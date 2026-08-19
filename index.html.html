@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Carrera Arbitral — Simulador de Árbitro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#0a0e13;
+  --bg-grad:#0d1420;
+  --panel:#131a23;
+  --card:#181f2a;
+  --card-hi:#1e2733;
+  --border:#262f3b;
+  --text:#e9eef3;
+  --text-dim:#8b96a3;
+  --text-faint:#5c6673;
+  --green:#00e676;
+  --green-deep:#00a856;
+  --gold:#f0c419;
+  --gold-deep:#c99e0e;
+  --red:#ff4d5e;
+  --yellow:#ffd400;
+  --font-display:'Oswald', 'Arial Narrow', sans-serif;
+  --font-body:'Inter', -apple-system, sans-serif;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html,body{
+  margin:0; padding:0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(0,230,118,0.07), transparent 60%),
+    linear-gradient(180deg, var(--bg-grad) 0%, var(--bg) 100%);
+  color:var(--text);
+  font-family:var(--font-body);
+  min-height:100vh;
+}
+
+#app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:18px 16px 40px;
+  position:relative;
+}
+
+/* ---------- Scrollbar / focus ---------- */
+::-webkit-scrollbar{ width:8px; }
+::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+  outline:2px solid var(--green); outline-offset:2px;
+}
+
+/* ---------- Typography helpers ---------- */
+h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:0.3px; }
+.eyebrow{
+  font-family:var(--font-body); font-weight:800; font-size:10.5px;
+  letter-spacing:1.6px; text-transform:uppercase; color:var(--text-faint);
+}
+.muted{ color:var(--text-dim); }
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:block; width:100%; box-sizing:border-box;
+  font-family:var(--font-display); font-size:18px; font-style:italic;
+  text-align:center; text-transform:uppercase; letter-spacing:0.4px;
+  padding:15px 14px; border-radius:12px; border:none; cursor:pointer;
+  font-weight:600; margin-top:10px; transition:transform .08s ease, filter .15s ease, opacity .15s ease;
+}
+.btn:active{ transform:scale(0.97); }
+.btn-primary{
+  background:linear-gradient(180deg, var(--green) 0%, var(--green-deep) 100%);
+  color:#04140b;
+  box-shadow:0 6px 18px rgba(0,230,118,0.25);
+}
+.btn-primary:hover{ filter:brightness(1.06); }
+.btn-gold{
+  background:linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color:#221a02;
+  box-shadow:0 6px 18px rgba(240,196,25,0.2);
+}
+.btn-outline{
+  background:transparent; color:var(--text); border:1.5px solid var(--border);
+  box-shadow:none;
+}
+.btn-outline:hover{ border-color:var(--text-dim); }
+.btn-danger{
+  background:linear-gradient(180deg, #ff5b6b 0%, #d8283a 100%); color:#1a0508;
+}
+.btn:disabled{ opacity:0.4; cursor:not-allowed; }
+.btn-small{ font-size:13px; padding:9px 10px; border-radius:9px; margin-top:8px; }
+
+/* ---------- Cards / panels ---------- */
+.panel{
+  background:var(--panel); border:1px solid var(--border); border-radius:16px;
+  padding:16px; margin-top:14px;
+}
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:14px; margin-top:12px;
+}
+
+/* ---------- Referee ID card (signature element) ---------- */
+.id-card{
+  position:relative; overflow:hidden;
+  border-radius:18px; padding:18px 16px 16px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 22px),
+    linear-gradient(160deg, #111820 0%, #0c1117 100%);
+  border:1px solid var(--border);
+  box-shadow: inset 0 0 0 1px rgba(0,230,118,0.06), 0 10px 30px rgba(0,0,0,0.35);
+}
+.id-card::before{
+  content:"FEDERACIÓN";
+  position:absolute; right:-38px; top:22px; width:180px;
+  transform:rotate(35deg); text-align:center;
+  font-family:var(--font-display); font-size:13px; font-weight:700;
+  letter-spacing:3px; color:rgba(240,196,25,0.10);
+}
+.id-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.id-serial{ font-family:'Courier New', monospace; font-size:10.5px; color:var(--text-faint); letter-spacing:1px; }
+.id-badge{
+  font-family:var(--font-body); font-weight:800; font-size:9.5px; letter-spacing:1px;
+  text-transform:uppercase; color:#04140b; background:var(--green);
+  padding:4px 9px; border-radius:20px; white-space:nowrap;
+}
+.id-main{ display:flex; align-items:center; gap:14px; margin-top:12px; }
+.id-photo{
+  width:58px; height:58px; border-radius:50%; flex:none;
+  background:radial-gradient(circle at 35% 30%, #2a3542, #0e131a 75%);
+  border:2px solid var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-size:22px; color:var(--gold);
+}
+.id-name{ font-family:var(--font-display); font-size:21px; color:#fff; line-height:1.1; }
+.id-sub{ font-size:11.5px; color:var(--text-dim); margin-top:3px; }
+.id-ovr{
+  margin-left:auto; text-align:center; flex:none;
+}
+.id-ovr .num{ font-family:var(--font-display); font-size:30px; color:var(--gold); line-height:1; }
+.id-ovr .lbl{ font-size:9px; letter-spacing:1.5px; color:var(--text-faint); text-transform:uppercase; }
+.id-stamp{
+  margin-top:14px; padding-top:12px; border-top:1px dashed var(--border);
+  display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim);
+}
+.id-stamp b{ color:var(--text); }
+
+/* ---------- Stat grid ---------- */
+.stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
+.stat-box{
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:11px 12px; text-align:left;
+}
+.stat-box .v{ font-family:var(--font-display); font-size:19px; color:var(--green); font-weight:600; }
+.stat-box .l{ font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-weight:800; letter-spacing:0.6px; margin-top:2px; }
+.stat-box.gold .v{ color:var(--gold); }
+.stat-box.red .v{ color:var(--red); }
+.stat-box.wide{ grid-column:span 2; }
+
+/* ---------- Meters ---------- */
+.meter-row{ margin-top:10px; }
+.meter-head{ display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px; }
+.meter-head b{ color:var(--text); font-weight:700; }
+.meter-track{ height:8px; background:#0d131a; border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+.meter-fill{ height:100%; border-radius:6px; transition:width .4s ease; }
+
+/* ---------- Match header ---------- */
+.match-title{
+  text-align:center; margin-top:6px;
+}
+.match-title .vs{
+  font-family:var(--font-display); font-size:23px; font-style:italic; color:#fff; margin-top:4px;
+}
+.match-title .vs .sep{ color:var(--green); margin:0 8px; }
+.minute-badge{
+  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
+  background:#0d131a; border:1px solid var(--border); border-radius:20px;
+  padding:6px 14px; font-family:var(--font-display); font-size:14px; color:var(--gold);
+}
+
+/* ---------- Event card ---------- */
+.event-tag{
+  display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:1px;
+  text-transform:uppercase; color:var(--bg); background:var(--gold);
+  padding:3px 9px; border-radius:6px; margin-bottom:9px;
+}
+.event-text{ font-size:15.5px; line-height:1.5; color:var(--text); }
+.option-btn{
+  display:block; width:100%; text-align:left; background:var(--card-hi);
+  border:1.5px solid var(--border); color:var(--text); border-radius:12px;
+  padding:13px 14px; margin-top:10px; font-family:var(--font-body); font-size:14.5px;
+  font-weight:600; cursor:pointer; transition:border-color .15s ease, transform .08s ease, background .15s ease;
+}
+.option-btn:hover{ border-color:var(--green); background:#1c2632; }
+.option-btn:active{ transform:scale(0.98); }
+.option-btn .chip{
+  display:inline-block; font-size:9px; font-weight:800; letter-spacing:0.6px;
+  text-transform:uppercase; color:var(--text-faint); border:1px solid var(--border);
+  border-radius:5px; padding:2px 6px; margin-bottom:6px;
+}
+
+/* ---------- Feedback ---------- */
+.feedback-box{
+  border-radius:14px; padding:14px; margin-top:12px; border:1px solid var(--border);
+  background:var(--card);
+}
+.feedback-box.pos{ border-color:rgba(0,230,118,0.35); background:rgba(0,230,118,0.06); }
+.feedback-box.neg{ border-color:rgba(255,77,94,0.35); background:rgba(255,77,94,0.06); }
+.feedback-title{ font-family:var(--font-display); font-size:14px; text-transform:uppercase; letter-spacing:0.5px; }
+.feedback-title.pos{ color:var(--green); }
+.feedback-title.neg{ color:var(--red); }
+.delta-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+.delta-pill{
+  font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px;
+  background:#0d131a; border:1px solid var(--border);
+}
+.delta-pill.up{ color:var(--green); border-color:rgba(0,230,118,0.3); }
+.delta-pill.down{ color:var(--red); border-color:rgba(255,77,94,0.3); }
+.card-flag{
+  display:inline-block; width:14px; height:19px; border-radius:2px; margin-right:6px; vertical-align:middle;
+}
+.card-flag.amarilla{ background:var(--yellow); }
+.card-flag.roja{ background:var(--red); }
+
+/* ---------- Misc ---------- */
+.center{ text-align:center; }
+.section-title{ font-family:var(--font-display); font-size:19px; color:#fff; margin-top:4px; }
+.divider{ height:1px; background:var(--border); margin:16px 0; border:none; }
+.progress-dots{ display:flex; gap:5px; justify-content:center; margin-top:10px; }
+.progress-dots span{ width:7px; height:7px; border-radius:50%; background:var(--border); }
+.progress-dots span.done{ background:var(--green); }
+.progress-dots span.now{ background:var(--gold); }
+
+.form-group{ margin-top:14px; }
+.form-label{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-faint); display:block; margin-bottom:6px; }
+.form-input{
+  width:100%; background:#0d131a; border:1.5px solid var(--border); color:var(--text);
+  padding:12px 13px; border-radius:10px; font-family:var(--font-body); font-size:15px;
+}
+.form-input:focus{ border-color:var(--green); outline:none; }
+
+.style-option{
+  border:1.5px solid var(--border); border-radius:14px; padding:13px 14px; margin-top:10px;
+  cursor:pointer; background:var(--card); transition:border-color .15s ease, background .15s ease;
+}
+.style-option.selected{ border-color:var(--green); background:rgba(0,230,118,0.07); }
+.style-option .st-name{ font-family:var(--font-display); font-size:16px; color:#fff; }
+.style-option .st-desc{ font-size:12.5px; color:var(--text-dim); margin-top:4px; line-height:1.4; }
+
+.badge-cat{
+  display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.6px; text-transform:uppercase;
+  color:var(--bg); background:var(--green); padding:3px 10px; border-radius:20px; margin-top:6px;
+}
+.result-big{
+  font-family:var(--font-display); font-size:52px; text-align:center; color:var(--gold); line-height:1; margin-top:6px;
+}
+.result-big small{ font-size:20px; color:var(--text-faint); }
+
+.headline{ font-family:var(--font-display); font-size:15px; color:var(--text); line-height:1.5; margin-top:10px; }
+.footer-note{ text-align:center; font-size:10.5px; color:var(--text-faint); margin-top:26px; letter-spacing:0.3px; }
+
+.toprow{ display:flex; align-items:center; justify-content:space-between; }
+.logo{ font-family:var(--font-display); font-size:15px; letter-spacing:1px; color:var(--text-dim); text-transform:uppercase; }
+.logo b{ color:var(--green); }
+
+@media (max-width:360px){
+  .id-name{ font-size:18px; }
+  .result-big{ font-size:42px; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* =========================================================
+   DATOS DEL JUEGO
+   ========================================================= */
+
+var EQUIPOS_REGIONAL = ["9 de Julio (R)","Alvarado","Argentino MM","Atenas (RC)","Atlético Escobar","Bartolomé Mitre",
+  "Boca Unidos","Cipolletti","Círculo Deportivo","Costa Brava","Defensores (VR)","Defensores Pto. Vilelas",
+  "Dvo. Rincón","Douglas Haig","El Linqueño","Germinal","Gimnasia de Concepción","Gmo. Brown",
+  "Huracán (LH)","Independiente (Chi)","Juv. Antoniana","Juventud Unida (SL)","Kimberley","Olimpo",
+  "San Martín (For)","San Martín (Mdza)","Santamarina","Sarmiento (LB)","Sol De Mayo","Sportivo LP","Villa Mitre"];
+
+var EQUIPOS_BMETRO = ["Argentino (M)","Argentino (Q)","Arsenal","Brown de Adrogué","Camioneros","Comunicaciones",
+  "CADU","Armenio","Laferrere","Merlo","Excursionistas","Flandria",
+  "Ituzaingó","Liniers","Real Pilar","San Martín (Bur.)","Dock Sud","Italiano",
+  "Talleres RE","UAI Urquiza","Villa Dálmine","San Carlos"];
+
+var EQUIPOS_NACIONAL = ["Acassuso","Agropecuario","All Boys","Almagro","Alte. Brown","Atlanta",
+  "Atlético Rafaela","Central Norte","Chacarita","Chaco For Ever","Colegiales",
+  "Colón","Defensores","Dep. Madryn","Maipú","Morón","Estudiantes (BA)",
+  "Ferro","Gimnasia (J)","Gimnasia y Tiro","Godoy Cruz","Güemes","Los Andes",
+  "Midland","GA Mitre","Nueva Chicago","Patronato","Quilmes","Racing (Cba)",
+  "San Martín (T)","San Miguel","San Telmo","Temperley","Tristán Suárez"];
+
+var EQUIPOS_LIGA = ["Aldosivi","Argentinos","Atl. Tucumán","Banfield","Barracas","Belgrano",
+  "Boca Jrs.","Central Córdoba","Defensa","Riestra","Estudiantes","Estudiantes RC",
+  "Gimnasia (M)","Gimnasia","Huracán","Independiente","Independiente Riv.","Instituto",
+  "Lanús","Newell's","Platense","Racing","River","Rosario Central",
+  "San Lorenzo","Sarmiento","Talleres","Tigre","Unión","Vélez"];
+
+var EQUIPOS_COPA = ["LDU Quito","Athletico Paranaense","Olimpia","Coquimbo Unido",
+  "Flamengo","Palmeiras","Peñarol","Colo-Colo","Cerro Porteño","Bolívar","Nacional","Emelec"];
+
+var EQUIPOS_MUNDIAL = ["Argentina","Brasil","Francia","Alemania","España","Inglaterra",
+  "Italia","Portugal","Uruguay","Croacia","Países Bajos","Bélgica","Marruecos","Japón","Estados Unidos","México"];
+
+var CATEGORIAS = [
+  { id:"regional", nombre:"Torneo Regional", corto:"Regional", fechas:14, equipos:EQUIPOS_REGIONAL, salario:14000, ovrBase:34 },
+  { id:"bmetro",   nombre:"Primera B Metro", corto:"B Metro", fechas:20, equipos:EQUIPOS_BMETRO,   salario:32000, ovrBase:44 },
+  { id:"nacional", nombre:"Primera Nacional", corto:"Nacional", fechas:30, equipos:EQUIPOS_NACIONAL, salario:65000, ovrBase:56 },
+  { id:"liga",     nombre:"Liga Profesional", corto:"Primera", fechas:27, equipos:EQUIPOS_LIGA,     salario:160000, ovrBase:70 },
+  { id:"copa",     nombre:"Copa Internacional", corto:"Copa Int.", fechas:10, equipos:EQUIPOS_COPA,   salario:340000, ovrBase:83 },
+  { id:"mundial",  nombre:"Selección / Mundial", corto:"Mundial", fechas:7,  equipos:EQUIPOS_MUNDIAL, salario:900000, ovrBase:92 }
+];
+
+var ESTILOS = {
+  riguroso:{ id:"riguroso", nombre:"Riguroso / Reglamentario",
+    desc:"Aplicás la letra del reglamento sin contemplaciones. Ganás control, pero la prensa te tilda de mano dura.",
+    bonusTipo:"riguroso", bonusControl:2, bonusFama:-1 },
+  permisivo:{ id:"permisivo", nombre:"Permisivo / Siga-Siga",
+    desc:"Dejás jugar todo lo posible y priorizás el espectáculo. Ganás simpatía, pero el partido se te puede ir de las manos.",
+    bonusTipo:"permisivo", bonusControl:-1, bonusFama:2 },
+  verbal:{ id:"verbal", nombre:"Liderazgo Verbal",
+    desc:"Hablás con los jugadores antes de sancionar y gestionás el partido con la palabra. Un estilo parejo, sin extremos.",
+    bonusTipo:"verbal", bonusControl:1, bonusFama:1 }
+};
+
+/* Cada evento: tipo (etiqueta visual), texto(local,visitante), opciones[] */
+var EVENTOS = [
+  { id:"plancha_penal", tag:"Jugada en el área",
+    texto:function(l,v){ return "Entrada fuerte de un defensor de <b>"+l+"</b> dentro del área. El delantero de <b>"+v+"</b> se tira. El público local presiona con silbidos."; },
+    opciones:[
+      { texto:"Cobrar penal, hubo contacto real", tipo:"riguroso", efectos:{nota:1.2,control:-6,fama:2},
+        resultado:"Señalás el punto penal sin dudar. La hinchada visitante festeja, la local te putea." },
+      { texto:"Dejar seguir, fue simulación", tipo:"permisivo", efectos:{nota:-1.5,control:-4,fama:-2},
+        resultado:"Hacés seña de \u201csiga, siga\u201d. Las repeticiones después muestran que sí hubo contacto." }
+    ]},
+
+  { id:"var_codazo", tag:"Intervención VAR",
+    texto:function(l,v){ return "El VAR te llama por un posible codazo lejos de la pelota entre jugadores de <b>"+l+"</b> y <b>"+v+"</b>."; },
+    opciones:[
+      { texto:"Ir a revisar la pantalla", tipo:"verbal", efectos:{nota:1.5,control:3,fama:-1},
+        resultado:"Vas al córner del VAR. Tras revisar, confirmás la infracción. El protocolo se respeta, aunque el trámite frena el partido." },
+      { texto:"Mantener tu decisión en cancha", tipo:"riguroso", efectos:{nota:-1.8,control:-8,fama:-1},
+        resultado:"Confiás en lo que viste desde tu posición. Las cámaras después muestran un ángulo que te complica." }
+    ]},
+
+  { id:"insulto_dt", tag:"Manejo de partido",
+    texto:function(l,v){ return "El DT de <b>"+l+"</b> te insulta a los gritos desde la línea de banda, reclamando una falta no cobrada."; },
+    opciones:[
+      { texto:"Apercibimiento verbal, bajarle el tono", tipo:"verbal", efectos:{nota:0.5,control:2,fama:1},
+        resultado:"Te acercás, le hablás firme y le pedís que se calme. El banco baja unos decibeles." },
+      { texto:"Tarjeta roja directa al DT", tipo:"riguroso", efectos:{nota:0.8,control:6,fama:-2}, tarjeta:"roja", quien:"dt",
+        resultado:"Sacás la roja y lo mandás a la tribuna. El partido se calma, pero la crónica te acusa de \u201cprotagonista\u201d." }
+    ]},
+
+  { id:"mano_area", tag:"Jugada en el área",
+    texto:function(l,v){ return "Centro al área de <b>"+v+"</b>. La pelota pega en el brazo de un defensor de <b>"+l+"</b> que lo tenía pegado al cuerpo."; },
+    opciones:[
+      { texto:"Cobrar penal por la mano", tipo:"riguroso", efectos:{nota:-1.4,control:-7,fama:-1},
+        resultado:"Vas al punto penal. El festejo local se corta en seco, con protestas airadas del banco." },
+      { texto:"Gesticular \u201cpegada al cuerpo\u201d, seguir", tipo:"permisivo", efectos:{nota:1.8,control:5,fama:1},
+        resultado:"Hacés la seña inconfundible y dejás correr. La transmisión después confirma que fue la lectura correcta." }
+    ]},
+
+  { id:"simulacion_area", tag:"Jugada en el área",
+    texto:function(l,v){ return "En el minuto de más presión, un delantero de <b>"+v+"</b> se deja caer en el área buscando el penal, casi sin contacto."; },
+    opciones:[
+      { texto:"Amonestar por simulación", tipo:"riguroso", efectos:{nota:1.8,control:5,fama:1}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Sacás amarilla al que se tiró. El local aplaude tu lectura, el técnico visitante reclama." },
+      { texto:"Cobrar penal igual", tipo:"permisivo", efectos:{nota:-2.5,control:-11,fama:-3},
+        resultado:"Señalás los doce pasos. En el entretiempo, la transmisión te expone sin piedad." }
+    ]},
+
+  { id:"patada_fuerte", tag:"Juego brusco",
+    texto:function(l,v){ return "En la mitad de la cancha, un volante de <b>"+l+"</b> llega con los tapones a la vista sobre un rival de <b>"+v+"</b>. Se arman empujones."; },
+    opciones:[
+      { texto:"Roja directa, sin dudar", tipo:"riguroso", efectos:{nota:1.2,control:6,fama:-1}, tarjeta:"roja", quien:"local",
+        resultado:"Sacás la roja de inmediato. El jugador expulsado protesta, pero nadie discute la firmeza." },
+      { texto:"Amarilla, bajar la tensión", tipo:"permisivo", efectos:{nota:-1.6,control:-8,fama:-2},
+        resultado:"Mostrás solo amarilla para no calentar más el partido. El rival siente que quedó impune." }
+    ]},
+
+  { id:"tiempo_arquero", tag:"Pérdida de tiempo",
+    texto:function(l,v){ return "El arquero de <b>"+v+"</b>, ganando el partido, acomoda la pelota tres veces antes de sacar de arco."; },
+    opciones:[
+      { texto:"Amonestar por demora", tipo:"riguroso", efectos:{nota:0.8,control:4,fama:-1}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Le mostrás amarilla por pérdida de tiempo. El local celebra la decisión." },
+      { texto:"Marcar el reloj y avisar verbalmente", tipo:"verbal", efectos:{nota:0.3,control:-1,fama:1},
+        resultado:"Le avisás que la próxima es tarjeta y anotás el tiempo perdido para el descuento." }
+    ]},
+
+  { id:"cambio_lento", tag:"Manejo de partido",
+    texto:function(l,v){ return "En un cambio de <b>"+l+"</b>, el jugador reemplazado camina lentísimo, cruzando toda la cancha para hacer tiempo."; },
+    opciones:[
+      { texto:"Indicar salida por la línea más cercana", tipo:"riguroso", efectos:{nota:0.7,control:3,fama:0},
+        resultado:"Le señalás que salga por el lugar más próximo. Sale refunfuñando pero acelera el paso." },
+      { texto:"Dejarlo cruzar sin apurarlo", tipo:"permisivo", efectos:{nota:-0.8,control:-4,fama:-1},
+        resultado:"No decís nada. El banco rival festeja la demora conseguida." }
+    ]},
+
+  { id:"reclamo_masivo", tag:"Manejo de partido",
+    texto:function(l,v){ return "Varios jugadores de <b>"+v+"</b> te rodean reclamando a los gritos una expulsión que no diste."; },
+    opciones:[
+      { texto:"Amonestar al capitán por protesta en masa", tipo:"riguroso", efectos:{nota:0.6,control:6,fama:-2}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Le mostrás amarilla al capitán y les pedís que se dispersen. El círculo se abre de inmediato." },
+      { texto:"Dialogar y pedirles calma sin sancionar", tipo:"verbal", efectos:{nota:1.0,control:4,fama:2},
+        resultado:"Extendés los brazos, hablás uno por uno y lográs bajar la tensión sin sacar tarjetas." }
+    ]},
+
+  { id:"offside_ajustado", tag:"Intervención VAR",
+    texto:function(l,v){ return "Gol de <b>"+l+"</b>. El VAR traza líneas: la posición del delantero es milimétrica, al límite de lo legal."; },
+    opciones:[
+      { texto:"Confirmar posición adelantada, anular el gol", tipo:"riguroso", efectos:{nota:1.4,control:-3,fama:-1},
+        resultado:"Anulás la conquista tras la revisión. La cámara oficial te da la razón por centímetros." },
+      { texto:"Confiar en el asistente y convalidar", tipo:"permisivo", efectos:{nota:-1.7,control:-6,fama:-1},
+        resultado:"Convalidás el gol sin ir a revisar del todo. Después, la transmisión muestra que estaba adelantado." }
+    ]},
+
+  { id:"lesion_fingida", tag:"Manejo de partido",
+    texto:function(l,v){ return "Un jugador de <b>"+v+"</b> se tira al piso pidiendo asistencia justo cuando <b>"+l+"</b> arrancaba un contraataque peligroso."; },
+    opciones:[
+      { texto:"Detener todo, hacer ingresar la camilla", tipo:"verbal", efectos:{nota:-0.6,control:1,fama:-1},
+        resultado:"Cortás el contraataque por precaución. El banco local se queja de que \u201cse hizo el vivo\u201d." },
+      { texto:"Dejar seguir, no parece grave", tipo:"riguroso", efectos:{nota:1.1,control:-2,fama:1},
+        resultado:"Convalidás la ventaja y dejás correr. El jugador se levanta solo, sin secuelas." }
+    ]},
+
+  { id:"festejo_provocador", tag:"Manejo de partido",
+    texto:function(l,v){ return "Gol de <b>"+l+"</b>. El autor festeja corriendo hacia la hinchada de <b>"+v+"</b> con gestos provocadores."; },
+    opciones:[
+      { texto:"Amonestar por conducta antideportiva", tipo:"riguroso", efectos:{nota:0.9,control:5,fama:-1}, tarjeta:"amarilla", quien:"local",
+        resultado:"Le mostrás amarilla apenas termina el festejo. El técnico visitante lo aplaude." },
+      { texto:"Dejarlo pasar, es parte del folclore", tipo:"permisivo", efectos:{nota:-0.4,control:-3,fama:2},
+        resultado:"No sancionás. La grada arde, pero el jugador ya volvió a su posición sin más consecuencias." }
+    ]},
+
+  { id:"banco_suplente", tag:"Manejo de partido",
+    texto:function(l,v){ return "Desde el banco de suplentes de <b>"+v+"</b> sale un insulto fuerte hacia tu línea, pero no queda claro quién lo gritó."; },
+    opciones:[
+      { texto:"Expulsar al que señalan los rivales", tipo:"riguroso", efectos:{nota:-1.3,control:-3,fama:-2}, tarjeta:"roja", quien:"visitante",
+        resultado:"Sancionás según lo que te indican los jugadores del local. Después, en el informe, dudás de haber acertado al responsable." },
+      { texto:"Advertir a todo el banco sin individualizar", tipo:"verbal", efectos:{nota:1.0,control:3,fama:1},
+        resultado:"Vas hacia el banco y advertís a todos por igual. Nadie puede reclamar una sanción injusta." }
+    ]},
+
+  { id:"arquero_saque_lateral", tag:"Pérdida de tiempo",
+    texto:function(l,v){ return "El arquero de <b>"+l+"</b>, ganando por la mínima, va a buscar un saque lateral cerca de su arco caminando a paso de tortuga."; },
+    opciones:[
+      { texto:"Amonestar por demora deliberada", tipo:"riguroso", efectos:{nota:0.9,control:4,fama:-1}, tarjeta:"amarilla", quien:"local",
+        resultado:"Le mostrás amarilla apenas llega a buscar la pelota. El banco visitante te aplaude, el local putea." },
+      { texto:"Correr a exigirle que apure, sin sancionar", tipo:"verbal", efectos:{nota:0.4,control:0,fama:0},
+        resultado:"Vas corriendo a apurarlo verbalmente. Acelera apenas el paso, pero el tiempo ya se perdió." }
+    ]},
+
+  { id:"arquero_finge_lesion", tag:"Pérdida de tiempo",
+    texto:function(l,v){ return "A siete minutos del final, el arquero de <b>"+v+"</b> se tira al piso agarrándose el gemelo, sin que nadie lo haya tocado."; },
+    opciones:[
+      { texto:"Hacer ingresar al kinesiólogo igual, pero amonestarlo después", tipo:"riguroso", efectos:{nota:1.3,control:3,fama:0}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Dejás entrar la asistencia por las dudas, pero apenas se reincorpora le mostrás amarilla por la demora evidente." },
+      { texto:"No detener el juego, exigirle que se levante", tipo:"permisivo", efectos:{nota:-0.9,control:-5,fama:-1},
+        resultado:"Le indicás que se levante y seguís de largo. El jugador cojea exageradamente durante varios minutos más." }
+    ]},
+
+  { id:"empujon_tumulto", tag:"Manejo de partido",
+    texto:function(l,v){ return "Tras un choque normal de juego, se arma un tumulto de empujones entre varios jugadores de <b>"+l+"</b> y <b>"+v+"</b>, sin golpes claros."; },
+    opciones:[
+      { texto:"Amonestar a un cabecilla de cada lado", tipo:"riguroso", efectos:{nota:1.0,control:6,fama:-1}, tarjeta:"amarilla", quien:"ambos",
+        resultado:"Identificás a los que empezaron el empuje y les mostrás amarilla a los dos. El tumulto se disuelve rápido." },
+      { texto:"Separar y advertir sin sacar tarjetas", tipo:"verbal", efectos:{nota:0.6,control:2,fama:1},
+        resultado:"Te metés en el medio, separás a los jugadores y advertís de palabra. Nadie sale sancionado, pero el clima se calma." }
+    ]},
+
+  { id:"falta_ultimo_hombre", tag:"Juego brusco",
+    texto:function(l,v){ return "El último defensor de <b>"+l+"</b> derriba al delantero de <b>"+v+"</b>, que quedaba mano a mano con el arquero. Clarísima ocasión de gol cortada."; },
+    opciones:[
+      { texto:"Roja directa por última chance clara de gol", tipo:"riguroso", efectos:{nota:1.6,control:5,fama:-1}, tarjeta:"roja", quien:"local",
+        resultado:"Sacás la roja sin titubear, tal como marca el reglamento para una ocasión manifiesta de gol. Nadie puede discutirla." },
+      { texto:"Solo amarilla, para no condicionar el partido", tipo:"permisivo", efectos:{nota:-2.2,control:-9,fama:-2},
+        resultado:"Te guardás la roja \u201cpara no arruinar el espectáculo\u201d. En la crónica del lunes te acusan de regalar una expulsión clara." }
+    ]},
+
+  { id:"falta_tactica", tag:"Juego brusco",
+    texto:function(l,v){ return "Lejos del área, un mediocampista de <b>"+v+"</b> corta con una falta claramente calculada un contraataque prometedor de <b>"+l+"</b>."; },
+    opciones:[
+      { texto:"Amonestar por falta táctica", tipo:"riguroso", efectos:{nota:1.0,control:3,fama:0}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Le mostrás amarilla por cortar el contraataque de manera antirreglamentaria. Decisión de manual." },
+      { texto:"Aplicar la ley de la ventaja, sin amonestar", tipo:"verbal", efectos:{nota:0.5,control:-1,fama:1},
+        resultado:"Dejás correr aplicando ventaja. El ataque no prospera del todo, pero valoran tu criterio futbolero." }
+    ]},
+
+  { id:"offside_var_real", tag:"Intervención VAR",
+    texto:function(l,v){ return "Gol de <b>"+l+"</b> tras un centro preciso. El línea no marca nada, pero el VAR te llama para revisar la posición del delantero."; },
+    opciones:[
+      { texto:"Confirmar posición adelantada y anular", tipo:"riguroso", efectos:{nota:1.7,control:-2,fama:-1},
+        resultado:"Vas a revisar y confirmás que sí estaba en offside. Anulás el gol. Las líneas del VAR te respaldan por completo." },
+      { texto:"Confiar en el campo y convalidar el gol", tipo:"permisivo", efectos:{nota:-2.0,control:-7,fama:-2},
+        resultado:"Convalidás sin revisar a fondo. Minutos después, las repeticiones muestran un offside evidente que te costó caro." }
+    ]},
+
+  { id:"offside_var_valido", tag:"Intervención VAR",
+    texto:function(l,v){ return "Gol de <b>"+v+"</b> en jugada rápida. Desde la tribuna gritan offside, y el VAR te sugiere revisar la posición del delantero."; },
+    opciones:[
+      { texto:"Ir a revisar y anular por las dudas", tipo:"riguroso", efectos:{nota:-1.8,control:-6,fama:-1},
+        resultado:"Anulás el gol tras la revisión. Después se confirma que el delantero estaba habilitado: le sacaste un gol legítimo al rival." },
+      { texto:"Confirmar que estaba habilitado y convalidar", tipo:"verbal", efectos:{nota:1.8,control:4,fama:2},
+        resultado:"Revisás con calma y confirmás que la jugada era legítima. El gol se mantiene y tu lectura queda intachable." }
+    ]},
+
+  { id:"simulacion_area_real", tag:"Jugada en el área",
+    texto:function(l,v){ return "Dentro del área, un delantero de <b>"+v+"</b> cae al piso de forma un poco exagerada tras un roce con el defensor de <b>"+l+"</b>."; },
+    opciones:[
+      { texto:"Amonestar por simulación", tipo:"riguroso", efectos:{nota:-1.9,control:-8,fama:-2}, tarjeta:"amarilla", quien:"visitante",
+        resultado:"Sancionás la caída como simulación. La cámara lenta muestra después un pisotón real que no habías visto: te equivocaste." },
+      { texto:"Cobrar penal, hubo contacto suficiente", tipo:"permisivo", efectos:{nota:1.9,control:5,fama:1},
+        resultado:"Pese a lo exagerado de la caída, vas al punto penal. Las repeticiones confirman que el contacto fue real." }
+    ]},
+
+  { id:"mano_intencional", tag:"Jugada en el área",
+    texto:function(l,v){ return "Centro al área. Un defensor de <b>"+l+"</b> extiende claramente el brazo para frenar el balón antes de que llegue a un rival."; },
+    opciones:[
+      { texto:"Cobrar penal, mano intencional y clara", tipo:"riguroso", efectos:{nota:1.6,control:4,fama:1},
+        resultado:"Sancionás sin dudar: el brazo estaba extendido de manera antinatural. Nadie discute la decisión." },
+      { texto:"Dejar seguir, restarle importancia", tipo:"permisivo", efectos:{nota:-2.1,control:-9,fama:-2},
+        resultado:"Dejás correr la jugada. La transmisión repite una y otra vez el brazo extendido: quedás muy expuesto." }
+    ]},
+
+  { id:"invasion_cancha", tag:"Invasión de cancha",
+    texto:function(l,v){ return "Tras un gol polémico, un grupo de hinchas de <b>"+l+"</b> salta el alambrado e invade el campo de juego."; },
+    opciones:[
+      { texto:"Suspender el partido y pedir refuerzo policial", tipo:"riguroso", efectos:{nota:1.1,control:7,fama:-1},
+        resultado:"Frenás todo de inmediato y pedís que despejen la cancha. El protocolo de seguridad se aplica sin sobresaltos." },
+      { texto:"Dejar que el campo se despeje solo, sin detener el reloj", tipo:"permisivo", efectos:{nota:-1.6,control:-11,fama:-2},
+        resultado:"Intentás seguir sin frenar formalmente. La situación se descontrola unos minutos antes de poder retomar el juego." }
+    ]},
+
+  { id:"discusion_bancos", tag:"Manejo de partido",
+    texto:function(l,v){ return "Los cuerpos técnicos de <b>"+l+"</b> y <b>"+v+"</b> casi llegan a las manos en pleno círculo central por un reclamo."; },
+    opciones:[
+      { texto:"Expulsar a los referentes de ambos bancos", tipo:"riguroso", efectos:{nota:0.7,control:7,fama:-2}, tarjeta:"roja", quien:"ambos",
+        resultado:"Sacás roja para los dos referentes técnicos. El cruce se termina en el acto, aunque quedás en el centro de la polémica." },
+      { texto:"Bajar la tensión hablando con ambos DT", tipo:"verbal", efectos:{nota:1.3,control:5,fama:2},
+        resultado:"Te metés entre los dos bancos y lográs bajar la tensión con la palabra, sin necesidad de sancionar a nadie." }
+    ]}
+];
+
+var EVENTO_DESCUENTO = { id:"descuento", tag:"Tiempo de descuento",
+  texto:function(l,v){ return "El partido entre <b>"+l+"</b> y <b>"+v+"</b> tuvo demoras por lesiones y reclamos. Es hora de fijar el descuento."; },
+  opciones:[
+    { texto:"Mínimo indispensable (2 minutos)", tipo:"riguroso", efectos:{nota:-0.8,control:-3,fama:-1},
+      resultado:"Adicionás solo 2 minutos. El equipo que iba en desventaja siente que le robaron tiempo real de juego." },
+    { texto:"Los justos según las demoras (5 minutos)", tipo:"verbal", efectos:{nota:1.6,control:5,fama:2},
+      resultado:"Calculás con criterio el tiempo perdido y adicionás 5 minutos. Ambos bancos lo consideran justo." },
+    { texto:"De más, para favorecer el show (8 minutos)", tipo:"permisivo", efectos:{nota:-1.2,control:-6,fama:1},
+      resultado:"Adicionás 8 minutos, muy por encima de lo perdido. El equipo que ganaba explota de bronca." }
+  ]};
+
+var TITULARES = {
+  pos:[
+    "Los programas de la previa destacan tu nivel: \u201c{nombre} viene mostrando una solidez enorme\u201d, dicen al aire.",
+    "La Federación te felicita en su parte de prensa semanal por tu rendimiento sostenido.",
+    "Un ex árbitro te elogia en radio: \u201cOjalá todos manejaran los partidos como {nombre}\u201d.",
+    "Las redes te bancan después del último partido: sos tendencia por las buenas.",
+    "Un diario deportivo te dedica una nota elogiosa sobre tu carrera en ascenso."
+  ],
+  neg:[
+    "Las redes te destrozan tras el último partido: piden que no te designen para la próxima fecha.",
+    "En la previa, un panelista cuestiona duramente tu nivel: \u201cNo está para esta categoría\u201d.",
+    "La Federación te envía un llamado de atención informal por el bajo rendimiento reciente.",
+    "Un ex jugador te apunta en su columna: \u201c{nombre} nos está complicando cada fin de semana\u201d.",
+    "Circula en redes un compilado de tus peores decisiones del mes."
+  ],
+  neu:[
+    "Semana tranquila en los medios, sin grandes titulares sobre tu arbitraje.",
+    "La previa se enfoca en los equipos; tu nombre pasa casi desapercibido en la prensa.",
+    "Un breve comentario en la transmisión te menciona sin mayores elogios ni críticas.",
+    "Nada relevante para destacar esta semana: bajo perfil total en los medios."
+  ]
+};
+
+function generarPrensa(){
+  var ultimaNota = state.carreraNotas.length ? state.carreraNotas[state.carreraNotas.length-1] : null;
+  var tono;
+  if(ultimaNota!==null && ultimaNota<4.5) tono = "neg";
+  else if(ultimaNota!==null && ultimaNota>=8) tono = "pos";
+  else if(state.fama>=65) tono = "pos";
+  else if(state.fama<=35) tono = "neg";
+  else tono = "neu";
+
+  var texto = pick(TITULARES[tono]).replace("{nombre}", state.ref.nombre);
+  var famaDelta = tono==="pos" ? 1 : (tono==="neg" ? -1 : 0);
+  state.fama = clamp(state.fama + famaDelta, 0, 100);
+  return { tono:tono, texto:texto };
+}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+var SAVE_KEY = "carrera_arbitral_save_v1";
+var state = null;
+
+function nuevoEstado(){
+  return {
+    screen:"start",
+    ref:{ nombre:"", edad:27, estiloId:null },
+    catIndex:0,
+    fecha:1,
+    fama:50,
+    ingresos:0,
+    carreraNotas:[],          // todas las notas de la carrera
+    temporadaNotas:[],        // notas de la temporada actual
+    stats:{ partidos:0, amarillas:0, rojas:0, penales:0 },
+    seasonsBajas:0,
+    match:null,               // partido en curso
+    lastSeasonResult:null,
+    despedido:false,
+    retirado:false
+  };
+}
+
+function guardar(){
+  // Desactivado para que no guarde partidas
+}
+function borrarGuardado(){
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+}
+function cargarGuardado(){
+  return null; // Forzamos a que siempre inicie como partida nueva
+}
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function pick(arr){ return arr[rand(0,arr.length-1)]; }
+function fmtMoney(n){
+  n = Math.round(n);
+  return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+function categoriaActual(){ return CATEGORIAS[state.catIndex]; }
+function estiloActual(){ return ESTILOS[state.ref.estiloId]; }
+function promedio(arr){
+  if(!arr.length) return 0;
+  var s=0; for(var i=0;i<arr.length;i++) s+=arr[i];
+  return s/arr.length;
+}
+function calcularOVR(){
+  var cat = categoriaActual();
+  var confMedia = state.carreraNotas.length ? promedio(state.carreraNotas) : 6;
+  var val = cat.ovrBase + (confMedia-6)*4 + (state.fama-50)*0.12;
+  return Math.round(clamp(val,20,99));
+}
+function calcularConfianza(){
+  return state.carreraNotas.length ? promedio(state.carreraNotas) : 0;
+}
+
+/* =========================================================
+   MOTOR DE RENDER
+   ========================================================= */
+
+var app = document.getElementById("app");
+
+function render(){
+  guardar();
+  var html = "";
+  switch(state.screen){
+    case "start": html = screenStart(); break;
+    case "style": html = screenStyle(); break;
+    case "dashboard": html = screenDashboard(); break;
+    case "week": html = screenWeek(); break;
+    case "prematch": html = screenPrematch(); break;
+    case "event": html = screenEvent(); break;
+    case "feedback": html = screenFeedback(); break;
+    case "matchResult": html = screenMatchResult(); break;
+    case "seasonSummary": html = screenSeasonSummary(); break;
+    case "retirement": html = screenRetirement(); break;
+    case "gameover": html = screenGameOver(); break;
+    default: html = screenStart();
+  }
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function topbar(){
+  return '<div class="toprow"><div class="logo">CARRERA <b>ARBITRAL</b></div>' +
+    (state.screen!=="start" ? '<div class="eyebrow">'+ (categoriaActual()?categoriaActual().corto:"") +'</div>' : '') +
+    '</div>';
+}
+
+/* ---------- PANTALLA: INICIO ---------- */
+function screenStart(){
+  var saved = cargarGuardado();
+  var continuarBtn = "";
+  if(saved && saved.screen && saved.screen!=="start"){
+    continuarBtn = '<button class="btn btn-primary" onclick="continuarPartida()">Continuar carrera</button>';
+  }
+  return topbar() +
+    '<div class="panel center" style="margin-top:26px;">' +
+      '<div class="eyebrow">Simulador de árbitro · modo carrera</div>' +
+      '<h1 class="section-title" style="font-size:28px; margin-top:8px;">SILBATO Y<br/>REPUTACIÓN</h1>' +
+      '<p class="muted" style="font-size:13.5px; margin-top:10px; line-height:1.5;">Empezá en el ascenso del fútbol argentino y construí, partido a partido, tu carrera hacia la Copa Internacional y la Selección. Cada decisión pesa en tu informe arbitral.</p>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<div class="form-group" style="margin-top:0;">' +
+        '<label class="form-label">Nombre del árbitro</label>' +
+        '<input class="form-input" id="inpNombre" maxlength="24" placeholder="Ej: Facundo Ríos" value="'+ escapeHtml(state.ref.nombre||"") +'"/>' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label class="form-label">Edad inicial</label>' +
+        '<input class="form-input" id="inpEdad" type="number" min="22" max="40" value="'+ (state.ref.edad||27) +'"/>' +
+      '</div>' +
+      '<button class="btn btn-primary" onclick="iniciarDesdeForm()">Comenzar carrera</button>' +
+      continuarBtn +
+    '</div>' +
+    '<div class="footer-note">Torneo Regional → B Metro → Nacional → Liga Profesional → Copa Internacional → Mundial</div>';
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+window.iniciarDesdeForm = function(){
+  var nombre = document.getElementById("inpNombre").value.trim();
+  var edad = parseInt(document.getElementById("inpEdad").value,10);
+  if(!nombre){ nombre = "Árbitro Anónimo"; }
+  if(isNaN(edad) || edad<22 || edad>40) edad = 27;
+  state.ref.nombre = nombre;
+  state.ref.edad = edad;
+  state.screen = "style";
+  render();
+};
+
+window.continuarPartida = function(){
+  var saved = cargarGuardado();
+  if(saved){ state = saved; render(); }
+};
+
+/* ---------- PANTALLA: ESTILO ---------- */
+function screenStyle(){
+  var keys = ["riguroso","permisivo","verbal"];
+  var opts = keys.map(function(k){
+    var e = ESTILOS[k];
+    var sel = state.ref.estiloId===k ? " selected" : "";
+    return '<div class="style-option'+sel+'" onclick="elegirEstilo(\''+k+'\')">' +
+      '<div class="st-name">'+e.nombre+'</div>' +
+      '<div class="st-desc">'+e.desc+'</div>' +
+    '</div>';
+  }).join("");
+
+  var puedeConfirmar = !!state.ref.estiloId;
+
+  return topbar() +
+    '<div class="panel">' +
+      '<div class="eyebrow">Paso 2 de 2</div>' +
+      '<h2 class="section-title" style="margin-top:6px;">Elegí tu estilo arbitral</h2>' +
+      '<p class="muted" style="font-size:13px; margin-top:6px;">Define cómo reaccionás por defecto ante cada situación de presión. Vas a poder decidir distinto en cada jugada, pero tu estilo marca el rumbo de tu carrera.</p>' +
+      opts +
+      '<button class="btn btn-primary" id="btnConfirmarEstilo" onclick="confirmarEstilo()"'+ (puedeConfirmar?"":" disabled") +'>Debutar en el Torneo Regional</button>' +
+      '<button class="btn btn-outline" onclick="volverAInicio()">← Volver</button>' +
+    '</div>';
+}
+
+window.elegirEstilo = function(k){
+  state.ref.estiloId = k;
+  render();
+};
+
+window.volverAInicio = function(){
+  state.screen = "start";
+  render();
+};
+
+window.confirmarEstilo = function(){
+  if(!state.ref.estiloId) return;
+  state.catIndex = 0;
+  state.fecha = 1;
+  state.screen = "dashboard";
+  render();
+};
+
+/* ---------- PANTALLA: DASHBOARD ---------- */
+function screenDashboard(){
+  var cat = categoriaActual();
+  var ovr = calcularOVR();
+  var conf = calcularConfianza();
+  var initials = state.ref.nombre.split(" ").map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase();
+
+  return topbar() +
+    '<div class="id-card" style="margin-top:14px;">' +
+      '<div class="id-top">' +
+        '<div class="id-serial">LIC. N.&deg; '+ String(10000+state.stats.partidos*7).padStart(5,"0") +'<br/>APTO PARA: '+cat.nombre.toUpperCase()+'</div>' +
+        '<div class="id-badge">'+ (estiloActual()?estiloActual().nombre.split(" /")[0]:"") +'</div>' +
+      '</div>' +
+      '<div class="id-main">' +
+        '<div class="id-photo">'+ (initials||"AR") +'</div>' +
+        '<div>' +
+          '<div class="id-name">'+ escapeHtml(state.ref.nombre) +'</div>' +
+          '<div class="id-sub">'+ state.ref.edad +' años · '+ cat.nombre +'</div>' +
+          '<div class="badge-cat">Fecha '+ state.fecha +' / '+ cat.fechas +'</div>' +
+        '</div>' +
+        '<div class="id-ovr"><div class="num">'+ ovr +'</div><div class="lbl">Media</div></div>' +
+      '</div>' +
+      '<div class="id-stamp"><span>Fama: <b>'+ Math.round(state.fama) +'/100</b></span><span>Ingresos: <b>'+ fmtMoney(state.ingresos) +'</b></span></div>' +
+    '</div>' +
+
+    '<div class="stat-grid">' +
+      '<div class="stat-box"><div class="v">'+ state.stats.partidos +'</div><div class="l">Partidos dirigidos</div></div>' +
+      '<div class="stat-box gold"><div class="v">'+ (conf?conf.toFixed(1):"–") +'</div><div class="l">Valoración media Federación</div></div>' +
+      '<div class="stat-box"><div class="v" style="color:var(--yellow);">'+ state.stats.amarillas +'</div><div class="l">Amarillas mostradas</div></div>' +
+      '<div class="stat-box red"><div class="v">'+ state.stats.rojas +'</div><div class="l">Rojas mostradas</div></div>' +
+      '<div class="stat-box wide"><div class="v">'+ state.stats.penales +'</div><div class="l">Penales cobrados en la carrera</div></div>' +
+    '</div>' +
+
+    '<div class="panel">' +
+      '<div class="eyebrow">Temporada en curso</div>' +
+      '<h2 class="section-title" style="margin-top:6px;">'+ cat.nombre +'</h2>' +
+      '<div class="progress-dots">' + dots(cat.fechas, state.fecha) + '</div>' +
+      '<button class="btn btn-primary" onclick="irAProximoPartido()">Dirigir próximo partido</button>' +
+    '</div>' +
+    '<div class="footer-note">Estilo declarado: '+ (estiloActual()?estiloActual().nombre:"") +'</div>';
+}
+
+function dots(total, actual){
+  total = Math.min(total, 20); // visual cap
+  var out = "";
+  for(var i=1;i<=total;i++){
+    var cls = i<actual ? "done" : (i===actual ? "now" : "");
+    out += '<span class="'+cls+'"></span>';
+  }
+  return out;
+}
+
+window.irAProximoPartido = function(){
+  var cat = categoriaActual();
+  var equipos = shuffle(cat.equipos);
+  var local = equipos[0], visitante = equipos[1];
+
+  var nExtra = rand(2,4); // 2 a 4 eventos generales + descuento = 3 a 5 en total
+  var pool = shuffle(EVENTOS).slice(0, nExtra);
+
+  state.match = {
+    local:local, visitante:visitante,
+    minuto:0,
+    eventos: pool.concat([EVENTO_DESCUENTO]),
+    idx:0,
+    nota:6.0,
+    control:70,
+    amarillas:0, rojas:0, penales:0,
+    lastFeedback:null
+  };
+  state.prensaActual = generarPrensa();
+  state.screen = "week";
+  render();
+};
+
+/* ---------- PANTALLA: SEMANA PREVIA / PRENSA ---------- */
+function screenWeek(){
+  var p = state.prensaActual;
+  var cls = p.tono==="pos" ? "pos" : (p.tono==="neg" ? "neg" : "");
+  var titulo = p.tono==="pos" ? "Buena semana en los medios" : (p.tono==="neg" ? "Semana complicada en los medios" : "Prensa sin sobresaltos");
+  return topbar() +
+    '<div class="panel">' +
+      '<div class="eyebrow">Semana previa · Fecha '+ state.fecha +'</div>' +
+      '<h2 class="section-title" style="margin-top:6px;">Lo que se dice de vos</h2>' +
+    '</div>' +
+    '<div class="feedback-box '+cls+'">' +
+      '<div class="feedback-title '+cls+'">'+ titulo +'</div>' +
+      '<div class="headline">\u201c'+ p.texto +'\u201d</div>' +
+    '</div>' +
+    '<button class="btn btn-primary" onclick="irAPrematch()">Ir al estadio</button>' +
+    '<button class="btn btn-outline" onclick="volverAlDashboard()">← Volver al panel</button>';
+}
+
+window.irAPrematch = function(){
+  state.screen = "prematch";
+  render();
+};
+
+/* ---------- PANTALLA: PRE-PARTIDO ---------- */
+function screenPrematch(){
+  var m = state.match;
+  var cat = categoriaActual();
+  return topbar() +
+    '<div class="panel center" style="margin-top:20px;">' +
+      '<div class="eyebrow">Partido de la fecha · '+ cat.nombre +'</div>' +
+      '<div class="match-title"><div class="vs">'+ m.local +' <span class="sep">VS</span> '+ m.visitante +'</div></div>' +
+      '<div class="minute-badge">🏟️ Fecha '+ state.fecha +' de '+ cat.fechas +'</div>' +
+    '</div>' +
+    '<div class="stat-grid">' +
+      '<div class="stat-box"><div class="v">'+ calcularOVR() +'</div><div class="l">Tu media arbitral</div></div>' +
+      '<div class="stat-box gold"><div class="v">'+ Math.round(state.fama) +'</div><div class="l">Fama / Reputación</div></div>' +
+    '</div>' +
+    '<button class="btn btn-primary" onclick="siguienteEvento()">Salir a dirigir el partido</button>' +
+    '<button class="btn btn-outline" onclick="volverAlDashboard()">← Volver al panel</button>';
+}
+
+window.volverAlDashboard = function(){
+  state.match = null;
+  state.screen = "dashboard";
+  render();
+};
+
+/* ---------- MOTOR DE PARTIDO ---------- */
+window.siguienteEvento = function(){
+  var m = state.match;
+  if(m.idx===0){
+    m.minuto = rand(6,22);
+  } else if(m.eventos[m.idx].id==="descuento"){
+    m.minuto = 90;
+  } else if(m.minuto<50){
+    m.minuto += rand(14,24);
+  } else {
+    m.minuto += rand(10,18);
+  }
+  state.screen = "event";
+  render();
+};
+
+function screenEvent(){
+  var m = state.match;
+  var ev = m.eventos[m.idx];
+  var cat = categoriaActual();
+  var opts = ev.opciones.map(function(op,i){
+    return '<button class="option-btn" onclick="elegirOpcion('+i+')">'+ op.texto +'</button>';
+  }).join("");
+
+  return topbar() +
+    '<div class="panel">' +
+      '<div class="eyebrow">'+ cat.nombre +' · Fecha '+ state.fecha +'</div>' +
+      '<div class="match-title"><div class="vs" style="font-size:18px;">'+ m.local +' <span class="sep">VS</span> '+ m.visitante +'</div></div>' +
+      '<div class="minute-badge">⏱️ Minuto '+ m.minuto +"'" + '</div>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="event-tag">'+ ev.tag +'</div>' +
+      '<div class="event-text">'+ ev.texto(m.local, m.visitante) +'</div>' +
+      opts +
+    '</div>' +
+    '<div class="meter-row">' +
+      meterHtml("Control del partido", m.control, controlColor(m.control)) +
+    '</div>';
+}
+
+function controlColor(v){
+  if(v>=70) return "var(--green)";
+  if(v>=40) return "var(--gold)";
+  return "var(--red)";
+}
+function meterHtml(label, value, color){
+  var pct = clamp(value,0,100);
+  return '<div class="meter-head"><span>'+label+'</span><b>'+ Math.round(pct) +'/100</b></div>' +
+    '<div class="meter-track"><div class="meter-fill" style="width:'+pct+'%; background:'+color+';"></div></div>';
+}
+
+window.elegirOpcion = function(i){
+  var m = state.match;
+  var ev = m.eventos[m.idx];
+  var op = ev.opciones[i];
+  var estilo = estiloActual();
+
+  var efectos = {
+    nota: op.efectos.nota || 0,
+    control: op.efectos.control || 0,
+    fama: op.efectos.fama || 0
+  };
+
+  var sinergia = false;
+  if(estilo && op.tipo===estilo.bonusTipo){
+    efectos.control += estilo.bonusControl;
+    efectos.fama += estilo.bonusFama;
+    sinergia = true;
+  }
+
+  m.nota = m.nota + efectos.nota;
+  m.control = clamp(m.control + efectos.control, 0, 100);
+  state.fama = clamp(state.fama + efectos.fama, 0, 100);
+
+  if(op.tarjeta==="amarilla"){ m.amarillas++; }
+  if(op.tarjeta==="roja"){ m.rojas++; }
+  var PENAL_EN_OPCION_0 = ["mano_area","plancha_penal","mano_intencional"];
+  var PENAL_EN_OPCION_1 = ["simulacion_area","simulacion_area_real"];
+  if(PENAL_EN_OPCION_0.indexOf(ev.id)!==-1 && i===0){ m.penales++; }
+  if(PENAL_EN_OPCION_1.indexOf(ev.id)!==-1 && i===1){ m.penales++; }
+
+  m.lastFeedback = {
+    resultado: op.resultado,
+    efectos: efectos,
+    tarjeta: op.tarjeta || null,
+    sinergia: sinergia
+  };
+
+  state.screen = "feedback";
+  render();
+};
+
+function screenFeedback(){
+  var m = state.match;
+  var fb = m.lastFeedback;
+  var pos = fb.efectos.nota >= 0;
+
+  var chips = "";
+  if(fb.efectos.nota) chips += deltaPill("Nota partido", fb.efectos.nota, 1);
+  if(fb.efectos.control) chips += deltaPill("Control", fb.efectos.control, 0);
+  if(fb.efectos.fama) chips += deltaPill("Fama", fb.efectos.fama, 0);
+
+  var tarjetaHtml = "";
+  if(fb.tarjeta){
+    tarjetaHtml = '<div style="margin-top:10px;"><span class="card-flag '+fb.tarjeta+'"></span>' +
+      (fb.tarjeta==="roja" ? "Tarjeta roja mostrada" : "Tarjeta amarilla mostrada") + '</div>';
+  }
+
+  var sinergiaHtml = fb.sinergia ? '<div class="muted" style="font-size:11.5px; margin-top:8px;">✓ Decisión alineada con tu estilo declarado.</div>' : "";
+
+  return topbar() +
+    '<div class="feedback-box '+(pos?"pos":"neg")+'">' +
+      '<div class="feedback-title '+(pos?"pos":"neg")+'">'+ (pos?"Buena lectura":"Decisión cuestionada") +'</div>' +
+      '<div class="headline">'+ fb.resultado +'</div>' +
+      tarjetaHtml +
+      '<div class="delta-row">'+ chips +'</div>' +
+      sinergiaHtml +
+    '</div>' +
+    '<button class="btn btn-primary" onclick="continuarTrasFeedback()">'+ (esUltimoEvento()?"Ir al final del partido":"Continuar el partido") +'</button>';
+}
+
+function deltaPill(label, value, decimals){
+  var up = value>=0;
+  var txt = (up?"+":"") + value.toFixed(decimals);
+  return '<span class="delta-pill '+(up?"up":"down")+'">'+label+' '+txt+'</span>';
+}
+
+function esUltimoEvento(){
+  return state.match.idx >= state.match.eventos.length-1;
+}
+
+window.continuarTrasFeedback = function(){
+  var m = state.match;
+  if(esUltimoEvento()){
+    cerrarPartido();
+  } else {
+    m.idx++;
+    siguienteEvento();
+  }
+};
+
+/* ---------- CIERRE DE PARTIDO ---------- */
+function cerrarPartido(){
+  var m = state.match;
+  var notaFinal = m.nota;
+
+  if(m.control < 30) notaFinal -= 1.5;
+  else if(m.control > 80) notaFinal += 0.4;
+
+  notaFinal = clamp(Math.round(notaFinal*10)/10, 1, 10);
+
+  var cat = categoriaActual();
+  var pagoBase = cat.salario * (0.65 + notaFinal/10);
+  state.ingresos += Math.round(pagoBase);
+
+  state.stats.partidos++;
+  state.stats.amarillas += m.amarillas;
+  state.stats.rojas += m.rojas;
+  state.stats.penales += m.penales;
+
+  state.carreraNotas.push(notaFinal);
+  state.temporadaNotas.push(notaFinal);
+
+  m.notaFinal = notaFinal;
+  m.pago = Math.round(pagoBase);
+
+  state.screen = "matchResult";
+  render();
+}
+
+function screenMatchResult(){
+  var m = state.match;
+  var cat = categoriaActual();
+  var veredicto = "";
+  if(m.notaFinal>=8.5) veredicto = "Arbitraje sobresaliente. La Federación lo destaca en el informe semanal.";
+  else if(m.notaFinal>=7) veredicto = "Buen partido dirigido. Control sólido de principio a fin.";
+  else if(m.notaFinal>=5.5) veredicto = "Un partido correcto, sin brillar, pero sin sobresaltos graves.";
+  else if(m.notaFinal>=4) veredicto = "Rendimiento flojo. Varias decisiones quedaron en duda.";
+  else veredicto = "Partido para el olvido. La prensa te destroza en las redes.";
+
+  return topbar() +
+    '<div class="panel center">' +
+      '<div class="eyebrow">Fin del partido · '+ m.local +' vs '+ m.visitante +'</div>' +
+      '<div class="result-big">'+ m.notaFinal.toFixed(1) +'<small>/10</small></div>' +
+      '<p class="muted" style="font-size:13px; margin-top:8px;">'+ veredicto +'</p>' +
+    '</div>' +
+    '<div class="stat-grid">' +
+      '<div class="stat-box"><div class="v" style="color:var(--yellow);">'+ m.amarillas +'</div><div class="l">Amarillas del partido</div></div>' +
+      '<div class="stat-box red"><div class="v">'+ m.rojas +'</div><div class="l">Rojas del partido</div></div>' +
+      '<div class="stat-box gold"><div class="v">'+ fmtMoney(m.pago) +'</div><div class="l">Cobrado por dirigir</div></div>' +
+      '<div class="stat-box"><div class="v">'+ Math.round(m.control) +'</div><div class="l">Control final</div></div>' +
+    '</div>' +
+    '<button class="btn btn-primary" onclick="avanzarCalendario()">Continuar</button>';
+}
+
+window.avanzarCalendario = function(){
+  var cat = categoriaActual();
+  state.match = null;
+  if(state.fecha >= cat.fechas){
+    cerrarTemporada();
+  } else {
+    state.fecha++;
+    state.screen = "dashboard";
+    render();
+  }
+};
+
+/* ---------- CIERRE DE TEMPORADA ---------- */
+function cerrarTemporada(){
+  var avg = promedio(state.temporadaNotas);
+  var cat = categoriaActual();
+  var resultado = { avg: Math.round(avg*10)/10, categoriaAnterior: cat.nombre, movimiento:"mantiene", mensaje:"" };
+
+  if(avg >= 8){
+    if(state.catIndex < CATEGORIAS.length-1){
+      state.catIndex++;
+      resultado.movimiento = "ascenso";
+      resultado.mensaje = "La Federación te asciende a "+ CATEGORIAS[state.catIndex].nombre +" por tu excelente temporada.";
+      state.seasonsBajas = 0;
+    } else {
+      resultado.mensaje = "Ya estás en la cima del arbitraje. Consolidás tu lugar en el Mundial.";
+      state.seasonsBajas = 0;
+    }
+  } else if(avg < 5){
+    state.seasonsBajas++;
+    if(state.seasonsBajas >= 2){
+      state.despedido = true;
+      resultado.movimiento = "despido";
+      resultado.mensaje = "Dos temporadas flojas consecutivas. La Federación decide desvincularte del cuerpo arbitral.";
+    } else if(state.catIndex > 0){
+      state.catIndex--;
+      resultado.movimiento = "descenso";
+      resultado.mensaje = "Tras una temporada floja, te reasignan a "+ CATEGORIAS[state.catIndex].nombre +".";
+    } else {
+      resultado.movimiento = "sancion";
+      resultado.mensaje = "Recibís una seria advertencia de la Federación. Una temporada más así y quedás fuera.";
+    }
+  } else {
+    resultado.mensaje = "Temporada pareja, sin sobresaltos. Seguís en "+ cat.nombre +".";
+    state.seasonsBajas = 0;
+  }
+
+  state.lastSeasonResult = resultado;
+  state.temporadaNotas = [];
+  state.fecha = 1;
+  state.ref.edad++;
+
+  if(state.despedido){
+    state.screen = "gameover";
+  } else if(state.ref.edad >= 48){
+    state.retirado = true;
+    state.screen = "retirement";
+  } else {
+    state.screen = "seasonSummary";
+  }
+  render();
+}
+
+function screenSeasonSummary(){
+  var r = state.lastSeasonResult;
+  var color = r.movimiento==="ascenso" ? "var(--green)" : (r.movimiento==="descenso"||r.movimiento==="sancion" ? "var(--red)" : "var(--gold)");
+  var tag = { ascenso:"ASCENSO", descenso:"DESCENSO", sancion:"ADVERTENCIA", mantiene:"SE MANTIENE" }[r.movimiento] || "TEMPORADA CERRADA";
+
+  return topbar() +
+    '<div class="panel center">' +
+      '<div class="eyebrow">Resumen de temporada</div>' +
+      '<h2 class="section-title" style="margin-top:6px;">'+ r.categoriaAnterior +'</h2>' +
+      '<div class="result-big" style="color:'+color+';">'+ r.avg.toFixed(1) +'<small>/10</small></div>' +
+      '<div class="muted" style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-top:2px;">Nota media de la temporada</div>' +
+      '<div class="badge-cat" style="background:'+color+';">'+ tag +'</div>' +
+      '<p class="headline" style="margin-top:14px;">'+ r.mensaje +'</p>' +
+    '</div>' +
+    '<div class="stat-grid">' +
+      '<div class="stat-box"><div class="v">'+ state.ref.edad +'</div><div class="l">Edad actual</div></div>' +
+      '<div class="stat-box gold"><div class="v">'+ fmtMoney(state.ingresos) +'</div><div class="l">Ingresos acumulados</div></div>' +
+    '</div>' +
+    '<button class="btn btn-primary" onclick="comenzarProximaTemporada()">Comenzar próxima temporada</button>';
+}
+
+window.comenzarProximaTemporada = function(){
+  state.screen = "dashboard";
+  render();
+};
+
+/* ---------- RETIRO / GAME OVER ---------- */
+function screenRetirement(){
+  var conf = calcularConfianza();
+  return topbar() +
+    '<div class="panel center">' +
+      '<div class="eyebrow">Fin de la carrera</div>' +
+      '<h1 class="section-title" style="font-size:26px; margin-top:8px;">RETIRO DEL<br/>ÁRBITRO '+ escapeHtml(state.ref.nombre).toUpperCase() +'</h1>' +
+      '<p class="muted" style="font-size:13px; margin-top:10px;">A los '+ state.ref.edad +' años, colgás el silbato. Así cierra tu paso por el arbitraje profesional.</p>' +
+    '</div>' +
+    resumenCarreraHtml(conf) +
+    '<button class="btn btn-gold" onclick="reiniciarCarrera()">Iniciar una nueva carrera</button>';
+}
+
+function screenGameOver(){
+  var conf = calcularConfianza();
+  return topbar() +
+    '<div class="panel center">' +
+      '<div class="eyebrow">Desvinculado de la Federación</div>' +
+      '<h1 class="section-title" style="font-size:24px; color:var(--red); margin-top:8px;">FIN DE LA CARRERA</h1>' +
+      '<p class="muted" style="font-size:13px; margin-top:10px;">'+ state.lastSeasonResult.mensaje +'</p>' +
+    '</div>' +
+    resumenCarreraHtml(conf) +
+    '<button class="btn btn-danger" onclick="reiniciarCarrera()">Empezar de nuevo</button>';
+}
+
+function resumenCarreraHtml(conf){
+  return '<div class="stat-grid">' +
+      '<div class="stat-box wide"><div class="v">'+ categoriaActual().nombre +'</div><div class="l">Categoría más alta alcanzada</div></div>' +
+      '<div class="stat-box"><div class="v">'+ state.stats.partidos +'</div><div class="l">Partidos dirigidos</div></div>' +
+      '<div class="stat-box gold"><div class="v">'+ (conf?conf.toFixed(1):"–") +'</div><div class="l">Valoración media histórica</div></div>' +
+      '<div class="stat-box"><div class="v" style="color:var(--yellow);">'+ state.stats.amarillas +'</div><div class="l">Amarillas mostradas</div></div>' +
+      '<div class="stat-box red"><div class="v">'+ state.stats.rojas +'</div><div class="l">Rojas mostradas</div></div>' +
+      '<div class="stat-box wide gold"><div class="v">'+ fmtMoney(state.ingresos) +'</div><div class="l">Ingresos totales de la carrera</div></div>' +
+    '</div>';
+}
+
+window.reiniciarCarrera = function(){
+  borrarGuardado();
+  state = nuevoEstado();
+  render();
+};
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+
+var saved = cargarGuardado();
+state = saved ? saved : nuevoEstado();
+if(state.screen==="start"){
+  render();
+} else {
+  render();
+}
+
+})();
+</script>
+</body>
+</html>
