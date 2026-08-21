@@ -561,6 +561,203 @@ h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:0.3px; }
 .logo{ font-family:var(--font-display); font-size:15px; letter-spacing:1px; color:var(--text-dim); text-transform:uppercase; }
 .logo b{ color:var(--green); }
 
+/* ---------- Shop Grid (Equipos / Inversiones Presidenciales) ---------- */
+.shop-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin-top:14px;
+}
+@media(min-width:620px){
+  .shop-grid{ grid-template-columns:repeat(2, 1fr); }
+}
+.shop-card{
+  background:linear-gradient(160deg, #121a24 0%, #0c1219 100%);
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  transition:border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  position:relative;
+  overflow:hidden;
+}
+.shop-card::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(circle at 85% 15%, rgba(240,196,25,0.06), transparent 65%);
+  pointer-events:none;
+}
+.shop-card:hover{
+  border-color:rgba(240,196,25,0.45);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.shop-card.bought{
+  border-color:rgba(0,230,118,0.45);
+  background:linear-gradient(160deg, rgba(0,230,118,0.06) 0%, #0c1219 100%);
+}
+.shop-card.bought::before{
+  background:radial-gradient(circle at 85% 15%, rgba(0,230,118,0.08), transparent 65%);
+}
+.shop-card-head{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.shop-card-head > div:first-child{
+  width:48px; height:48px; flex:none;
+  border-radius:12px;
+  background:#0d131a;
+  border:1.5px solid rgba(240,196,25,0.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px;
+}
+.shop-card.bought .shop-card-head > div:first-child{
+  border-color:rgba(0,230,118,0.4);
+  background:rgba(0,230,118,0.06);
+}
+.shop-card-title{
+  font-family:var(--font-display);
+  font-size:15.5px;
+  font-weight:700;
+  color:#fff;
+  line-height:1.2;
+}
+.shop-card-desc{
+  font-size:12px;
+  color:var(--text-dim);
+  margin-top:5px;
+  line-height:1.45;
+}
+.shop-card-foot{
+  margin-top:auto;
+  padding-top:14px;
+}
+.shop-btn{
+  display:block;
+  width:100%;
+  text-align:center;
+  border:none;
+  border-radius:10px;
+  padding:11px 14px;
+  font-family:var(--font-display);
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:0.3px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:transform 0.1s ease, filter 0.15s ease;
+}
+.shop-btn:active{ transform:scale(0.97); }
+.shop-btn.can-buy{
+  background:linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color:#221a02;
+  box-shadow:0 4px 14px rgba(240,196,25,0.2);
+}
+.shop-btn.can-buy:hover{ filter:brightness(1.08); }
+.shop-btn.cant-buy{
+  background:#0d131a;
+  border:1.5px solid var(--border);
+  color:var(--text-faint);
+  cursor:not-allowed;
+}
+.shop-badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0.6px;
+  text-transform:uppercase;
+  padding:6px 14px;
+  border-radius:8px;
+  text-align:center;
+  width:100%;
+  box-sizing:border-box;
+}
+.shop-badge.bought{
+  background:rgba(0,230,118,0.12);
+  color:var(--green);
+  border:1.5px solid rgba(0,230,118,0.4);
+}
+.shop-card-cat{
+  display:inline-block;
+  font-family:var(--font-display);
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:0.8px;
+  text-transform:uppercase;
+  color:var(--gold);
+  background:rgba(240,196,25,0.12);
+  border:1px solid rgba(240,196,25,0.25);
+  padding:2px 8px;
+  border-radius:5px;
+  margin-bottom:6px;
+}
+.shop-card.bought .shop-card-cat{
+  color:var(--green);
+  background:rgba(0,230,118,0.1);
+  border-color:rgba(0,230,118,0.3);
+}
+.shop-progress-bar-wrap{
+  margin-top:14px;
+}
+.shop-progress-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:5px;
+}
+.shop-progress-label{
+  font-size:11px;
+  font-weight:800;
+  color:var(--text-dim);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.shop-progress-count{
+  font-family:var(--font-display);
+  font-size:13px;
+  font-weight:700;
+  color:var(--gold);
+}
+.shop-progress-track{
+  width:100%;
+  height:8px;
+  background:#080c11;
+  border:1px solid var(--border);
+  border-radius:5px;
+  overflow:hidden;
+}
+.shop-progress-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold-deep), var(--gold));
+  border-radius:5px;
+  transition:width 0.4s ease;
+  box-shadow:0 0 8px rgba(240,196,25,0.3);
+}
+.shop-funds-pill{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  background:#080c11;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+}
+.shop-funds-label{
+  font-size:11.5px;
+  font-weight:700;
+  color:var(--text-dim);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.shop-funds-val{
+  font-family:var(--font-display);
+  font-size:18px;
+  font-weight:800;
+  color:var(--green);
+}
+
 /* ---------- Shop Styles ---------- */
 .shop-cat-header{
   font-family:var(--font-display); font-size:16px; color:var(--gold); letter-spacing:0.8px;
@@ -9186,7 +9383,18 @@ function screenPresidentTraining(){
     }
   ];
 
+  var catMap = {
+    preparadorFisico:"Físico", crioTerapia:"Recuperación", clinicaPsicologia:"Mental",
+    simuladorVAR:"Tecnología", intercomunicadoresHD:"Comunicación", analisisVideo:"Análisis",
+    aumentoViaticos:"Bienestar", pasantiaFIFA:"Formación"
+  };
+
+  var activasCount = mejorasData.filter(function(m){ return m.comprado; }).length;
+  var totalMejoras = mejorasData.length;
+  var pctProgreso = Math.round((activasCount / totalMejoras) * 100);
+
   var cardsHtml = mejorasData.map(function(m){
+    var catLabel = catMap[m.id] || "Inversión";
     var btnHtml = m.comprado ?
       '<span class="shop-badge bought">✓ Inversión Activa</span>' :
       (ps.fondos >= m.costo ?
@@ -9196,8 +9404,9 @@ function screenPresidentTraining(){
 
     return '<div class="shop-card' + (m.comprado ? ' bought' : '') + '">' +
       '<div class="shop-card-head">' +
-        '<div style="font-size:26px;">' + m.icono + '</div>' +
+        '<div>' + m.icono + '</div>' +
         '<div style="flex:1;">' +
+          '<span class="shop-card-cat">' + catLabel + '</span>' +
           '<div class="shop-card-title">' + m.nombre + '</div>' +
           '<div class="shop-card-desc">' + m.desc + '</div>' +
         '</div>' +
@@ -9208,10 +9417,23 @@ function screenPresidentTraining(){
 
   return topbar() +
     navTabsPresidente("pres_training") +
-    '<div class="panel">' +
+    '<div class="pres-office-panel">' +
       '<div class="eyebrow" style="color:var(--gold);">Tecnología, Fisioterapia & Equipamiento</div>' +
-      '<h2 class="section-title" style="margin-top:4px;">Inversiones Institucionales para Árbitros</h2>' +
-      '<p class="muted" style="font-size:13px; margin-top:4px;">Fondos disponibles en las arcas del Colegio: <b style="color:var(--green);">' + fmtMoney(ps.fondos) + '</b></p>' +
+      '<h2 class="section-title" style="margin-top:4px;">Inversiones Institucionales</h2>' +
+      '<p class="muted" style="font-size:13px; margin-top:6px; line-height:1.45;">Mejorá el rendimiento de todo el plantel arbitral con tecnología de punta, recuperación física y formación de élite.</p>' +
+      '<div class="shop-progress-bar-wrap">' +
+        '<div class="shop-progress-head">' +
+          '<span class="shop-progress-label">Inversiones activas</span>' +
+          '<span class="shop-progress-count">' + activasCount + ' / ' + totalMejoras + '</span>' +
+        '</div>' +
+        '<div class="shop-progress-track">' +
+          '<div class="shop-progress-fill" style="width:' + pctProgreso + '%;"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="shop-funds-pill">' +
+        '<span class="shop-funds-label">Fondos del Colegio</span>' +
+        '<span class="shop-funds-val">' + fmtMoney(ps.fondos) + '</span>' +
+      '</div>' +
     '</div>' +
     '<div class="shop-grid">' + cardsHtml + '</div>' +
     '<button class="btn btn-outline" style="margin-top:16px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
