@@ -1481,22 +1481,40 @@ h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:0.3px; }
 }
 
 /* Pestañas de Navegación del Despacho */
+.pres-nav-tabs-wrapper{
+  position: relative;
+  width: 100%;
+  margin-top: 12px;
+}
 .pres-nav-tabs{
   display: flex;
   gap: 6px;
   overflow-x: auto;
   padding: 4px 2px 8px 2px;
-  margin-top: 12px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) #0d131a;
+  -webkit-overflow-scrolling: touch;
 }
-.pres-nav-tabs::-webkit-scrollbar{ display: none; }
+.pres-nav-tabs::-webkit-scrollbar{
+  height: 6px;
+  display: block;
+}
+.pres-nav-tabs::-webkit-scrollbar-track{
+  background: #0d131a;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.pres-nav-tabs::-webkit-scrollbar-thumb{
+  background: linear-gradient(90deg, var(--gold), #ffd54f);
+  border-radius: 4px;
+}
 .pres-nav-tab{
   flex: none;
   background: #0d131a;
   border: 1px solid var(--border);
   color: var(--text-dim);
   border-radius: 10px;
-  padding: 8px 13px;
+  padding: 8px 14px;
   font-family: var(--font-display);
   font-size: 11.5px;
   font-weight: 700;
@@ -1506,9 +1524,20 @@ h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:0.3px; }
   transition: all 0.15s ease;
   white-space: nowrap;
 }
+@media(min-width: 680px){
+  .pres-nav-tabs{
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  .pres-nav-tab{
+    flex: 1 1 calc(25% - 6px);
+    text-align: center;
+  }
+}
 .pres-nav-tab:hover{
   border-color: var(--gold);
   color: #fff;
+  background: #141c26;
 }
 .pres-nav-tab.active{
   background: rgba(240,196,25,0.15);
@@ -2015,6 +2044,225 @@ h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:0.3px; }
   .press-sponsor-board{ grid-template-columns:repeat(2, 1fr); }
   .pres-stats-grid{ grid-template-columns: 1fr; }
 }
+
+/* Custom In-App Modal Overlay for reliable confirmation */
+.custom-modal-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(4, 7, 12, 0.85);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: fadeInModal 0.2s ease;
+}
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.custom-modal-box{
+  background: #0d141e;
+  border: 1.5px solid rgba(240,196,25,0.4);
+  border-radius: 18px;
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 24px rgba(240,196,25,0.15);
+  text-align: center;
+}
+.custom-modal-title{
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 10px;
+  line-height: 1.25;
+}
+.custom-modal-desc{
+  font-size: 13px;
+  color: #a6b5c5;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Division Sections in Multi-Division Assignment */
+.division-section-box{
+  background: #0c1219;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.division-section-box.liga{ border-color: rgba(240,196,25,0.4); }
+.division-section-box.nacional{ border-color: rgba(0,230,118,0.4); }
+.division-section-box.bmetro{ border-color: rgba(64,196,255,0.4); }
+.division-section-box.regional{ border-color: rgba(179,136,255,0.4); }
+
+.division-section-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.division-section-title{
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.division-badge-count{
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+}
+
+/* Commission Directiva Cabinet HUD */
+.cabinet-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.cabinet-slot-card{
+  background: #0e151e;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.cabinet-slot-card.active{
+  border-color: rgba(240,196,25,0.45);
+  background: radial-gradient(circle at top right, rgba(240,196,25,0.06), #0e151e 75%);
+}
+.cabinet-slot-head{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cabinet-avatar{
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #141c27;
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex: none;
+}
+.cabinet-name{
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.cabinet-role{
+  font-size: 11px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.cabinet-perk{
+  background: rgba(0,230,118,0.06);
+  border: 1px solid rgba(0,230,118,0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #c9f7dd;
+  line-height: 1.4;
+}
+.cabinet-salary{
+  font-size: 11.5px;
+  color: var(--text-faint);
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Equipment / Technology Shop HUD */
+.shop-filter-bar{
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-top: 10px;
+}
+.shop-cat-btn{
+  background: #0d141e;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.shop-cat-btn.active{
+  background: rgba(240,196,25,0.18);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Financial Breakdown Receipt Table */
+.financial-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.financial-table td{
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.financial-table tr:last-child td{
+  border-bottom: none;
+  font-weight: 800;
+  font-size: 14px;
+  padding-top: 12px;
+}
+.financial-table .f-label{
+  color: #c0ccd8;
+}
+.financial-table .f-val-pos{
+  color: var(--green);
+  text-align: right;
+  font-weight: 700;
+}
+.financial-table .f-val-neg{
+  color: var(--red);
+  text-align: right;
+  font-weight: 700;
+}
+
 </style>
 </head>
 <body>
@@ -4003,7 +4251,9 @@ function crearPlantelArbitrosInicial(){
     { id:"falcon", nombre:"Yael Falcón Pérez", apodo:"La Joven Promesa", edad:34, exp:75, temple:82, fisico:95, rigor:"Equilibrado", integridad:92, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"h5", divisionPreferida:"nacional", internacional:true, enConmebol:false, suspensiones:0 },
     { id:"dealmeida", nombre:"Mariana De Almeida", apodo:"La Justiciera", edad:40, exp:84, temple:89, fisico:90, rigor:"Equilibrado", integridad:96, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"m1", divisionPreferida:"liga", internacional:true, enConmebol:false, suspensiones:0 },
     { id:"penel", nombre:"Ariel Penel", apodo:"El Batallador del Ascenso", edad:43, exp:76, temple:77, fisico:78, rigor:"Severo", integridad:85, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"h2", divisionPreferida:"bmetro", internacional:false, enConmebol:false, suspensiones:0 },
-    { id:"doval", nombre:"Sebastián Zunino", apodo:"El Dinámico del Interior", edad:35, exp:68, temple:76, fisico:91, rigor:"Equilibrado", integridad:90, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"h3", divisionPreferida:"regional", internacional:false, enConmebol:false, suspensiones:0 }
+    { id:"doval", nombre:"Sebastián Zunino", apodo:"El Dinámico del Interior", edad:35, exp:68, temple:76, fisico:91, rigor:"Equilibrado", integridad:90, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"h3", divisionPreferida:"regional", internacional:false, enConmebol:false, suspensiones:0 },
+    { id:"lamolina", nombre:"Nicolás Lamolina", apodo:"Criterio y Continuidad", edad:42, exp:79, temple:81, fisico:84, rigor:"Permisivo", integridad:88, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"h4", divisionPreferida:"nacional", internacional:false, enConmebol:false, suspensiones:0 },
+    { id:"fortunato", nombre:"Laura Fortunato", apodo:"La Referente Mundialista", edad:39, exp:86, temple:91, fisico:92, rigor:"Equilibrado", integridad:97, energia:100, partidosSeguidos:0, partidosTotal:0, avatarId:"m2", divisionPreferida:"liga", internacional:true, enConmebol:false, suspensiones:0 }
   ];
 }
 
@@ -4036,7 +4286,7 @@ function generarCandidatoScouting(idSeq){
   };
 }
 
-function nuevoEstadoPresidente(nombre, avatarId){
+function nuevoEstadoPresidente(nombre, avatarId, comision){
   var estado = {
     screen: "pres_dashboard",
     activeTab: "dashboard", // "dashboard", "designaciones", "comision", "sponsors", "academia", "mejoras", "balance"
@@ -4051,6 +4301,12 @@ function nuevoEstadoPresidente(nombre, avatarId){
     fondos: 260000,
     moralPlantel: 78,
     academiaNivel: 1, // 1: Escuela Regional, 2: Centro Tecnificación, 3: INAF, 4: FIFA Alto Rendimiento
+    comision: comision || {
+      tecnica: "com_elizondo",
+      medica: "com_villani",
+      legal: "com_benitez",
+      prensa: "com_rossi"
+    },
     sponsors: {
       mangaPecho: "sponsor_banco",
       reloj: "sponsor_casio",
@@ -4067,7 +4323,10 @@ function nuevoEstadoPresidente(nombre, avatarId){
       clinicaPsicologia: false,
       simuladorVAR: false,
       intercomunicadoresHD: false,
-      aumentoViaticos: false
+      aumentoViaticos: false,
+      crioTerapia: false,
+      analisisVideo: false,
+      pasantiaFIFA: false
     },
     arbitros: crearPlantelArbitrosInicial(),
     scoutingCandidatos: [generarCandidatoScouting(1), generarCandidatoScouting(2), generarCandidatoScouting(3)],
@@ -4103,6 +4362,20 @@ function sanearEstadoPresidente(ps){
   if(typeof ps.academiaNivel !== "number") ps.academiaNivel = 1;
   if(typeof ps.promocionesRealizadas !== "number") ps.promocionesRealizadas = 0;
   if(typeof ps.totalFechasDirigidas !== "number") ps.totalFechasDirigidas = 0;
+  
+  if(!ps.comision || typeof ps.comision !== "object"){
+    ps.comision = {
+      tecnica: "com_elizondo",
+      medica: "com_villani",
+      legal: "com_benitez",
+      prensa: "com_rossi"
+    };
+  } else {
+    if(!ps.comision.tecnica) ps.comision.tecnica = "com_elizondo";
+    if(!ps.comision.medica) ps.comision.medica = "com_villani";
+    if(!ps.comision.legal) ps.comision.legal = "com_benitez";
+    if(!ps.comision.prensa) ps.comision.prensa = "com_rossi";
+  }
   
   if(!ps.sponsors || typeof ps.sponsors !== "object"){
     ps.sponsors = {
@@ -4509,6 +4782,20 @@ function render(){
     }
   }
   
+  if(modalConfirmReinicioActivo){
+    html += '<div class="custom-modal-overlay">' +
+      '<div class="custom-modal-box">' +
+        '<div style="font-size:36px; text-align:center;">🔄</div>' +
+        '<div class="custom-modal-title">¿Reiniciar Carrera de Dirigente?</div>' +
+        '<div class="custom-modal-desc">Se borrarán todos los avances, árbitros promovidos de la academia, fondos acumulados y acuerdos comerciales de sponsors. Volverás a la elección inicial de presidente.</div>' +
+        '<div style="display:flex; gap:10px; margin-top:18px;">' +
+          '<button class="btn btn-danger" style="flex:1; padding:12px 14px;" onclick="ejecutarReinicioPresidenciaConfirmado()">Sí, Reiniciar</button>' +
+          '<button class="btn btn-outline" style="flex:1; padding:12px 14px;" onclick="cancelarReinicioPresidencia()">Cancelar</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
   app.innerHTML = html;
   if(state.screen !== lastRenderedScreen || (presState && presState.screen !== lastRenderedScreen)){
     window.scrollTo(0,0);
@@ -5232,7 +5519,14 @@ function tickTunnelTimer(){
       sfxWhistle();
       triggerHaptic("error");
     }
-    render();
+    var footerEl = document.getElementById("tunnelFooterContainer");
+    if(footerEl){
+      footerEl.innerHTML = '<div class="feedback-box neg" style="margin-top:14px; text-align:center;">' +
+        '<div class="feedback-title neg">⚠️ ¡Tiempo Agotado en el Túnel (60s)!</div>' +
+        '<div class="headline" style="font-size:13px; margin-top:4px;">No alcanzaste a revisar la indumentaria antes de salir al campo. Hay desconcentración y desorden: <b style="color:var(--red);">-15% de Control de Partido</b>.</div>' +
+      '</div>' +
+      '<button class="btn btn-gold" style="margin-top:14px; font-size:14px;" onclick="iniciarSorteoCapitanes()">⚽ Salir al Sorteo de Capitanes en la Cancha →</button>';
+    }
   }
 }
 
@@ -5263,7 +5557,11 @@ window.iniciarTunelRevision = function(){
   tunnelTimerHandle = setInterval(tickTunnelTimer, 1000);
 };
 
-window.voltearCartaMemoria = function(idx){
+window.voltearCartaMemoria = function(idx, event){
+  if(event){
+    if(event.preventDefault) event.preventDefault();
+    if(event.stopPropagation) event.stopPropagation();
+  }
   var s = tunnelMemoryState;
   if(!s || s.bloqueado || s.completado || s.tiempoAgotado) return;
   if(s.flipped.indexOf(idx) !== -1) return;
@@ -5271,12 +5569,19 @@ window.voltearCartaMemoria = function(idx){
 
   sfxCardFlip();
   s.flipped.push(idx);
-  render();
+
+  var cardEl = document.getElementById("memCard_" + idx);
+  if(cardEl) cardEl.classList.add("flipped");
 
   if(s.flipped.length === 2){
     s.intentos++;
-    var c1 = s.cards[s.flipped[0]];
-    var c2 = s.cards[s.flipped[1]];
+    var attemptsEl = document.getElementById("tunnelAttemptsCount");
+    if(attemptsEl) attemptsEl.textContent = s.intentos;
+
+    var idx1 = s.flipped[0];
+    var idx2 = s.flipped[1];
+    var c1 = s.cards[idx1];
+    var c2 = s.cards[idx2];
 
     if(c1.id === c2.id){
       // Coincidencia
@@ -5285,25 +5590,44 @@ window.voltearCartaMemoria = function(idx){
       sfxCardMatch();
       triggerHaptic("success");
 
+      var el1 = document.getElementById("memCard_" + idx1);
+      var el2 = document.getElementById("memCard_" + idx2);
+      if(el1) el1.classList.add("matched");
+      if(el2) el2.classList.add("matched");
+
       // Comprobar si completó todos los 6 pares
       var totalMatches = Object.keys(s.matchedIds).length;
+      var matchesEl = document.getElementById("tunnelMatchesCount");
+      if(matchesEl) matchesEl.textContent = totalMatches + "/" + PROHIBITED_ITEMS.length;
+
       if(totalMatches === PROHIBITED_ITEMS.length){
         s.completado = true;
         clearInterval(tunnelTimerHandle);
         // Bonificación
         state.match.control = clamp(state.match.control + 5, 0, 100);
         state.fama = clamp(state.fama + 1, 0, 100);
+
+        var footerEl = document.getElementById("tunnelFooterContainer");
+        if(footerEl){
+          footerEl.innerHTML = '<div class="feedback-box pos" style="margin-top:14px; text-align:center;">' +
+            '<div class="feedback-title pos">✅ ¡Revisión Impecable en Tiempo Récord!</div>' +
+            '<div class="headline" style="font-size:13px; margin-top:4px;">Todos los futbolistas retiraron los accesorios peligrosos. Ganás <b style="color:var(--green);">+5 Control</b> y <b style="color:var(--gold);">+1 Fama</b>.</div>' +
+          '</div>' +
+          '<button class="btn btn-gold" style="margin-top:14px; font-size:14px;" onclick="iniciarSorteoCapitanes()">⚽ Salir al Sorteo de Capitanes en la cancha →</button>';
+        }
       }
-      render();
     } else {
-      // No coincide, dar tiempo para memorizar y dar vuelta
+      // No coincide, dar tiempo para memorizar y dar vuelta sin recrear el DOM
       s.bloqueado = true;
       setTimeout(function(){
         if(s.tiempoAgotado) return;
+        var el1 = document.getElementById("memCard_" + idx1);
+        var el2 = document.getElementById("memCard_" + idx2);
+        if(el1) el1.classList.remove("flipped");
+        if(el2) el2.classList.remove("flipped");
         s.flipped = [];
         s.bloqueado = false;
-        render();
-      }, 700);
+      }, 650);
     }
   }
 };
@@ -5324,7 +5648,7 @@ function screenTunnelMemory(){
     var isMatched = !!s.matchedIds[c.id];
     var cardCls = "memory-card" + (isFlipped ? " flipped" : "") + (isMatched ? " matched" : "");
 
-    return '<div class="'+cardCls+'" onclick="voltearCartaMemoria('+i+')">' +
+    return '<div class="'+cardCls+'" id="memCard_'+i+'" onclick="voltearCartaMemoria('+i+', event)">' +
       '<div class="memory-card-inner">' +
         '<div class="memory-card-front">' +
           '<div style="font-size:20px;">🛡️</div>' +
@@ -5348,9 +5672,9 @@ function screenTunnelMemory(){
   } else if(s && s.completado){
     footerResultHtml = '<div class="feedback-box pos" style="margin-top:14px; text-align:center;">' +
       '<div class="feedback-title pos">✅ ¡Revisión Impecable en Tiempo Récord!</div>' +
-      '<div class="headline" style="font-size:13px; margin-top:4px;">Todos los futbolistas retiraron los accesorios peligrosos. Ganás <b>+5 Control</b> y <b>+1 Fama</b>.</div>' +
+      '<div class="headline" style="font-size:13px; margin-top:4px;">Todos los futbolistas retiraron los accesorios peligrosos. Ganás <b style="color:var(--green);">+5 Control</b> y <b style="color:var(--gold);">+1 Fama</b>.</div>' +
     '</div>' +
-    '<button class="btn btn-primary" style="margin-top:14px;" onclick="iniciarSorteoCapitanes()">Ir al Sorteo de Capitanes en la cancha →</button>';
+    '<button class="btn btn-gold" style="margin-top:14px;" onclick="iniciarSorteoCapitanes()">Ir al Sorteo de Capitanes en la cancha →</button>';
   } else {
     footerResultHtml = '<button class="btn btn-outline" style="margin-top:14px; font-size:12.5px;" onclick="iniciarSorteoCapitanes()">⏩ Omitir inspección previa e ir al Sorteo</button>';
   }
@@ -5375,11 +5699,11 @@ function screenTunnelMemory(){
       '</div>' +
 
       '<div class="memory-stats-bar">' +
-        '<span>Pares detectados: <b style="color:var(--green);">'+ totalMatches +'/'+ PROHIBITED_ITEMS.length +'</b></span>' +
-        '<span>Intentos: <b>'+ s.intentos +'</b></span>' +
+        '<span>Pares detectados: <b id="tunnelMatchesCount" style="color:var(--green);">'+ totalMatches +'/'+ PROHIBITED_ITEMS.length +'</b></span>' +
+        '<span>Intentos: <b id="tunnelAttemptsCount">'+ (s ? s.intentos : 0) +'</b></span>' +
       '</div>' +
       '<div class="memory-grid">' + cardsHtml + '</div>' +
-      footerResultHtml +
+      '<div id="tunnelFooterContainer">' + footerResultHtml + '</div>' +
     '</div>';
 }
 
@@ -6649,58 +6973,722 @@ var PRES_DIVISIONES = [
 
 var PRES_FIXTURES_POR_DIVISION = {
   liga: [
-    // 10 Fechas de Liga Profesional
-    [ { local:"Boca Juniors", visitante:"River Plate", tension:"Extrema", clasico:"Superclásico Nacional", dif:92 }, { local:"Racing Club", visitante:"Independiente", tension:"Muy Alta", clasico:"Clásico de Avellaneda", dif:84 }, { local:"San Lorenzo", visitante:"Huracán", tension:"Alta", clasico:"Clásico Porteño", dif:78 } ],
-    [ { local:"Estudiantes LP", visitante:"Gimnasia LP", tension:"Muy Alta", clasico:"Clásico Platense", dif:82 }, { local:"Rosario Central", visitante:"Newell's", tension:"Extrema", clasico:"Clásico Rosarino", dif:90 }, { local:"Vélez Sarsfield", visitante:"Argentinos Jrs", tension:"Media", clasico:"Duelo Táctico", dif:68 } ],
-    [ { local:"Belgrano", visitante:"Talleres", tension:"Muy Alta", clasico:"Clásico Cordobés", dif:84 }, { local:"Lanús", visitante:"Banfield", tension:"Alta", clasico:"Clásico del Sur", dif:76 }, { local:"River Plate", visitante:"Racing Club", tension:"Alta", clasico:"Clásico Histórico", dif:80 } ],
-    [ { local:"Independiente", visitante:"Boca Juniors", tension:"Muy Alta", clasico:"Duelo de Gigantes", dif:85 }, { local:"Colón", visitante:"Unión", tension:"Muy Alta", clasico:"Clásico Santafesino", dif:83 }, { local:"Defensa y Justicia", visitante:"Tigre", tension:"Media", clasico:"Cruce de Zona", dif:65 } ],
-    [ { local:"Boca Juniors", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Vieja Rivalidad", dif:83 }, { local:"Huracán", visitante:"River Plate", tension:"Alta", clasico:"Duelo en el Ducó", dif:76 }, { local:"Newell's", visitante:"Estudiantes LP", tension:"Media", clasico:"Batalla Táctica", dif:70 } ],
-    [ { local:"Rosario Central", visitante:"Boca Juniors", tension:"Muy Alta", clasico:"El Gigante Arde", dif:86 }, { local:"River Plate", visitante:"Talleres", tension:"Alta", clasico:"Duelo por la Cima", dif:79 }, { local:"Gimnasia LP", visitante:"Vélez Sarsfield", tension:"Media", clasico:"Duelo en el Bosque", dif:66 } ],
-    [ { local:"Racing Club", visitante:"Boca Juniors", tension:"Extrema", clasico:"Clásico Caliente", dif:89 }, { local:"River Plate", visitante:"Independiente", tension:"Muy Alta", clasico:"Choque Tradicional", dif:83 }, { local:"Banfield", visitante:"Lanús", tension:"Alta", clasico:"Revancha en el Sur", dif:76 } ],
-    [ { local:"Boca Juniors", visitante:"Estudiantes LP", tension:"Alta", clasico:"Duelo Copero", dif:78 }, { local:"San Lorenzo", visitante:"River Plate", tension:"Muy Alta", clasico:"Choque de Candidatos", dif:85 }, { local:"Talleres", visitante:"Belgrano", tension:"Muy Alta", clasico:"Revancha Cordobesa", dif:85 } ],
-    [ { local:"Newell's", visitante:"Rosario Central", tension:"Extrema", clasico:"Revancha en el Parque", dif:91 }, { local:"Argentinos Jrs", visitante:"Racing Club", tension:"Media", clasico:"Duelo en la Paternal", dif:68 }, { local:"Independiente", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Clásico Tradicional", dif:82 } ],
-    [ { local:"River Plate", visitante:"Boca Juniors", tension:"Extrema", clasico:"GRAN FINAL POR EL TÍTULO", dif:96 }, { local:"Independiente", visitante:"Racing Club", tension:"Extrema", clasico:"DEFINICIÓN DE CLASIFICACIÓN", dif:93 }, { local:"Huracán", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"DESQUITE FINAL", dif:86 } ]
+    // 10 Fechas de Liga Profesional (Dificultad 78 - 96: Extrema exigencia y presión de hinchadas)
+    [
+      { local:"Boca Juniors", visitante:"River Plate", tension:"Extrema", clasico:"Superclásico Nacional", dif:94 },
+      { local:"Racing Club", visitante:"Independiente", tension:"Muy Alta", clasico:"Clásico de Avellaneda", dif:86 },
+      { local:"San Lorenzo", visitante:"Huracán", tension:"Alta", clasico:"Clásico Porteño", dif:80 },
+      { local:"Estudiantes LP", visitante:"Gimnasia LP", tension:"Muy Alta", clasico:"Clásico Platense", dif:83 },
+      { local:"Rosario Central", visitante:"Newell's", tension:"Extrema", clasico:"Clásico Rosarino", dif:91 },
+      { local:"Vélez Sarsfield", visitante:"Argentinos Jrs", tension:"Media", clasico:"Duelo Táctico", dif:76 }
+    ],
+    [
+      { local:"Estudiantes LP", visitante:"Gimnasia LP", tension:"Muy Alta", clasico:"Clásico Platense", dif:84 },
+      { local:"Rosario Central", visitante:"Newell's", tension:"Extrema", clasico:"Clásico Rosarino", dif:92 },
+      { local:"Vélez Sarsfield", visitante:"Argentinos Jrs", tension:"Media", clasico:"Duelo Táctico", dif:75 },
+      { local:"Boca Juniors", visitante:"Talleres", tension:"Alta", clasico:"Duelo Caliente", dif:82 },
+      { local:"River Plate", visitante:"Lanús", tension:"Alta", clasico:"Choque de Estilos", dif:80 },
+      { local:"San Lorenzo", visitante:"Defensa y Justicia", tension:"Media", clasico:"Duelo Metropolitano", dif:74 }
+    ],
+    [
+      { local:"Belgrano", visitante:"Talleres", tension:"Muy Alta", clasico:"Clásico Cordobés", dif:86 },
+      { local:"Lanús", visitante:"Banfield", tension:"Alta", clasico:"Clásico del Sur", dif:79 },
+      { local:"River Plate", visitante:"Racing Club", tension:"Alta", clasico:"Clásico Histórico", dif:82 },
+      { local:"Independiente", visitante:"Vélez Sarsfield", tension:"Alta", clasico:"Duelo de Copas", dif:80 },
+      { local:"Boca Juniors", visitante:"Godoy Cruz", tension:"Media", clasico:"Cruce en Mendoza", dif:77 },
+      { local:"Newell's", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Batalla de Gigantes", dif:83 }
+    ],
+    [
+      { local:"Independiente", visitante:"Boca Juniors", tension:"Muy Alta", clasico:"Duelo de Gigantes", dif:87 },
+      { local:"Colón", visitante:"Unión", tension:"Muy Alta", clasico:"Clásico Santafesino", dif:85 },
+      { local:"Defensa y Justicia", visitante:"Tigre", tension:"Media", clasico:"Cruce de Zona", dif:75 },
+      { local:"River Plate", visitante:"Estudiantes LP", tension:"Alta", clasico:"Choque Técnico", dif:81 },
+      { local:"Racing Club", visitante:"Huracán", tension:"Alta", clasico:"Duelo Tradicional", dif:79 },
+      { local:"Talleres", visitante:"Rosario Central", tension:"Alta", clasico:"Duelo Federal", dif:80 }
+    ],
+    [
+      { local:"Boca Juniors", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Vieja Rivalidad", dif:86 },
+      { local:"Huracán", visitante:"River Plate", tension:"Alta", clasico:"Duelo en el Ducó", dif:79 },
+      { local:"Newell's", visitante:"Estudiantes LP", tension:"Media", clasico:"Batalla Táctica", dif:76 },
+      { local:"Gimnasia LP", visitante:"Racing Club", tension:"Alta", clasico:"Cruce en el Bosque", dif:78 },
+      { local:"Independiente", visitante:"Banfield", tension:"Media", clasico:"Duelo en Avellaneda", dif:75 },
+      { local:"Argentinos Jrs", visitante:"Belgrano", tension:"Media", clasico:"Duelo de Criterio", dif:73 }
+    ],
+    [
+      { local:"Rosario Central", visitante:"Boca Juniors", tension:"Muy Alta", clasico:"El Gigante Arde", dif:88 },
+      { local:"River Plate", visitante:"Talleres", tension:"Alta", clasico:"Duelo por la Cima", dif:81 },
+      { local:"Gimnasia LP", visitante:"Vélez Sarsfield", tension:"Media", clasico:"Duelo en el Bosque", dif:74 },
+      { local:"San Lorenzo", visitante:"Racing Club", tension:"Muy Alta", clasico:"Clásico Porteño-Sur", dif:84 },
+      { local:"Estudiantes LP", visitante:"Independiente", tension:"Alta", clasico:"Duelo de Historia", dif:79 },
+      { local:"Lanús", visitante:"Huracán", tension:"Media", clasico:"Cruce en la Fortaleza", dif:75 }
+    ],
+    [
+      { local:"Racing Club", visitante:"Boca Juniors", tension:"Extrema", clasico:"Clásico Caliente", dif:91 },
+      { local:"River Plate", visitante:"Independiente", tension:"Muy Alta", clasico:"Choque Tradicional", dif:85 },
+      { local:"Banfield", visitante:"Lanús", tension:"Alta", clasico:"Revancha en el Sur", dif:79 },
+      { local:"Huracán", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Revancha en Parque Patricios", dif:86 },
+      { local:"Talleres", visitante:"Estudiantes LP", tension:"Alta", clasico:"Duelo de Estrategas", dif:78 },
+      { local:"Vélez Sarsfield", visitante:"Rosario Central", tension:"Alta", clasico:"Batalla en Liniers", dif:80 }
+    ],
+    [
+      { local:"Boca Juniors", visitante:"Estudiantes LP", tension:"Alta", clasico:"Duelo Copero", dif:80 },
+      { local:"San Lorenzo", visitante:"River Plate", tension:"Muy Alta", clasico:"Choque de Candidatos", dif:87 },
+      { local:"Talleres", visitante:"Belgrano", tension:"Muy Alta", clasico:"Revancha Cordobesa", dif:87 },
+      { local:"Independiente", visitante:"Newell's", tension:"Alta", clasico:"Duelo en el Libertadores", dif:79 },
+      { local:"Rosario Central", visitante:"Racing Club", tension:"Muy Alta", clasico:"Cruce de Arroyito", dif:84 },
+      { local:"Argentinos Jrs", visitante:"Lanús", tension:"Media", clasico:"Duelo Semillero", dif:74 }
+    ],
+    [
+      { local:"Newell's", visitante:"Rosario Central", tension:"Extrema", clasico:"Revancha en el Parque", dif:93 },
+      { local:"Argentinos Jrs", visitante:"Racing Club", tension:"Media", clasico:"Duelo en la Paternal", dif:76 },
+      { local:"Independiente", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"Clásico Tradicional", dif:85 },
+      { local:"Boca Juniors", visitante:"Huracán", tension:"Alta", clasico:"Duelo en la Bombonera", dif:81 },
+      { local:"River Plate", visitante:"Vélez Sarsfield", tension:"Alta", clasico:"Choque en el Monumental", dif:82 },
+      { local:"Gimnasia LP", visitante:"Talleres", tension:"Media", clasico:"Duelo en 60 y 118", dif:75 }
+    ],
+    [
+      { local:"River Plate", visitante:"Boca Juniors", tension:"Extrema", clasico:"GRAN FINAL POR EL TÍTULO", dif:96 },
+      { local:"Independiente", visitante:"Racing Club", tension:"Extrema", clasico:"DEFINICIÓN DE CLASIFICACIÓN", dif:94 },
+      { local:"Huracán", visitante:"San Lorenzo", tension:"Muy Alta", clasico:"DESQUITE FINAL", dif:88 },
+      { local:"Rosario Central", visitante:"Estudiantes LP", tension:"Alta", clasico:"Batalla de Copas", dif:82 },
+      { local:"Talleres", visitante:"Lanús", tension:"Alta", clasico:"Cierre de Temporada", dif:79 },
+      { local:"Belgrano", visitante:"Vélez Sarsfield", tension:"Media", clasico:"Cierre en Alberdi", dif:75 }
+    ]
   ],
   nacional: [
-    // 10 Fechas de Primera Nacional
-    [ { local:"Ferro Carril Oeste", visitante:"Chacarita Jrs", tension:"Muy Alta", clasico:"Clásico del Ascenso", dif:76 }, { local:"Quilmes", visitante:"Nueva Chicago", tension:"Alta", clasico:"Choque Tradicional", dif:72 } ],
-    [ { local:"All Boys", visitante:"Atlanta", tension:"Muy Alta", clasico:"Clásico de Barrio", dif:75 }, { local:"Almirante Brown", visitante:"Deportivo Morón", tension:"Extrema", clasico:"Clásico del Oeste", dif:82 } ],
-    [ { local:"San Martín Tucumán", visitante:"Gimnasia Jujuy", tension:"Alta", clasico:"Clásico del Norte", dif:74 }, { local:"Patronato", visitante:"Colón", tension:"Alta", clasico:"Duelo de Primera", dif:73 } ],
-    [ { local:"Temperley", visitante:"Los Andes", tension:"Muy Alta", clasico:"Clásico de Lomas", dif:77 }, { local:"Defensores de Belgrano", visitante:"Platense", tension:"Media", clasico:"Duelo Norteño", dif:68 } ],
-    [ { local:"Chacarita Jrs", visitante:"Atlanta", tension:"Extrema", clasico:"Clásico de Villa Crespo", dif:85 }, { local:"Ferro Carril Oeste", visitante:"Quilmes", tension:"Alta", clasico:"Batalla de Históricos", dif:74 } ],
-    [ { local:"Deportivo Morón", visitante:"Nueva Chicago", tension:"Muy Alta", clasico:"Clásico Metropolitano", dif:80 }, { local:"Gimnasia Mendoza", visitante:"Independiente Rivadavia", tension:"Extrema", clasico:"Clásico Mendocino", dif:86 } ],
-    [ { local:"Colón", visitante:"San Martín Tucumán", tension:"Alta", clasico:"Candidatos al Ascenso", dif:75 }, { local:"Almirante Brown", visitante:"Temperley", tension:"Media", clasico:"Duelo en Casanova", dif:67 } ],
-    [ { local:"Nueva Chicago", visitante:"All Boys", tension:"Extrema", clasico:"Superclásico del Oeste", dif:88 }, { local:"Patronato", visitante:"Ferro Carril Oeste", tension:"Media", clasico:"Cruce en Paraná", dif:66 } ],
-    [ { local:"Chacarita Jrs", visitante:"Quilmes", tension:"Alta", clasico:"Duelo Caliente", dif:75 }, { local:"Atlanta", visitante:"Deportivo Morón", tension:"Alta", clasico:"Choque Metropolitano", dif:71 } ],
-    [ { local:"Ferro Carril Oeste", visitante:"All Boys", tension:"Muy Alta", clasico:"DEFINICIÓN DE ASCENSO", dif:84 }, { local:"San Martín Tucumán", visitante:"Colón", tension:"Extrema", clasico:"FINAL POR LA PUNTA", dif:87 } ]
+    // 10 Fechas de Primera Nacional (Dificultad 65 - 80: Fuerte roce físico y estadios con presión)
+    [
+      { local:"Ferro Carril Oeste", visitante:"Chacarita Jrs", tension:"Muy Alta", clasico:"Clásico del Ascenso", dif:78 },
+      { local:"Quilmes", visitante:"Nueva Chicago", tension:"Alta", clasico:"Choque Tradicional", dif:74 },
+      { local:"San Martín Tucumán", visitante:"Gimnasia Jujuy", tension:"Alta", clasico:"Duelo del Norte", dif:72 },
+      { local:"Almirante Brown", visitante:"Deportivo Morón", tension:"Muy Alta", clasico:"Clásico del Oeste", dif:79 },
+      { local:"Colón", visitante:"Patronato", tension:"Media", clasico:"Cruce Litoral", dif:68 }
+    ],
+    [
+      { local:"All Boys", visitante:"Atlanta", tension:"Muy Alta", clasico:"Clásico de Barrio", dif:77 },
+      { local:"Almirante Brown", visitante:"Deportivo Morón", tension:"Extrema", clasico:"Clásico del Oeste", dif:80 },
+      { local:"Ferro Carril Oeste", visitante:"Temperley", tension:"Alta", clasico:"Duelo en Caballito", dif:72 },
+      { local:"Quilmes", visitante:"Defensores de Belgrano", tension:"Media", clasico:"Choque en el Sur", dif:69 },
+      { local:"Gimnasia Mendoza", visitante:"San Martín Tucumán", tension:"Alta", clasico:"Duelo Cuyano-Norte", dif:73 }
+    ],
+    [
+      { local:"San Martín Tucumán", visitante:"Gimnasia Jujuy", tension:"Alta", clasico:"Clásico del Norte", dif:75 },
+      { local:"Patronato", visitante:"Colón", tension:"Alta", clasico:"Duelo de Primera", dif:74 },
+      { local:"Chacarita Jrs", visitante:"Nueva Chicago", tension:"Muy Alta", clasico:"Batalla de San Martín", dif:79 },
+      { local:"Atlanta", visitante:"Ferro Carril Oeste", tension:"Alta", clasico:"Duelo Porteño", dif:73 },
+      { local:"Deportivo Morón", visitante:"All Boys", tension:"Media", clasico:"Cruce en Castelar", dif:70 }
+    ],
+    [
+      { local:"Temperley", visitante:"Los Andes", tension:"Muy Alta", clasico:"Clásico de Lomas", dif:78 },
+      { local:"Defensores de Belgrano", visitante:"Platense", tension:"Media", clasico:"Duelo Norteño", dif:70 },
+      { local:"Quilmes", visitante:"San Martín Tucumán", tension:"Alta", clasico:"Choque de Aspirantes", dif:74 },
+      { local:"Almirante Brown", visitante:"Colón", tension:"Alta", clasico:"Duelo Caliente", dif:75 },
+      { local:"Gimnasia Jujuy", visitante:"Patronato", tension:"Media", clasico:"Cruce en la Tacita", dif:67 }
+    ],
+    [
+      { local:"Chacarita Jrs", visitante:"Atlanta", tension:"Extrema", clasico:"Clásico de Villa Crespo", dif:80 },
+      { local:"Ferro Carril Oeste", visitante:"Quilmes", tension:"Alta", clasico:"Batalla de Históricos", dif:75 },
+      { local:"Nueva Chicago", visitante:"Almirante Brown", tension:"Muy Alta", clasico:"Duelo de Matanza y Mataderos", dif:79 },
+      { local:"Deportivo Morón", visitante:"Temperley", tension:"Media", clasico:"Cruce Conurbano", dif:69 },
+      { local:"San Martín Tucumán", visitante:"All Boys", tension:"Alta", clasico:"Duelo en la Ciudadela", dif:72 }
+    ],
+    [
+      { local:"Deportivo Morón", visitante:"Nueva Chicago", tension:"Muy Alta", clasico:"Clásico Metropolitano", dif:79 },
+      { local:"Gimnasia Mendoza", visitante:"Independiente Rivadavia", tension:"Extrema", clasico:"Clásico Mendocino", dif:80 },
+      { local:"Colón", visitante:"Chacarita Jrs", tension:"Alta", clasico:"Duelo en el Cementerio", dif:75 },
+      { local:"Patronato", visitante:"Atlanta", tension:"Media", clasico:"Cruce en Entre Ríos", dif:68 },
+      { local:"All Boys", visitante:"Quilmes", tension:"Alta", clasico:"Duelo en Floresta", dif:73 }
+    ],
+    [
+      { local:"Colón", visitante:"San Martín Tucumán", tension:"Alta", clasico:"Candidatos al Ascenso", dif:76 },
+      { local:"Almirante Brown", visitante:"Temperley", tension:"Media", clasico:"Duelo en Casanova", dif:69 },
+      { local:"Ferro Carril Oeste", visitante:"Deportivo Morón", tension:"Alta", clasico:"Duelo del Oeste", dif:74 },
+      { local:"Nueva Chicago", visitante:"Gimnasia Jujuy", tension:"Media", clasico:"Cruce en Mataderos", dif:68 },
+      { local:"Chacarita Jrs", visitante:"All Boys", tension:"Muy Alta", clasico:"Duelo Tradicional", dif:77 }
+    ],
+    [
+      { local:"Nueva Chicago", visitante:"All Boys", tension:"Extrema", clasico:"Superclásico del Oeste", dif:80 },
+      { local:"Patronato", visitante:"Ferro Carril Oeste", tension:"Media", clasico:"Cruce en Paraná", dif:68 },
+      { local:"Quilmes", visitante:"Almirante Brown", tension:"Alta", clasico:"Batalla del Ascenso", dif:74 },
+      { local:"Atlanta", visitante:"San Martín Tucumán", tension:"Alta", clasico:"Cruce en Humboldt", dif:72 },
+      { local:"Temperley", visitante:"Colón", tension:"Alta", clasico:"Duelo en Turdera", dif:73 }
+    ],
+    [
+      { local:"Chacarita Jrs", visitante:"Quilmes", tension:"Alta", clasico:"Duelo Caliente", dif:76 },
+      { local:"Atlanta", visitante:"Deportivo Morón", tension:"Alta", clasico:"Choque Metropolitano", dif:73 },
+      { local:"San Martín Tucumán", visitante:"Ferro Carril Oeste", tension:"Muy Alta", clasico:"Duelo en el Norte", dif:77 },
+      { local:"All Boys", visitante:"Nueva Chicago", tension:"Extrema", clasico:"Revancha en Floresta", dif:80 },
+      { local:"Colón", visitante:"Gimnasia Mendoza", tension:"Alta", clasico:"Duelo por la Cima", dif:75 }
+    ],
+    [
+      { local:"Ferro Carril Oeste", visitante:"All Boys", tension:"Muy Alta", clasico:"DEFINICIÓN DE ASCENSO", dif:80 },
+      { local:"San Martín Tucumán", visitante:"Colón", tension:"Extrema", clasico:"FINAL POR LA PUNTA", dif:80 },
+      { local:"Chacarita Jrs", visitante:"Nueva Chicago", tension:"Muy Alta", clasico:"DEFINICIÓN DEL REDUCIDO", dif:79 },
+      { local:"Almirante Brown", visitante:"Quilmes", tension:"Alta", clasico:"Cierre en Casanova", dif:75 },
+      { local:"Deportivo Morón", visitante:"Patronato", tension:"Media", clasico:"Duelo Final", dif:69 }
+    ]
   ],
   bmetro: [
-    // 10 Fechas de Primera B Metropolitana
-    [ { local:"Los Andes", visitante:"Arsenal", tension:"Alta", clasico:"Duelo de Tradición", dif:68 }, { local:"Deportivo Laferrere", visitante:"Dock Sud", tension:"Muy Alta", clasico:"Batalla en La Matanza", dif:73 } ],
-    [ { local:"Comunicaciones", visitante:"Colegiales", tension:"Media", clasico:"Clásico Agronomía", dif:62 }, { local:"Excursionistas", visitante:"Defensores de Belgrano", tension:"Muy Alta", clasico:"Clásico del Bajo", dif:78 } ],
-    [ { local:"Argentino de Quilmes", visitante:"San Telmo", tension:"Alta", clasico:"Duelo Ribereño", dif:66 }, { local:"Flandria", visitante:"Villa Dálmine", tension:"Alta", clasico:"Clásico de la Ruta 5", dif:69 } ],
-    [ { local:"Ituzaingó", visitante:"Merlo", tension:"Extrema", clasico:"Clásico del Oeste B", dif:79 }, { local:"Talleres Remedios", visitante:"Los Andes", tension:"Alta", clasico:"Choque Sureño", dif:70 } ],
-    [ { local:"Dock Sud", visitante:"San Telmo", tension:"Extrema", clasico:"Clásico de la Isla Maciel", dif:82 }, { local:"Arsenal", visitante:"Comunicaciones", tension:"Media", clasico:"Duelo en Sarandí", dif:60 } ],
-    [ { local:"Colegiales", visitante:"Excursionistas", tension:"Alta", clasico:"Duelo Porteño", dif:67 }, { local:"Deportivo Laferrere", visitante:"Ituzaingó", tension:"Alta", clasico:"Batalla del Conurbano", dif:72 } ],
-    [ { local:"Merlo", visitante:"Flandria", tension:"Media", clasico:"Cruce en el Parque", dif:61 }, { local:"Argentino de Quilmes", visitante:"Los Andes", tension:"Alta", clasico:"Duelo en la Barranca", dif:68 } ],
-    [ { local:"San Telmo", visitante:"Arsenal", tension:"Alta", clasico:"Duelo de Riberas", dif:65 }, { local:"Villa Dálmine", visitante:"Colegiales", tension:"Media", clasico:"Cruce en Campana", dif:62 } ],
-    [ { local:"Excursionistas", visitante:"Dock Sud", tension:"Alta", clasico:"Choque en Pampa y Miñones", dif:70 }, { local:"Comunicaciones", visitante:"Laferrere", tension:"Media", clasico:"Duelo en Agronomía", dif:63 } ],
-    [ { local:"Los Andes", visitante:"San Telmo", tension:"Muy Alta", clasico:"DEFINICIÓN DE CAMPEÓN METRO", dif:77 }, { local:"Arsenal", visitante:"Dock Sud", tension:"Alta", clasico:"FINAL POR EL REDUCIDO", dif:74 } ]
+    // 10 Fechas de Primera B Metropolitana (Dificultad 50 - 68: Fricción barrial, ideal para foguear árbitros jóvenes)
+    [
+      { local:"Los Andes", visitante:"Arsenal", tension:"Alta", clasico:"Duelo de Tradición", dif:65 },
+      { local:"Deportivo Laferrere", visitante:"Dock Sud", tension:"Muy Alta", clasico:"Batalla en La Matanza", dif:68 },
+      { local:"Comunicaciones", visitante:"Colegiales", tension:"Media", clasico:"Clásico Agronomía", dif:56 },
+      { local:"Excursionistas", visitante:"Defensores de Belgrano", tension:"Alta", clasico:"Clásico del Bajo", dif:64 }
+    ],
+    [
+      { local:"Comunicaciones", visitante:"Colegiales", tension:"Media", clasico:"Clásico Agronomía", dif:57 },
+      { local:"Excursionistas", visitante:"Defensores de Belgrano", tension:"Alta", clasico:"Clásico del Bajo", dif:66 },
+      { local:"Argentino de Quilmes", visitante:"Los Andes", tension:"Media", clasico:"Cruce Ribereño", dif:58 },
+      { local:"Flandria", visitante:"Villa Dálmine", tension:"Media", clasico:"Clásico de la Ruta 5", dif:59 }
+    ],
+    [
+      { local:"Argentino de Quilmes", visitante:"San Telmo", tension:"Media", clasico:"Duelo Ribereño", dif:58 },
+      { local:"Flandria", visitante:"Villa Dálmine", tension:"Media", clasico:"Clásico de la Ruta 5", dif:60 },
+      { local:"Deportivo Laferrere", visitante:"Comunicaciones", tension:"Media", clasico:"Cruce Metropolitano", dif:55 },
+      { local:"Colegiales", visitante:"Arsenal", tension:"Media", clasico:"Duelo en Munro", dif:56 }
+    ],
+    [
+      { local:"Ituzaingó", visitante:"Merlo", tension:"Muy Alta", clasico:"Clásico del Oeste B", dif:67 },
+      { local:"Talleres Remedios", visitante:"Los Andes", tension:"Alta", clasico:"Choque Sureño", dif:63 },
+      { local:"Dock Sud", visitante:"Excursionistas", tension:"Media", clasico:"Duelo en la Dársena", dif:57 },
+      { local:"Villa Dálmine", visitante:"San Telmo", tension:"Media", clasico:"Cruce en Campana", dif:56 }
+    ],
+    [
+      { local:"Dock Sud", visitante:"San Telmo", tension:"Muy Alta", clasico:"Clásico de la Isla Maciel", dif:68 },
+      { local:"Arsenal", visitante:"Comunicaciones", tension:"Media", clasico:"Duelo en Sarandí", dif:54 },
+      { local:"Colegiales", visitante:"Ituzaingó", tension:"Media", clasico:"Cruce en Munro", dif:55 },
+      { local:"Deportivo Laferrere", visitante:"Flandria", tension:"Media", clasico:"Duelo en La Matanza", dif:57 }
+    ],
+    [
+      { local:"Colegiales", visitante:"Excursionistas", tension:"Media", clasico:"Duelo Porteño", dif:59 },
+      { local:"Deportivo Laferrere", visitante:"Ituzaingó", tension:"Alta", clasico:"Batalla del Conurbano", dif:64 },
+      { local:"San Telmo", visitante:"Los Andes", tension:"Alta", clasico:"Cruce Tradicional", dif:63 },
+      { local:"Argentino de Quilmes", visitante:"Arsenal", tension:"Media", clasico:"Duelo en la Barranca", dif:55 }
+    ],
+    [
+      { local:"Merlo", visitante:"Flandria", tension:"Media", clasico:"Cruce en el Parque", dif:54 },
+      { local:"Argentino de Quilmes", visitante:"Los Andes", tension:"Alta", clasico:"Duelo en la Barranca", dif:62 },
+      { local:"Dock Sud", visitante:"Colegiales", tension:"Media", clasico:"Cruce Portuario", dif:56 },
+      { local:"Comunicaciones", visitante:"San Telmo", tension:"Media", clasico:"Duelo en Agronomía", dif:55 }
+    ],
+    [
+      { local:"San Telmo", visitante:"Arsenal", tension:"Media", clasico:"Duelo de Riberas", dif:58 },
+      { local:"Villa Dálmine", visitante:"Colegiales", tension:"Media", clasico:"Cruce en Campana", dif:55 },
+      { local:"Los Andes", visitante:"Deportivo Laferrere", tension:"Alta", clasico:"Choque en Lomas", dif:63 },
+      { local:"Excursionistas", visitante:"Ituzaingó", tension:"Media", clasico:"Duelo en Belgrano", dif:56 }
+    ],
+    [
+      { local:"Excursionistas", visitante:"Dock Sud", tension:"Alta", clasico:"Choque en Pampa y Miñones", dif:63 },
+      { local:"Comunicaciones", visitante:"Laferrere", tension:"Media", clasico:"Duelo en Agronomía", dif:56 },
+      { local:"Flandria", visitante:"San Telmo", tension:"Media", clasico:"Cruce en Jáuregui", dif:54 },
+      { local:"Arsenal", visitante:"Los Andes", tension:"Alta", clasico:"Revancha en Sarandí", dif:62 }
+    ],
+    [
+      { local:"Los Andes", visitante:"San Telmo", tension:"Muy Alta", clasico:"DEFINICIÓN DE CAMPEÓN METRO", dif:68 },
+      { local:"Arsenal", visitante:"Dock Sud", tension:"Alta", clasico:"FINAL POR EL REDUCIDO", dif:65 },
+      { local:"Colegiales", visitante:"Comunicaciones", tension:"Media", clasico:"Cierre en Munro", dif:57 },
+      { local:"Deportivo Laferrere", visitante:"Excursionistas", tension:"Media", clasico:"Cierre en La Matanza", dif:58 }
+    ]
   ],
   regional: [
-    // 10 Fechas de Torneo Regional Federal
-    [ { local:"Olimpo (BB)", visitante:"Villa Mitre (BB)", tension:"Extrema", clasico:"Clásico Bahiense", dif:84 }, { local:"Cipolletti", visitante:"Deportivo Roca", tension:"Muy Alta", clasico:"Clásico Rionegrino", dif:78 } ],
-    [ { local:"Boca Unidos (Ctes)", visitante:"Mandiyú (Ctes)", tension:"Extrema", clasico:"Clásico Correntino", dif:82 }, { local:"Santamarina (Tandil)", visitante:"Kimberley (MdP)", tension:"Media", clasico:"Duelo Bonaerense", dif:62 } ],
-    [ { local:"Douglas Haig (Perg)", visitante:"Defensores (VR)", tension:"Alta", clasico:"Clásico del Norte Bonaerense", dif:69 }, { local:"Juventud Antoniana", visitante:"Central Norte (Salta)", tension:"Extrema", clasico:"Clásico Salteño", dif:86 } ],
-    [ { local:"Gimnasia (CdU)", visitante:"Atlético Paraná", tension:"Alta", clasico:"Clásico Entrerriano", dif:70 }, { local:"San Martín (Mza)", visitante:"Huracán Las Heras", tension:"Muy Alta", clasico:"Clásico del Gran Mendoza", dif:80 } ],
-    [ { local:"Villa Mitre (BB)", visitante:"Santamarina", tension:"Alta", clasico:"Duelo en el Fortín", dif:71 }, { local:"Deportivo Roca", visitante:"Olimpo (BB)", tension:"Alta", clasico:"Batalla del Sur", dif:73 } ],
-    [ { local:"Central Norte", visitante:"Gimnasia y Tiro", tension:"Extrema", clasico:"Superclásico del Norte", dif:88 }, { local:"Kimberley", visitante:"Cipolletti", tension:"Media", clasico:"Cruce en Mardel", dif:64 } ],
-    [ { local:"Mandiyú (Ctes)", visitante:"Chaco For Ever", tension:"Extrema", clasico:"Clásico del Puente", dif:87 }, { local:"Douglas Haig", visitante:"Santamarina", tension:"Media", clasico:"Duelo del Interior", dif:63 } ],
-    [ { local:"Huracán Las Heras", visitante:"Gutiérrez SC", tension:"Alta", clasico:"Duelo Mendocino", dif:72 }, { local:"Atlético Paraná", visitante:"Boca Unidos", tension:"Media", clasico:"Cruce Litoral", dif:65 } ],
-    [ { local:"Cipolletti", visitante:"Villa Mitre (BB)", tension:"Muy Alta", clasico:"Duelo Patagónico", dif:77 }, { local:"Santamarina", visitante:"Olimpo (BB)", tension:"Alta", clasico:"Choque en Tandil", dif:72 } ],
-    [ { local:"Villa Mitre (BB)", visitante:"Olimpo (BB)", tension:"Extrema", clasico:"FINALÍSIMA DEL REGIONAL", dif:89 }, { local:"Central Norte", visitante:"Juventud Antoniana", tension:"Extrema", clasico:"DESQUITE FINAL SALTEÑO", dif:90 } ]
+    // 10 Fechas de Torneo Regional Federal (Dificultad 35 - 55: Accesible para que los árbitros jóvenes sumen partidos y experiencia)
+    [
+      { local:"Olimpo (BB)", visitante:"Villa Mitre (BB)", tension:"Media", clasico:"Clásico Bahiense", dif:54 },
+      { local:"Cipolletti", visitante:"Deportivo Roca", tension:"Media", clasico:"Clásico Rionegrino", dif:48 },
+      { local:"Santamarina (Tandil)", visitante:"Kimberley (MdP)", tension:"Baja", clasico:"Duelo Bonaerense", dif:40 }
+    ],
+    [
+      { local:"Boca Unidos (Ctes)", visitante:"Mandiyú (Ctes)", tension:"Media", clasico:"Clásico Correntino", dif:52 },
+      { local:"Santamarina (Tandil)", visitante:"Kimberley (MdP)", tension:"Baja", clasico:"Duelo Bonaerense", dif:42 },
+      { local:"Douglas Haig (Perg)", visitante:"Defensores (VR)", tension:"Baja", clasico:"Cruce del Norte", dif:43 }
+    ],
+    [
+      { local:"Douglas Haig (Perg)", visitante:"Defensores (VR)", tension:"Baja", clasico:"Clásico del Norte Bonaerense", dif:44 },
+      { local:"Juventud Antoniana", visitante:"Central Norte (Salta)", tension:"Media", clasico:"Clásico Salteño", dif:55 },
+      { local:"Atlético Paraná", visitante:"Gimnasia (CdU)", tension:"Baja", clasico:"Duelo Entrerriano", dif:41 }
+    ],
+    [
+      { local:"Gimnasia (CdU)", visitante:"Atlético Paraná", tension:"Baja", clasico:"Clásico Entrerriano", dif:45 },
+      { local:"San Martín (Mza)", visitante:"Huracán Las Heras", tension:"Media", clasico:"Clásico del Gran Mendoza", dif:50 },
+      { local:"Deportivo Roca", visitante:"Cipolletti", tension:"Media", clasico:"Revancha Rionegrina", dif:47 }
+    ],
+    [
+      { local:"Villa Mitre (BB)", visitante:"Santamarina", tension:"Baja", clasico:"Duelo en el Fortín", dif:45 },
+      { local:"Deportivo Roca", visitante:"Olimpo (BB)", tension:"Baja", clasico:"Batalla del Sur", dif:46 },
+      { local:"Kimberley", visitante:"Douglas Haig", tension:"Baja", clasico:"Duelo del Litoral", dif:39 }
+    ],
+    [
+      { local:"Central Norte", visitante:"Gimnasia y Tiro", tension:"Media", clasico:"Superclásico del Norte", dif:54 },
+      { local:"Kimberley", visitante:"Cipolletti", tension:"Baja", clasico:"Cruce en Mardel", dif:40 },
+      { local:"Mandiyú (Ctes)", visitante:"Boca Unidos", tension:"Media", clasico:"Revancha en Corrientes", dif:51 }
+    ],
+    [
+      { local:"Mandiyú (Ctes)", visitante:"Chaco For Ever", tension:"Media", clasico:"Clásico del Puente", dif:53 },
+      { local:"Douglas Haig", visitante:"Santamarina", tension:"Baja", clasico:"Duelo del Interior", dif:41 },
+      { local:"Huracán Las Heras", visitante:"San Martín (Mza)", tension:"Media", clasico:"Duelo en Las Heras", dif:49 }
+    ],
+    [
+      { local:"Huracán Las Heras", visitante:"Gutiérrez SC", tension:"Baja", clasico:"Duelo Mendocino", dif:44 },
+      { local:"Atlético Paraná", visitante:"Boca Unidos", tension:"Baja", clasico:"Cruce Litoral", dif:42 },
+      { local:"Cipolletti", visitante:"Santamarina", tension:"Baja", clasico:"Cruce Patagónico", dif:41 }
+    ],
+    [
+      { local:"Cipolletti", visitante:"Villa Mitre (BB)", tension:"Media", clasico:"Duelo Patagónico", dif:49 },
+      { local:"Santamarina", visitante:"Olimpo (BB)", tension:"Baja", clasico:"Choque en Tandil", dif:44 },
+      { local:"Defensores (VR)", visitante:"Douglas Haig", tension:"Baja", clasico:"Duelo Regional", dif:40 }
+    ],
+    [
+      { local:"Villa Mitre (BB)", visitante:"Olimpo (BB)", tension:"Media", clasico:"FINALÍSIMA DEL REGIONAL", dif:55 },
+      { local:"Central Norte", visitante:"Juventud Antoniana", tension:"Media", clasico:"DESQUITE FINAL SALTEÑO", dif:55 },
+      { local:"Mandiyú (Ctes)", visitante:"Chaco For Ever", tension:"Media", clasico:"GRAN FINAL DEL NORTE", dif:53 }
+    ]
   ]
 };
+
+var PRES_ACADEMIA_NIVELES = [
+  {
+    nivel: 1,
+    nombre: "Escuela Regional de Árbitros",
+    maxArbitros: 12,
+    partidosTotales: 9,
+    cuotas: { liga: 3, nacional: 2, bmetro: 2, regional: 2 },
+    costo: 0,
+    desc: "Infraestructura inicial. Plantel de 12 árbitros oficiales y 9 partidos multidivisión por fecha."
+  },
+  {
+    nivel: 2,
+    nombre: "Centro de Tecnificación Nacional",
+    maxArbitros: 16,
+    partidosTotales: 12,
+    cuotas: { liga: 4, nacional: 3, bmetro: 3, regional: 2 },
+    costo: 85000,
+    desc: "Gimnasio de alta intensidad y scouting juvenil. Plantel ampliado a 16 árbitros y 12 partidos por fecha."
+  },
+  {
+    nivel: 3,
+    nombre: "Instituto Nacional del Arbitraje (INAF)",
+    maxArbitros: 20,
+    partidosTotales: 15,
+    cuotas: { liga: 5, nacional: 4, bmetro: 3, regional: 3 },
+    costo: 150000,
+    desc: "Aulas de reglamento digital y temple acelerado (+5 Temple en egresados). Plantel de 20 árbitros y 15 partidos por fecha."
+  },
+  {
+    nivel: 4,
+    nombre: "Centro de Alto Rendimiento FIFA",
+    maxArbitros: 24,
+    partidosTotales: 18,
+    cuotas: { liga: 6, nacional: 5, bmetro: 4, regional: 3 },
+    costo: 240000,
+    desc: "Instalaciones de clase mundial y regeneración atlética. Plantel de hasta 24 árbitros y 18 partidos multidivisión por fecha."
+  }
+];
+
+/* ---------- CATÁLOGO DE MIEMBROS DE COMISIÓN DIRECTIVA ---------- */
+var PRES_COMISION_CATALOGO = {
+  tecnica: [
+    {
+      id: "com_elizondo",
+      nombre: "Horacio Elizondo",
+      rol: "Dirección Técnica & Estrategia",
+      avatar: "👴",
+      expNivel: "Élite Mundial (Finalista Copa del Mundo)",
+      sueldoPorFecha: 5200,
+      bonoDesc: "+0.3 de nota técnica promedio a todos los árbitros designados.",
+      perk: "nota_boost",
+      quote: "“En los clásicos de alta tensión, la colocación a 15 metros de la jugada evita cualquier discusión con los capitanes.”"
+    },
+    {
+      id: "com_baldassi",
+      nombre: "Héctor Baldassi",
+      rol: "Dirección Técnica & Manejo de Presión",
+      avatar: "👨‍🦳",
+      expNivel: "Consagrado (Mundiales & Clásicos)",
+      sueldoPorFecha: 4200,
+      bonoDesc: "+5 de Temple en partidos calientes de Liga y Nacional.",
+      perk: "temple_boost",
+      quote: "“Al jugador temperamental hay que hablarle con firmeza y mirada fija antes de sacar la tarjeta.”"
+    },
+    {
+      id: "com_castrilli",
+      nombre: "Javier Castrilli",
+      rol: "Disciplina & Rigor Reglamentario",
+      avatar: "🧐",
+      expNivel: "El Juez de Hierro",
+      sueldoPorFecha: 3600,
+      bonoDesc: "+6 de Rigor y blindaje contra reclamos violentos en estadios.",
+      perk: "rigor_boost",
+      quote: "“El reglamento no se negocia ni se flexibiliza según la camiseta. La ley es idéntica para todos.”"
+    }
+  ],
+  medica: [
+    {
+      id: "com_villani",
+      nombre: "Dr. Donato Villani",
+      rol: "Departamento Médico & Fisiología",
+      avatar: "👨‍⚕️",
+      expNivel: "Jefe Médico de Selecciones Nacionales",
+      sueldoPorFecha: 4600,
+      bonoDesc: "+15% de energía adicional en árbitros descansados (+60% total).",
+      perk: "recovery_boost",
+      quote: "“La suplementación electrolítica y el descanso biológico son la clave para evitar calambres en el descuento.”"
+    },
+    {
+      id: "com_santillan",
+      nombre: "Prof. Santillán",
+      rol: "Preparación Física & Test FIFA",
+      avatar: "🏃‍♂️",
+      expNivel: "Especialista en Biomecánica Deportiva",
+      sueldoPorFecha: 3500,
+      bonoDesc: "Reduce 15% el gasto de energía por partido en todo el plantel.",
+      perk: "fatigue_shield",
+      quote: "“Un árbitro que llega entero al minuto 90 cobra el offside con la mente fría y el pulso calmo.”"
+    },
+    {
+      id: "com_carlassare",
+      nombre: "Dra. Carlassare",
+      rol: "Kinesiología & Terapia Preventiva",
+      avatar: "👩‍⚕️",
+      expNivel: "Clínica del Rendimiento del Ascenso",
+      sueldoPorFecha: 2800,
+      bonoDesc: "Inmunidad ante lesiones musculares y bajas de último minuto.",
+      perk: "injury_shield",
+      quote: "“La prevención articular y el masaje miofascial en el entretiempo salvan carreras enteras.”"
+    }
+  ],
+  legal: [
+    {
+      id: "com_benitez",
+      nombre: "Dr. Benítez",
+      rol: "Asesoría Legal & Tribunal de Disciplina",
+      avatar: "⚖️",
+      expNivel: "Ex Presidente del Tribunal de Disciplina",
+      sueldoPorFecha: 4000,
+      bonoDesc: "+10% de Confianza con el Comité de AFA frente a polémicas.",
+      perk: "afa_shield",
+      quote: "“Los informes arbitrales deben redactarse con precisión quirúrgica para sostener las sanciones en el Tribunal.”"
+    },
+    {
+      id: "com_valenzuela",
+      nombre: "Dra. Valenzuela",
+      rol: "Derecho Deportivo & Ética Institucional",
+      avatar: "👩‍⚖️",
+      expNivel: "Abogada especialista en CONMEBOL",
+      sueldoPorFecha: 3200,
+      bonoDesc: "Blindaje legal contra impugnaciones de clubes y denuncias públicas.",
+      perk: "legal_shield",
+      quote: "“La transparencia procesal es el mejor antídoto contra las suspicacias de los dirigentes de turno.”"
+    }
+  ],
+  prensa: [
+    {
+      id: "com_rossi",
+      nombre: "Valeria Rossi",
+      rol: "Relaciones Institucionales & Medios",
+      avatar: "🎙️",
+      expNivel: "Directora de Prensa & Vocería Oficial",
+      sueldoPorFecha: 4400,
+      bonoDesc: "+12% de Reputación con programas deportivos y prensa escrita.",
+      perk: "press_boost",
+      quote: "“Una conferencia de prensa explicativa a tiempo desactiva cualquier debate tóxico de medianoche en televisión.”"
+    },
+    {
+      id: "com_bonadeo",
+      nombre: "Gonzalo Bonadeo",
+      rol: "Análisis Periodístico & Opinión",
+      avatar: "📻",
+      expNivel: "Periodista Deportivo y Líder de Opinión",
+      sueldoPorFecha: 3700,
+      bonoDesc: "Protege la reputación pública evitando caídas drásticas tras partidos calientes.",
+      perk: "press_shield",
+      quote: "“El periodismo serio valora la honestidad intelectual y la autocrítica de los colegios de árbitros.”"
+    }
+  ]
+};
+
+var PRES_EVENTOS_CORRUPCION_Y_POLEMICAS = [
+  {
+    id: "doping_sorpresa",
+    tipo: "doping",
+    titulo: "🧪 Control Antidoping Sorpresa: Resultado Adverso en el Plantel",
+    emisor: "Comisión Nacional Antidopaje (CNEP)",
+    subtitulo: "Un análisis de rutina detectó una sustancia no declarada en uno de tus árbitros principales.",
+    descripcion: "El informe de laboratorio arrojó presencia de un descongestivo no informado en el árbitro designado para el partido estelar. Si lo suspendés preventivamente perderás un árbitro clave para esta fecha; si apelás de urgencia podrías enfrentar sanciones de la AFA.",
+    opciones: [
+      {
+        texto: "⚖️ Suspender preventivamente al árbitro y ordenar sumario interno ($15.000)",
+        badge: "🏛️ Tolerancia Cero",
+        cls: "firme",
+        fondosDelta: -15000,
+        confianzaDelta: 14,
+        reputacionDelta: 16,
+        moralDelta: -8,
+        impacto: "Demostraste rigurosidad absoluta. El Comité de AFA elogió tu rapidez y la prensa destacó la transparencia institucional."
+      },
+      {
+        texto: "🩺 Presentar descargo médico de urgencia alegando medicación por cuadro gripal ($25.000)",
+        badge: "🛡️ Defensa Médica",
+        cls: "prudente",
+        fondosDelta: -25000,
+        confianzaDelta: 2,
+        reputacionDelta: 4,
+        moralDelta: 15,
+        impacto: "El tribunal aceptó el justificativo médico y el árbitro quedó habilitado, manteniendo la calma en el plantel."
+      },
+      {
+        texto: "🤫 Ocultar el sumario y desviar la atención a divisiones menores",
+        badge: "🔒 Negacionismo",
+        cls: "nervioso",
+        fondosDelta: 0,
+        confianzaDelta: -16,
+        reputacionDelta: -20,
+        moralDelta: -12,
+        impacto: "La noticia se filtró a los periodistas de investigación. El escándalo dañó la reputación del Colegio."
+      }
+    ]
+  },
+  {
+    id: "ausencia_urgencia_gripe",
+    tipo: "ausencia",
+    titulo: "🤒 Baja de Último Momento: Cuadro Febril Agudo en Vestuarios",
+    emisor: "Cuerpo Médico Oficial de la AFA",
+    subtitulo: "A 90 minutos de salir a la cancha, el árbitro principal colapsó con 39°C de fiebre.",
+    descripcion: "El médico de guardia confirmó que el réferi no puede pisar el campo de juego. Debés designar un reemplazo de emergencia del cuarto árbitro o convocar a un juez del semillero pagando viáticos de traslado urgente.",
+    opciones: [
+      {
+        texto: "🚀 Promover al 4to árbitro del ascenso y pagar bono de incentivo ($12.000)",
+        badge: "⚡ Reemplazo Inmediato",
+        cls: "firme",
+        fondosDelta: -12000,
+        confianzaDelta: 8,
+        reputacionDelta: 10,
+        moralDelta: 18,
+        impacto: "El joven 4to árbitro asumió la responsabilidad con gran valentía y el partido se disputó sin demoras."
+      },
+      {
+        texto: "🚗 Trasladar en remis privado a un árbitro consagrado desde su domicilio ($20.000)",
+        badge: "⭐ Jerarquía de Emergencia",
+        cls: "prudente",
+        fondosDelta: -20000,
+        confianzaDelta: 12,
+        reputacionDelta: 8,
+        moralDelta: 6,
+        impacto: "Garantizaste experiencia en el silbato central, aunque el costo de logística fue elevado."
+      }
+    ]
+  },
+  {
+    id: "oferta_liga_saudi",
+    tipo: "mercado",
+    titulo: "🇸🇦 Oferta Millonaria: La Liga Profesional Saudí quiere a tu mejor Árbitro",
+    emisor: "Federación de Fútbol de Arabia Saudita (Riyadh)",
+    subtitulo: "Llegó un fax oficial ofreciendo un resarcimiento histórico por transferir al réferi internacional.",
+    descripcion: "Los emisarios árabes ofrecen pagar $140.000 limpios a las arcas del Colegio de Árbitros de la AFA por la rescisión del contrato de tu árbitro más prestigioso para que dirija en Medio Oriente.",
+    opciones: [
+      {
+        texto: "💰 Aceptar la transferencia y cobrar los $140.000 para el Colegio",
+        badge: "💵 Inyección de Capital",
+        cls: "bribe",
+        fondosDelta: 140000,
+        confianzaDelta: -6,
+        reputacionDelta: 10,
+        moralDelta: 12,
+        impacto: "Una inyección récord de fondos que permite financiar obras e indumentaria, aunque perdiste una figura arbitral clave."
+      },
+      {
+        texto: "🇦🇷 Rechazar la oferta y mejorar el contrato del árbitro local ($30.000)",
+        badge: "🛡️ Retener Jerarquía",
+        cls: "firme",
+        fondosDelta: -30000,
+        confianzaDelta: 16,
+        reputacionDelta: 14,
+        moralDelta: 20,
+        impacto: "El fútbol argentino festejó que sus mejores árbitros no emigren. La AFA te felicitó efusivamente."
+      }
+    ]
+  },
+  {
+    id: "apuestas_whatsapp_ascenso",
+    tipo: "apuestas",
+    titulo: "📱 Denuncia por WhatsApp: Mensajes Sospechosos en la B Metro",
+    emisor: "Asociación de Técnicos y Jugadores del Ascenso",
+    subtitulo: "Se filtraron capturas de pantalla de una red clandestina intentando condicionar tarjetas amarillas.",
+    descripcion: "Un grupo de apostadores asiáticos contactó a líneas juveniles ofreciendo $50.000 por garantizar más de 6 tarjetas amarillas en un partido de ascenso. Los jueces denunciaron el mensaje al Colegio.",
+    opciones: [
+      {
+        texto: "🛡️ Premiar la honestidad de los jóvenes y elevar la causa a la Justicia Federal ($20.000)",
+        badge: "⚖️ Denuncia Penal y Premio",
+        cls: "firme",
+        fondosDelta: -20000,
+        confianzaDelta: 18,
+        reputacionDelta: 22,
+        moralDelta: 25,
+        impacto: "Tu respuesta implacable fue portada de todos los diarios. Blindaste la integridad moral de todo el arbitraje."
+      },
+      {
+        texto: "🤫 Manejarlo en reserva interna para evitar el pánico de los sponsors",
+        badge: "🔒 Silencio Institucional",
+        cls: "nervioso",
+        fondosDelta: 0,
+        confianzaDelta: -10,
+        reputacionDelta: -12,
+        moralDelta: -14,
+        impacto: "La falta de denuncia pública generó desconfianza entre los futbolistas del ascenso."
+      }
+    ]
+  },
+  {
+    id: "reclamo_gremial_aaa",
+    tipo: "gremio",
+    titulo: "📢 Reclamo Gremial: La Asociación Argentina de Árbitros exige Viáticos",
+    emisor: "Sindicato de Árbitros (AAA y SADRA)",
+    subtitulo: "Los colegiados del interior amenazan con un paro por costos de combustible y hotelería.",
+    descripcion: "Debido a la inflación y las largas distancias en el Torneo Regional y Primera Nacional, el gremio solicita un fondo extraordinario de viáticos de $35.000 por jornada.",
+    opciones: [
+      {
+        texto: "🤝 Acordar aumento de viáticos y garantizar hotelería de 4 estrellas ($35.000)",
+        badge: "🤝 Paz Gremial",
+        cls: "prudente",
+        fondosDelta: -35000,
+        confianzaDelta: 10,
+        reputacionDelta: 8,
+        moralDelta: 30,
+        impacto: "Los árbitros viajan descansados y en óptimas condiciones. La moral del plantel alcanzó su máximo histórico."
+      },
+      {
+        texto: "⚖️ Negociar una compensación menor con los sponsors de transporte ($18.000)",
+        badge: "💼 Salida Intermedia",
+        cls: "firme",
+        fondosDelta: -18000,
+        confianzaDelta: 4,
+        reputacionDelta: 2,
+        moralDelta: 8,
+        impacto: "Lograste desactivar el conflicto con un costo financiero moderado."
+      }
+    ]
+  },
+  {
+    id: "declaraciones_polemicas_tv",
+    tipo: "polemica",
+    titulo: "🎙️ Declaraciones Incendiarias: Árbitro atacó al DT en Radio Mitre",
+    emisor: "Programa Deportivo de Radio & TV",
+    subtitulo: "Uno de tus árbitros se despachó sin filtro contra el entrenador de un club grande.",
+    descripcion: "Al salir del vestuario, el árbitro principal dio una entrevista sin autorización del Colegio diciendo: “El DT de ellos es un llorón serial que presiona a los líneas y condiciona los partidos”. El club afectado exige sanción ejemplar inmediata y la prensa está en llamas.",
+    opciones: [
+      {
+        texto: "⚖️ Suspender al árbitro por 3 fechas y exigir disculpas institucionales públicas",
+        badge: "🏛️ Disciplina Férrea",
+        cls: "firme",
+        fondosDelta: 0,
+        confianzaDelta: 12,
+        reputacionDelta: 14,
+        moralDelta: -16,
+        impacto: "Demostraste autoridad ante los clubes y la prensa valoró la sanción ética, aunque el gremio de árbitros sintió falta de protección."
+      },
+      {
+        texto: "🛡️ Respaldar al árbitro públicamente en conferencia de prensa del Colegio",
+        badge: "🤝 Blindaje al Plantel",
+        cls: "prudente",
+        fondosDelta: 0,
+        confianzaDelta: -15,
+        reputacionDelta: -18,
+        moralDelta: 22,
+        impacto: "Tus árbitros te adoran por no dejarte intimidar por los clubes, pero los dirigentes grandes juraron pedir tu renuncia en la asamblea."
+      },
+      {
+        texto: "💵 Aplicar multa económica interna ($20.000) y dar por superado el incidente",
+        badge: "💰 Sanción Económica",
+        cls: "autocritico",
+        fondosDelta: 20000,
+        confianzaDelta: 4,
+        reputacionDelta: 2,
+        moralDelta: -4,
+        impacto: "Una salida intermedia que recaudó fondos para el Colegio y enfrió la polémica mediática sin mayores fracturas."
+      }
+    ]
+  },
+  {
+    id: "penal_fantasma_95",
+    tipo: "polemica",
+    titulo: "🗞️ Tapa de Diarios: El 'Penal Fantasma' cobrado en el Minuto 96'",
+    emisor: "Diario Olé y Portadas Digitales",
+    subtitulo: "Un árbitro agotado cobró un penal inexistente tras un piscinazo en el descuento.",
+    descripcion: "Las imágenes de televisión en 4K demuestran que el delantero se tiró sin contacto. El árbitro, que venía dirigiendo 3 fechas seguidas sin descanso físico, cobró penal a 40 metros de distancia y el VAR no intervino. El país entero debate el escándalo.",
+    opciones: [
+      {
+        texto: "📺 Publicar peritaje técnico de la cabina y enviar al árbitro a 'parar' 2 fechas a la B Metro",
+        badge: "🔍 Transparencia y Rotación",
+        cls: "autocritico",
+        fondosDelta: 0,
+        confianzaDelta: 8,
+        reputacionDelta: 16,
+        moralDelta: -10,
+        impacto: "La autocrítica institucional calmó las aguas en la televisión. El árbitro recuperará ritmo en el ascenso."
+      },
+      {
+        texto: "🤐 Ratificar el fallo diciendo que 'hubo contacto interpretable' para no desacreditar la terna",
+        badge: "🔒 Negacionismo Total",
+        cls: "nervioso",
+        fondosDelta: 0,
+        confianzaDelta: -12,
+        reputacionDelta: -22,
+        moralDelta: 6,
+        impacto: "La prensa deportiva te destrozó en los programas de debate. La credibilidad pública sufrió un duro golpe."
+      },
+      {
+        texto: "🖥️ Invertir de urgencia en Clínicas de VAR y psicólogos de campo ($30.000)",
+        badge: "🛠️ Inversión Correctiva",
+        cls: "firme",
+        fondosDelta: -30000,
+        confianzaDelta: 10,
+        reputacionDelta: 18,
+        moralDelta: 14,
+        impacto: "Transformaste el escándalo en una mejora formativa concreta. El Comité Ejecutivo elogió tu respuesta profesional."
+      }
+    ]
+  },
+  {
+    id: "maletin_dirigente",
+    tipo: "corrupcion",
+    titulo: "📞 Llamada Secreta: El 'Aporte Institucional' del Club Grande",
+    emisor: "Presidente de Club Candidato al Título",
+    subtitulo: "Un influyente dirigente te cita en un restaurante reservado de Puerto Madero.",
+    descripcion: "“Presidente, este fin de semana nos jugamos el campeonato. Sabemos que el Colegio necesita fondos para equipamiento y viáticos. Si nos designás a un árbitro 'comprensivo' que no se apure con las tarjetas rojas contra nuestro equipo, habrá una contribución de $160.000 para la asociación... y nuestro voto asegurado en la próxima asamblea.”",
+    opciones: [
+      {
+        texto: "🤝 Aceptar la contribución ($160.000) y prometer designación favorable",
+        badge: "💰 Corrupción / Dinero",
+        cls: "bribe",
+        fondosDelta: 160000,
+        confianzaDelta: 12,
+        reputacionDelta: -18,
+        moralDelta: -14,
+        impacto: "Aceptaste los $160.000 en las arcas del colegio. La dirigencia del club está contenta, pero en los pasillos de los árbitros hay murmullos sobre favoritismos."
+      },
+      {
+        texto: "🛡️ Rechazar tajantemente y advertir con denuncia al Tribunal de Ética",
+        badge: "⚖️ Integridad Total",
+        cls: "firme",
+        fondosDelta: 0,
+        confianzaDelta: -10,
+        reputacionDelta: 20,
+        moralDelta: 16,
+        impacto: "Defendiste el honor del arbitraje. La prensa filtró tu rectitud y el público te elogia, aunque el club ofendido operará en tu contra en el Comité."
+      },
+      {
+        texto: "💬 Dar una respuesta diplomática y evasiva sin aceptar dinero",
+        badge: "🤝 Neutral / Político",
+        cls: "prudente",
+        fondosDelta: 0,
+        confianzaDelta: 2,
+        reputacionDelta: 0,
+        moralDelta: 0,
+        impacto: "Evitaste el conflicto directo sin comprometer la ética del Colegio. Todo queda en statu quo."
+      }
+    ]
+  }
+];
 
 var PRES_SPONSORS_CATALOGO = [
   // Manga y Pecho
@@ -6853,300 +7841,6 @@ var PRES_SPONSORS_CATALOGO = [
   }
 ];
 
-var PRES_EVENTOS_CORRUPCION_Y_POLEMICAS = [
-  {
-    id: "declaraciones_polemicas_tv",
-    tipo: "polemica",
-    titulo: "🎙️ Declaraciones Incendiarias: Árbitro atacó al DT en Radio Mitre",
-    emisor: "Programa Deportivo de Radio & TV",
-    subtitulo: "Uno de tus árbitros se despachó sin filtro contra el entrenador de un club grande.",
-    descripcion: "Al salir del vestuario, el árbitro principal dio una entrevista sin autorización del Colegio diciendo: “El DT de ellos es un llorón serial que presiona a los líneas y condiciona los partidos”. El club afectado exige sanción ejemplar inmediata y la prensa está en llamas.",
-    opciones: [
-      {
-        texto: "⚖️ Suspender al árbitro por 3 fechas y exigir disculpas institucionales públicas",
-        badge: "🏛️ Disciplina Férrea",
-        cls: "firme",
-        fondosDelta: 0,
-        confianzaDelta: 12,
-        reputacionDelta: 14,
-        moralDelta: -16,
-        impacto: "Demostraste autoridad ante los clubes y la prensa valoró la sanción ética, aunque el gremio de árbitros sintió falta de protección."
-      },
-      {
-        texto: "🛡️ Respaldar al árbitro públicamente en conferencia de prensa del Colegio",
-        badge: "🤝 Blindaje al Plantel",
-        cls: "prudente",
-        fondosDelta: 0,
-        confianzaDelta: -15,
-        reputacionDelta: -18,
-        moralDelta: 22,
-        impacto: "Tus árbitros te adoran por no dejarte intimidar por los clubes, pero los dirigentes grandes juraron pedir tu renuncia en la asamblea."
-      },
-      {
-        texto: "💵 Aplicar multa económica interna ($20.000) y dar por superado el incidente",
-        badge: "💰 Sanción Económica",
-        cls: "autocritico",
-        fondosDelta: 20000,
-        confianzaDelta: 4,
-        reputacionDelta: 2,
-        moralDelta: -4,
-        impacto: "Una salida intermedia que recaudó fondos para el Colegio y enfrió la polémica mediática sin mayores fracturas."
-      }
-    ]
-  },
-  {
-    id: "penal_fantasma_95",
-    tipo: "polemica",
-    titulo: "🗞️ Tapa de Diarios: El 'Penal Fantasma' cobrado en el Minuto 96'",
-    emisor: "Diario Olé y Portadas Digitales",
-    subtitulo: "Un árbitro agotado cobró un penal inexistente tras un piscinazo en el descuento.",
-    descripcion: "Las imágenes de televisión en 4K demuestran que el delantero se tiró sin contacto. El árbitro, que venía dirigiendo 3 fechas seguidas sin descanso físico, cobró penal a 40 metros de distancia y el VAR no intervino. El país entero debate el escándalo.",
-    opciones: [
-      {
-        texto: "📺 Publicar peritaje técnico de la cabina y enviar al árbitro a 'parar' 2 fechas a la B Metro",
-        badge: "🔍 Transparencia y Rotación",
-        cls: "autocritico",
-        fondosDelta: 0,
-        confianzaDelta: 8,
-        reputacionDelta: 16,
-        moralDelta: -10,
-        impacto: "La autocrítica institucional calmó las aguas en la televisión. El árbitro recuperará ritmo en el ascenso."
-      },
-      {
-        texto: "🤐 Ratificar el fallo diciendo que 'hubo contacto interpretable' para no desacreditar la terna",
-        badge: "🔒 Negacionismo Total",
-        cls: "nervioso",
-        fondosDelta: 0,
-        confianzaDelta: -12,
-        reputacionDelta: -22,
-        moralDelta: 6,
-        impacto: "La prensa deportiva te destrozó en los programas de debate. La credibilidad pública sufrió un duro golpe."
-      },
-      {
-        texto: "🖥️ Invertir de urgencia en Clínicas de VAR y psicólogos de campo ($30.000)",
-        badge: "🛠️ Inversión Correctiva",
-        cls: "firme",
-        fondosDelta: -30000,
-        confianzaDelta: 10,
-        reputacionDelta: 18,
-        moralDelta: 14,
-        impacto: "Transformaste el escándalo en una mejora formativa concreta. El Comité Ejecutivo elogió tu respuesta profesional."
-      }
-    ]
-  },
-  {
-    id: "foto_viral_camiseta",
-    tipo: "polemica",
-    titulo: "📸 Viral en Twitter/X: Foto del Árbitro de chico con la camiseta de un grande",
-    emisor: "Hinchas y Redes Sociales",
-    subtitulo: "Se viralizó una foto del réferi a los 14 años en la tribuna popular del equipo que le toca dirigir.",
-    descripcion: "A 48 horas del clásico de la fecha, hinchas rivales filtraron fotos del árbitro cantando en la tribuna popular con la camiseta puesta. La dirigencia visitante pide la impugnación inmediata de la terna.",
-    opciones: [
-      {
-        texto: "🔄 Cambiar la designación a última hora por un árbitro neutral e intachable",
-        badge: "🔄 Reemplazo Preventivo",
-        cls: "prudente",
-        fondosDelta: -10000,
-        confianzaDelta: 10,
-        reputacionDelta: 14,
-        moralDelta: -8,
-        impacto: "Evitaste sospechas en el clásico, aunque tuviste que gastar viáticos extras de emergencia en el nuevo designado."
-      },
-      {
-        texto: "⚖️ Ratificar al árbitro afirmando que 'el profesionalismo no tiene camiseta infantil'",
-        badge: "🛡️ Confianza Profesional",
-        cls: "firme",
-        fondosDelta: 0,
-        confianzaDelta: -6,
-        reputacionDelta: 6,
-        moralDelta: 16,
-        impacto: "Demostraste templanza frente al histerismo de las redes sociales. El árbitro dirigió con el cuchillo entre los dientes."
-      }
-    ]
-  },
-  {
-    id: "pedido_conmebol",
-    tipo: "conmebol",
-    titulo: "🌎 Convocatoria CONMEBOL: La Élite a la Copa Libertadores",
-    emisor: "Comisión de Arbitraje de CONMEBOL (Luque, Paraguay)",
-    subtitulo: "La confederación sudamericana solicita con urgencia a tus mejores árbitros para la Copa.",
-    descripcion: "CONMEBOL exige a tus réferis de mayor jerarquía para dirigir semifinales de Copa Libertadores en el Maracaná de Río de Janeiro y Medellín. El problema: no estarán disponibles para la fecha del torneo local este fin de semana.",
-    opciones: [
-      {
-        texto: "✈️ Ceder a los árbitros a CONMEBOL (Se reciben $80.000 en viáticos en USD y +Prestigio)",
-        badge: "🏆 Prestigio Continental",
-        cls: "prudente",
-        fondosDelta: 80000,
-        confianzaDelta: -4,
-        reputacionDelta: 20,
-        moralDelta: 22,
-        impacto: "Tus árbitros brillaron en el Maracaná y sumaron prestigio sudamericano, dejando fondos en el Colegio."
-      },
-      {
-        texto: "🇦🇷 Priorizar el fútbol argentino y retener a todas las figuras para los clásicos",
-        badge: "🛡️ Prioridad Nacional",
-        cls: "firme",
-        fondosDelta: 0,
-        confianzaDelta: 16,
-        reputacionDelta: 4,
-        moralDelta: -8,
-        impacto: "Garantizaste las mejores ternas para los clásicos locales. La AFA te felicitó por tu lealtad local."
-      }
-    ]
-  },
-  {
-    id: "maletin_dirigente",
-    tipo: "corrupcion",
-    titulo: "📞 Llamada Secreta: El 'Aporte Institucional' del Club Grande",
-    emisor: "Presidente de Club Candidato al Título",
-    subtitulo: "Un influyente dirigente te cita en un restaurante reservado de Puerto Madero.",
-    descripcion: "“Presidente, este fin de semana nos jugamos el campeonato. Sabemos que el Colegio necesita fondos para equipamiento y viáticos. Si nos designás a un árbitro 'comprensivo' que no se apure con las tarjetas rojas contra nuestro equipo, habrá una contribución de $160.000 para la asociación... y nuestro voto asegurado en la próxima asamblea.”",
-    opciones: [
-      {
-        texto: "🤝 Aceptar la contribución ($160.000) y prometer designación favorable",
-        badge: "💰 Corrupción / Dinero",
-        cls: "bribe",
-        fondosDelta: 160000,
-        confianzaDelta: 12,
-        reputacionDelta: -18,
-        moralDelta: -14,
-        impacto: "Aceptaste los $160.000 en las arcas del colegio. La dirigencia del club está contenta, pero en los pasillos de los árbitros hay murmullos sobre favoritismos."
-      },
-      {
-        texto: "🛡️ Rechazar tajantemente y advertir con denuncia al Tribunal de Ética",
-        badge: "⚖️ Integridad Total",
-        cls: "firme",
-        fondosDelta: 0,
-        confianzaDelta: -10,
-        reputacionDelta: 20,
-        moralDelta: 16,
-        impacto: "Defendiste el honor del arbitraje. La prensa filtró tu rectitud y el público te elogia, aunque el club ofendido operará en tu contra en el Comité."
-      },
-      {
-        texto: "💬 Dar una respuesta diplomática y evasiva sin aceptar dinero",
-        badge: "🤝 Neutral / Político",
-        cls: "prudente",
-        fondosDelta: 0,
-        confianzaDelta: 2,
-        reputacionDelta: 0,
-        moralDelta: 0,
-        impacto: "Evitaste el conflicto directo sin comprometer la ética del Colegio. Todo queda en statu quo."
-      }
-    ]
-  },
-  {
-    id: "apriete_barrabrava",
-    tipo: "presion",
-    titulo: "⚠️ Tensión en el Predio: Visita de la Barra Brava",
-    emisor: "Jefes de la Barra Brava Local",
-    subtitulo: "Varios autos sin patente se estacionaron en el predio de entrenamiento de los árbitros.",
-    descripcion: "Un grupo de 15 personas ingresó a las instalaciones para 'hablar' con los árbitros antes del clásico del domingo. Exigen que el árbitro designado 'no nos perjudique con tarjetas dudosas porque se pudre todo en la tribuna'.",
-    opciones: [
-      {
-        texto: "🚨 Contratar custodia de seguridad privada reforzada de urgencia ($35.000)",
-        badge: "🛡️ Proteger al Plantel",
-        cls: "firme",
-        fondosDelta: -35000,
-        confianzaDelta: 6,
-        reputacionDelta: 12,
-        moralDelta: 26,
-        impacto: "Invertiste fondos del colegio para blindar a los árbitros y sus familias. El plantel siente un respaldo inquebrantable."
-      },
-      {
-        texto: "🏛️ Exigir a la AFA y al Ministerio de Seguridad la suspensión del estadio",
-        badge: "⚖️ Denuncia Penal",
-        cls: "prudente",
-        fondosDelta: 0,
-        confianzaDelta: -12,
-        reputacionDelta: 18,
-        moralDelta: 12,
-        impacto: "Tu denuncia escaló a nivel judicial. Los clubes te acusan de dramatizar, pero pusiste un límite a la violencia."
-      },
-      {
-        texto: "🤫 Bajar el perfil y pedirle a los árbitros que no hagan declaraciones",
-        badge: "😰 Ceder a la Presión",
-        cls: "nervioso",
-        fondosDelta: 0,
-        confianzaDelta: 0,
-        reputacionDelta: -10,
-        moralDelta: -20,
-        impacto: "La falta de firmeza generó miedo y desazón entre los árbitros más jóvenes del plantel."
-      }
-    ]
-  }
-];
-
-var PRES_CONSEJEROS_COMISION = [
-  {
-    id: "el_maestro",
-    nombre: "Horacio Elizondo",
-    cargo: "Director Técnico del Colegio & Ex Árbitro Finalista del Mundo",
-    avatar: "👴",
-    badge: "Estrategia Técnica",
-    consejo: function(ps){
-      var fixIdx = (ps.fecha - 1) % 10;
-      var matches = (PRES_FIXTURES_POR_DIVISION.liga[fixIdx] || []).filter(function(m){ return m.dif >= 85; });
-      if(matches.length > 0){
-        return "“Presidente, en esta Fecha " + ps.fecha + " tenemos choques de altísima fricción como " + matches[0].clasico + " (" + matches[0].local + " vs " + matches[0].visitante + "). Designá árbitros con Temple superior a 85 (como Pitana o Rapallini) y que no vengan arrastrando partidos seguidos, o el partido se les va a ir de las manos.”";
-      }
-      return "“La fecha viene equilibrada. Es un momento ideal para darle rodaje a Falcón Pérez o Mariana De Almeida en la Liga Profesional mientras descansamos a los más veteranos.”";
-    }
-  },
-  {
-    id: "prof_fisico",
-    nombre: "Prof. Santillán",
-    cargo: "Director de Preparación Física & Ciencias del Deporte",
-    avatar: "🏃‍♂️",
-    badge: "Fisioterapia & GPS",
-    consejo: function(ps){
-      var agotados = ps.arbitros.filter(function(a){ return a.energia < 50; });
-      if(agotados.length > 0){
-        var nombres = agotados.map(function(a){ return a.nombre; }).join(", ");
-        return "“¡Alerta médica! Tenemos " + agotados.length + " árbitro(s) en zona roja de fatiga (" + nombres + "). Si los hacés correr 12 km este fin de semana sufrirán calambres y cobrarán tarde los offsides. Dales descanso para que recuperen +45% de energía.”";
-      }
-      return "“El plantel está en una condición atlética envidiable. El 100% de los árbitros aprobó los tests de velocidad FIFA.”";
-    }
-  },
-  {
-    id: "tribunal_etica",
-    nombre: "Dr. Benítez",
-    cargo: "Asesor Jurídico & Miembro del Tribunal de Ética",
-    avatar: "⚖️",
-    badge: "Legal & Ética",
-    consejo: function(ps){
-      if(ps.reputacionPublica < 50){
-        return "“Presidente, la prensa y las redes sociales nos tienen en la mira. Si nos llega alguna oferta dudosa o llamada de dirigentes, rechacémosla categóricamente para recuperar la credibilidad del colegio.”";
-      }
-      if(ps.fondos < 80000){
-        return "“Las arcas del Colegio están ajustadas ($" + fmtMoney(ps.fondos) + "). Deberíamos revisar los contratos de Sponsors en Manga y Relojería para asegurar un flujo constante de ingresos por fecha.”";
-      }
-      return "“El balance institucional es intachable. Si seguimos con superávit financiero y confianza por encima del 60%, tu reelección a los 4 años de mandato está prácticamente asegurada.”";
-    }
-  },
-  {
-    id: "prensa_rrii",
-    nombre: "Valeria Rossi",
-    cargo: "Directora de Comunicación & Relaciones Institucionales",
-    avatar: "🎙️",
-    badge: "Prensa & Opinión",
-    consejo: function(ps){
-      if(ps.confianzaAFA < 55){
-        return "“En los pasillos de la AFA hay inquietud de algunos presidentes de clubes. Mostremos respaldo al protocolo VAR y evitemos polémicas en las conferencias de prensa post-partido.”";
-      }
-      return "“Los canales de televisión elogiaron la agilidad de las decisiones en la última fecha. La imagen del colegio arbitral está en alza histórica.”";
-    }
-  }
-];
-
-var PRES_ACADEMIA_NIVELES = [
-  { nivel:1, nombre:"Escuela Regional de Árbitros", maxArbitros:10, costo:0, desc:"Infraestructura básica. Permite un plantel de hasta 10 árbitros oficiales." },
-  { nivel:2, nombre:"Centro de Tecnificación Nacional", maxArbitros:13, costo:80000, desc:"Gimnasio de alta intensidad y scouting juvenil. Plantel de hasta 13 árbitros." },
-  { nivel:3, nombre:"Instituto Nacional del Arbitraje (INAF)", maxArbitros:16, costo:140000, desc:"Aulas de reglamento digital y temple acelerado (+5 Temple en egresados). Plantel de 16 árbitros." },
-  { nivel:4, nombre:"Centro de Alto Rendimiento FIFA", maxArbitros:20, costo:220000, desc:"Instalaciones de clase mundial, nutricionistas y regeneración de figuras internacionales. Hasta 20 árbitros." }
-];
-
-/* ---------- PANTALLAS DEL MODO PRESIDENTE ---------- */
-
 /* ---------- PANTALLAS DEL MODO PRESIDENTE ---------- */
 
 function navTabsPresidente(currentScreen){
@@ -7177,6 +7871,12 @@ window.irAPantallaPresidente = function(scr){
 };
 
 var tempDirigenteAvatarId = "dir_h1";
+var tempComisionPreStart = {
+  tecnica: "com_elizondo",
+  medica: "com_villani",
+  legal: "com_benitez",
+  prensa: "com_rossi"
+};
 
 window.seleccionarDirigentePreStart = function(id){
   tempDirigenteAvatarId = id;
@@ -7190,6 +7890,12 @@ window.seleccionarDirigentePreStart = function(id){
       }
     }
   }
+  render();
+};
+
+window.seleccionarComisionPreStart = function(depto, id){
+  tempComisionPreStart[depto] = id;
+  triggerHaptic("light");
   render();
 };
 
@@ -7225,12 +7931,56 @@ function screenPresidentStart(){
     '</div>';
   }).join("");
 
+  // Commission Departments Selection Cards
+  var deptKeys = [
+    { key: "tecnica", titulo: "1. Dirección Técnica & Estrategia", icon: "🎯" },
+    { key: "medica", titulo: "2. Cuerpo Médico & Rendimiento", icon: "🩺" },
+    { key: "legal", titulo: "3. Asesoría Legal & Tribunal de Disciplina", icon: "⚖️" },
+    { key: "prensa", titulo: "4. Vocería & Relaciones Institucionales", icon: "🎙️" }
+  ];
+
+  var comisionSelectionHtml = deptKeys.map(function(dept){
+    var candidates = PRES_COMISION_CATALOGO[dept.key] || [];
+    var selectedId = tempComisionPreStart[dept.key];
+
+    var candHtml = candidates.map(function(c){
+      var isSel = c.id === selectedId;
+      return '<div class="advisor-choice-card' + (isSel ? ' selected' : '') + '" onclick="seleccionarComisionPreStart(\'' + dept.key + '\', \'' + c.id + '\')">' +
+        (isSel ? '<div class="dirigente-badge-check">✓</div>' : '') +
+        '<div style="display:flex; align-items:center; gap:8px;">' +
+          '<div style="font-size:24px;">' + c.avatar + '</div>' +
+          '<div style="flex:1;">' +
+            '<div style="font-weight:700; font-size:13.5px; color:#fff;">' + c.nombre + '</div>' +
+            '<div style="font-size:11px; color:var(--text-faint);">' + c.expNivel + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;">' +
+            '<div style="font-size:12px; font-weight:800; color:var(--gold);">' + fmtMoney(c.sueldoPorFecha) + '/f</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:11.5px; color:var(--text-dim); margin-top:6px; line-height:1.35;">' + c.bonoDesc + '</div>' +
+      '</div>';
+    }).join("");
+
+    return '<div style="margin-top:12px;">' +
+      '<div style="font-size:12.5px; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px;">' + dept.icon + ' ' + dept.titulo + '</div>' +
+      '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">' + candHtml + '</div>' +
+    '</div>';
+  }).join("");
+
+  var totalSueldosComision = 0;
+  for(var dk in tempComisionPreStart){
+    var selId = tempComisionPreStart[dk];
+    var cList = PRES_COMISION_CATALOGO[dk] || [];
+    var foundObj = cList.find(function(it){ return it.id === selId; });
+    if(foundObj) totalSueldosComision += foundObj.sueldoPorFecha;
+  }
+
   return topbar() +
     savedBlock +
     '<div class="panel center" style="margin-top:14px;">' +
       '<div class="eyebrow" style="color:var(--gold);">Asociación del Fútbol Argentino · Colegio de Árbitros</div>' +
       '<h1 class="section-title" style="font-size:25px; margin-top:8px;">PRESIDENCIA DEL<br/>COLEGIO DE ÁRBITROS</h1>' +
-      '<p class="muted" style="font-size:13px; margin-top:8px; line-height:1.5;">Fuiste electo por la Asamblea de la Federación para liderar el Colegio de Árbitros por un mandato de 4 años. Elegí tu imagen dirigencial de traje y asumí el control de las 4 divisiones del fútbol argentino.</p>' +
+      '<p class="muted" style="font-size:13px; margin-top:8px; line-height:1.5;">Fuiste electo por la Asamblea de la Federación para liderar el Colegio de Árbitros por un mandato de 4 años. Elegí tu imagen dirigencial de traje, conformá tu gabinete asesor y asumí el control de las 4 divisiones del fútbol argentino.</p>' +
     '</div>' +
 
     '<div class="panel">' +
@@ -7239,7 +7989,13 @@ function screenPresidentStart(){
     '</div>' +
 
     '<div class="panel">' +
-      '<div class="eyebrow" style="color:var(--gold);">2. Datos del Acta de Asunción Presidencial</div>' +
+      '<div class="eyebrow" style="color:var(--gold);">2. Conformá tu Comisión Directiva Asesora (4 Departamentos)</div>' +
+      '<p class="muted" style="font-size:12.5px; margin-top:4px;">Seleccioná a los especialistas de tu gabinete. Los más experimentados ofrecen mejores bonificaciones pero cobran sueldos más altos por fecha (Total actual: <b style="color:var(--gold);">' + fmtMoney(totalSueldosComision) + '/fecha</b>).</p>' +
+      comisionSelectionHtml +
+    '</div>' +
+
+    '<div class="panel">' +
+      '<div class="eyebrow" style="color:var(--gold);">3. Datos del Acta de Asunción Presidencial</div>' +
       '<div class="form-group" style="margin-top:8px;">' +
         '<label class="form-label">Nombre Oficial del Presidente</label>' +
         '<input class="form-input" id="inpPresNombre" maxlength="28" placeholder="Ej: Don Alberto Macías" value="'+ escapeHtml(dirigenteDefault.nombre) +'"/>' +
@@ -7263,7 +8019,7 @@ window.iniciarPresidenciaDesdeForm = function(){
   var nombre = document.getElementById("inpPresNombre") ? document.getElementById("inpPresNombre").value.trim() : "";
   var dirDef = AVATARES_DIRIGENTES.find(function(it){ return it.id === tempDirigenteAvatarId; });
   if(!nombre) nombre = (dirDef ? dirDef.nombre : "Don Alberto Macías");
-  presState = nuevoEstadoPresidente(nombre, tempDirigenteAvatarId);
+  presState = nuevoEstadoPresidente(nombre, tempDirigenteAvatarId, Object.assign({}, tempComisionPreStart));
   presState.screen = "pres_dashboard";
   guardarPresidente();
   render();
@@ -7442,112 +8198,243 @@ window.resolverEventoPresidente = function(idx){
   render();
 };
 
+function obtenerTodosPartidosFecha(fecha){
+  var ps = presState;
+  var acLevel = (ps && ps.academiaNivel) ? ps.academiaNivel : 1;
+  var nivelObj = PRES_ACADEMIA_NIVELES.find(function(n){ return n.nivel === acLevel; }) || PRES_ACADEMIA_NIVELES[0];
+  var cuotas = (nivelObj && nivelObj.cuotas) ? nivelObj.cuotas : { liga: 3, nacional: 2, bmetro: 2, regional: 2 };
+
+  var fixIdx = (fecha - 1) % 10;
+  var list = [];
+  PRES_DIVISIONES.forEach(function(d){
+    var fixDiv = PRES_FIXTURES_POR_DIVISION[d.id] || PRES_FIXTURES_POR_DIVISION.liga;
+    var partidos = fixDiv[fixIdx] || fixDiv[0];
+    var maxCuota = cuotas[d.id] || partidos.length;
+    var seleccionados = partidos.slice(0, maxCuota);
+    seleccionados.forEach(function(m, idx){
+      list.push({
+        desKey: d.id + "_" + idx,
+        divId: d.id,
+        divNombre: d.nombre,
+        divIcon: d.icon,
+        idx: idx,
+        match: m
+      });
+    });
+  });
+  return list;
+}
+
 function screenPresidentAssign(){
   var ps = presState;
-  var divId = ps.divisionSeleccionada || "liga";
-  var fixIdx = (ps.fecha - 1) % 10;
-  var fixturesDivision = PRES_FIXTURES_POR_DIVISION[divId] || PRES_FIXTURES_POR_DIVISION.liga;
-  var partidos = fixturesDivision[fixIdx] || fixturesDivision[0];
+  var todosPartidos = obtenerTodosPartidosFecha(ps.fecha);
+  var totalMatches = todosPartidos.length;
 
-  // Auto-init designations if empty
   if(!ps.designaciones) ps.designaciones = {};
-  for(var i=0; i<partidos.length; i++){
-    var desKey = divId + "_" + i;
-    if(!ps.designaciones[desKey]){
-      ps.designaciones[desKey] = ps.arbitros[i % ps.arbitros.length].id;
+
+  // Build assigned reverse map: refId => { desKey, matchTitle, divNombre }
+  var assignedRefsMap = {};
+  var assignedCount = 0;
+  for(var i=0; i<todosPartidos.length; i++){
+    var item = todosPartidos[i];
+    var rId = ps.designaciones[item.desKey];
+    if(rId){
+      assignedRefsMap[rId] = {
+        desKey: item.desKey,
+        matchTitle: item.match.local + " vs " + item.match.visitante,
+        divNombre: item.divNombre
+      };
+      assignedCount++;
     }
   }
 
-  var assignedSet = {};
-  for(var k in ps.designaciones){
-    assignedSet[ps.designaciones[k]] = true;
-  }
+  // Referees in rest
+  var restingRefs = ps.arbitros.filter(function(a){ return !assignedRefsMap[a.id]; });
 
-  // Division selector pills
-  var divPillsHtml = PRES_DIVISIONES.map(function(d){
-    var active = d.id === divId ? " active" : "";
-    return '<button class="pres-cat-pill' + active + '" onclick="cambiarDivisionDesignacion(\'' + d.id + '\')">' +
-      d.icon + ' ' + d.nombre +
-    '</button>';
-  }).join("");
+  // Generate sections for all 4 divisions
+  var divisionSectionsHtml = PRES_DIVISIONES.map(function(d){
+    var divisionMatches = todosPartidos.filter(function(it){ return it.divId === d.id; });
+    if(!divisionMatches.length) return "";
 
-  var matchesHtml = partidos.map(function(m, idx){
-    var desKey = divId + "_" + idx;
-    var currentRefId = ps.designaciones[desKey] || ps.arbitros[0].id;
-    var refObj = ps.arbitros.find(function(a){ return a.id === currentRefId; }) || ps.arbitros[0];
-    
-    var adviceHtml = "";
-    if(m.dif >= 85 && refObj.temple < 85){
-      adviceHtml = '<div style="color:var(--yellow); font-size:12px; margin-top:4px;">⚠️ <b>Riesgo de Temple:</b> ' + refObj.nombre + ' tiene temple de ' + refObj.temple + ' y este choque de alta tensión exige al menos 85.</div>';
-    } else if(refObj.energia < 45){
-      adviceHtml = '<div style="color:var(--red); font-size:12px; margin-top:4px;">🚨 <b>Fatiga Severa:</b> ' + refObj.nombre + ' está agotado (' + refObj.energia + '%). Alto riesgo de calambres y polémicas graves.</div>';
-    } else {
-      adviceHtml = '<div style="color:var(--green); font-size:12px; margin-top:4px;">🟢 <b>Designación Óptima:</b> Nivel técnico y energía física adecuados para el compromiso.</div>';
-    }
+    var matchesInDivHtml = divisionMatches.map(function(item){
+      var desKey = item.desKey;
+      var m = item.match;
+      var currentRefId = ps.designaciones[desKey] || "";
+      var refObj = ps.arbitros.find(function(a){ return a.id === currentRefId; });
 
-    var optionsHtml = ps.arbitros.map(function(a){
-      var sel = a.id === currentRefId ? " selected" : "";
-      var fatigueNote = a.energia < 45 ? " [🚨 Agotado: " + a.energia + "%]" : (a.energia < 70 ? " [⚠️ Fatiga: " + a.energia + "%]" : " [🟢 100%]");
-      var intNote = a.esInternacional ? " [FIFA]" : "";
-      return '<option value="' + a.id + '"' + sel + '>' + a.nombre + intNote + ' (Temple: ' + a.temple + ' · Físico: ' + a.fisico + fatigueNote + ')</option>';
+      var adviceHtml = "";
+      if(!refObj){
+        adviceHtml = '<div style="color:var(--yellow); font-size:12px; margin-top:5px;">⚠️ <b>Vacante:</b> Seleccioná un árbitro para este encuentro.</div>';
+      } else if(m.dif >= 85 && refObj.temple < 85){
+        adviceHtml = '<div style="color:var(--yellow); font-size:12px; margin-top:5px;">⚠️ <b>Riesgo de Temple:</b> ' + refObj.nombre + ' tiene temple ' + refObj.temple + ' y este clásico exige 85+.</div>';
+      } else if(refObj.energia < 45){
+        adviceHtml = '<div style="color:var(--red); font-size:12px; margin-top:5px;">🚨 <b>Fatiga Severa:</b> ' + refObj.nombre + ' está exhausto (' + refObj.energia + '%). Alto riesgo de fallos graves.</div>';
+      } else if(m.dif <= 55 && refObj.exp < 80){
+        adviceHtml = '<div style="color:var(--green); font-size:12px; margin-top:5px;">🌱 <b>Desarrollo de Promesas:</b> Categoría ideal para que ' + refObj.nombre + ' gane experiencia y temple.</div>';
+      } else {
+        adviceHtml = '<div style="color:var(--green); font-size:12px; margin-top:5px;">🟢 <b>Designación Óptima:</b> Nivel técnico y físico excelentes para este partido.</div>';
+      }
+
+      var optionsHtml = '<option value="">– Sin designar (Vacante) –</option>';
+      optionsHtml += ps.arbitros.map(function(a){
+        var isThisMatch = a.id === currentRefId;
+        var otherAssign = (!isThisMatch && assignedRefsMap[a.id]) ? assignedRefsMap[a.id] : null;
+
+        var fatigueNote = a.energia < 45 ? " [🚨 Agotado " + a.energia + "%]" : (a.energia < 70 ? " [⚠️ Fatiga " + a.energia + "%]" : " [🟢 " + a.energia + "%]");
+        var intNote = a.esInternacional ? " [FIFA]" : "";
+
+        if(otherAssign){
+          return '<option value="' + a.id + '" style="color:#78909c;">' + a.nombre + ' (⛔ Ya dirige en ' + otherAssign.divNombre + ')</option>';
+        }
+
+        var sel = isThisMatch ? " selected" : "";
+        return '<option value="' + a.id + '"' + sel + '>' + a.nombre + intNote + ' (Temple ' + a.temple + ' · Físico ' + a.fisico + fatigueNote + ')</option>';
+      }).join("");
+
+      return '<div class="match-assign-card' + (m.dif >= 85 ? ' high-tension' : '') + '">' +
+        '<div class="match-assign-header">' +
+          '<div>' +
+            '<div class="match-tension-badge">' + m.clasico + ' · Tensión ' + m.dif + '/100</div>' +
+            '<div class="match-teams-title">' + m.local + ' vs ' + m.visitante + '</div>' +
+          '</div>' +
+          '<div style="display:flex; align-items:center; gap:6px;">' +
+            renderTeamCrest(m.local, 26) +
+            '<span style="font-weight:700; color:var(--text-faint); font-size:11px;">vs</span>' +
+            renderTeamCrest(m.visitante, 26) +
+          '</div>' +
+        '</div>' +
+        '<div style="margin-top:8px;">' +
+          '<select class="ref-select-box" onchange="cambiarDesignacionGlobal(\'' + desKey + '\', this.value)">' +
+            optionsHtml +
+          '</select>' +
+        '</div>' +
+        adviceHtml +
+      '</div>';
     }).join("");
 
-    return '<div class="match-assign-card">' +
-      '<div class="match-assign-header">' +
-        '<div>' +
-          '<div class="match-tension-badge">' + m.clasico + ' · Dificultad: ' + m.dif + '/100</div>' +
-          '<div class="match-teams-title">' + m.local + ' vs ' + m.visitante + '</div>' +
-        '</div>' +
-        '<div style="display:flex; align-items:center; gap:6px;">' +
-          renderTeamCrest(m.local, 28) +
-          '<span style="font-weight:700; color:var(--text-faint);">vs</span>' +
-          renderTeamCrest(m.visitante, 28) +
-        '</div>' +
+    return '<div class="division-section-box ' + d.id + '">' +
+      '<div class="division-section-header">' +
+        '<div class="division-section-title">' + d.icon + ' ' + d.nombre + '</div>' +
+        '<span class="division-badge-count">' + divisionMatches.length + ' Partidos Oficiales</span>' +
       '</div>' +
-      '<div style="margin-top:10px;">' +
-        '<label class="form-label" style="font-size:12px;">Árbitro Principal Designado:</label>' +
-        '<select class="ref-select-box" onchange="cambiarDesignacion(\'' + desKey + '\', this.value)">' +
-          optionsHtml +
-        '</select>' +
-      '</div>' +
-      adviceHtml +
+      '<div class="match-assign-grid" style="margin-top:0;">' + matchesInDivHtml + '</div>' +
     '</div>';
   }).join("");
 
-  // Resting referees
-  var restingRefs = ps.arbitros.filter(function(a){ return !assignedSet[a.id]; });
+  var recoveryRate = ps.mejoras.crioTerapia ? 65 : 45;
+
+  // Resting Referees Cards
   var restingHtml = restingRefs.length ? restingRefs.map(function(a){
-    return '<span class="mode-feat-pill" style="border-color:rgba(0,230,118,0.4); color:var(--green);">💤 ' + a.nombre + ' (+45% Energía)</span>';
-  }).join(" ") : '<span class="muted" style="font-size:12px;">Todos los árbitros están asignados esta fecha.</span>';
+    var recoveryPreview = Math.min(100, a.energia + recoveryRate);
+    return '<div style="background:#101722; border:1px solid rgba(0,230,118,0.3); border-radius:10px; padding:8px 12px; display:flex; align-items:center; gap:10px;">' +
+      '<div class="avatar-preview-box" style="width:34px; height:34px; flex:none;">' + renderAvatarSvg(a.avatarId || "h1", 34) + '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:12.5px; font-weight:700; color:#fff;">💤 ' + a.nombre + '</div>' +
+        '<div style="font-size:11px; color:var(--green);">Energía: ' + a.energia + '% ➔ <b>' + recoveryPreview + '%</b> (+' + recoveryRate + '%)</div>' +
+      '</div>' +
+    '</div>';
+  }).join("") : '<div class="muted" style="font-size:12.5px; padding:6px 0;">Todos los árbitros del plantel han sido designados para esta fecha.</div>';
 
   return topbar() +
     navTabsPresidente("pres_assign") +
     '<div class="panel">' +
-      '<div class="eyebrow" style="color:var(--gold);">Tribunal de Designaciones · Fecha ' + ps.fecha + ' de 10</div>' +
-      '<h2 class="section-title" style="margin-top:4px;">Nombramiento Oficial de Ternas por División</h2>' +
-      '<p class="muted" style="font-size:13px; margin-top:4px;">Seleccioná la categoría para nombrar a los árbitros principales de cada partido.</p>' +
-      '<div class="pres-cat-selector">' + divPillsHtml + '</div>' +
+      '<div class="eyebrow" style="color:var(--gold);">Tribunal de Designaciones Oficiales · Fecha ' + ps.fecha + ' de 10</div>' +
+      '<h1 class="section-title" style="font-size:22px; margin-top:4px;">Asignación Simultánea de las 4 Divisiones</h1>' +
+      '<p class="muted" style="font-size:12.5px; margin-top:4px;">Nombrá a los árbitros principales de toda la fecha oficial (' + totalMatches + ' partidos según nivel ' + ps.academiaNivel + ' de la Academia). Cada árbitro solo puede dirigir un partido por fecha; los que no dirijan descansarán y recargarán +' + recoveryRate + '% de energía.</p>' +
+      
+      '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:12px; background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:10px; border:1px solid var(--border);">' +
+        '<div style="font-size:13px; font-weight:700; color:#fff;">' +
+          'Partidos Asignados: <span style="color:' + (assignedCount === totalMatches ? 'var(--green)' : 'var(--gold)') + ';">' + assignedCount + ' / ' + totalMatches + '</span>' +
+        '</div>' +
+        '<div style="display:flex; gap:8px;">' +
+          '<button class="btn btn-sm btn-gold" onclick="autoAsignarTernasFecha()">⚡ Auto-Designar Todo</button>' +
+          '<button class="btn btn-sm btn-outline" onclick="limpiarDesignacionesFecha()">🧹 Vaciar</button>' +
+        '</div>' +
+      '</div>' +
     '</div>' +
 
-    '<div class="match-assign-grid">' + matchesHtml + '</div>' +
+    divisionSectionsHtml +
 
-    '<div class="panel" style="margin-top:14px; background:rgba(0,230,118,0.04); border-color:rgba(0,230,118,0.2);">' +
-      '<div class="eyebrow" style="color:var(--green);">Árbitros en Descanso y Recuperación Física</div>' +
-      '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;">' + restingHtml + '</div>' +
+    '<div class="panel" style="margin-top:16px; background:rgba(0,230,118,0.03); border-color:rgba(0,230,118,0.25);">' +
+      '<div class="eyebrow" style="color:var(--green); display:flex; justify-content:space-between; align-items:center;">' +
+        '<span>Árbitros en Descanso & Recuperación de Energía (' + restingRefs.length + ')</span>' +
+        '<span style="font-size:11px; color:var(--green);">Recuperan +' + recoveryRate + '% de Físico</span>' +
+      '</div>' +
+      '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:8px; margin-top:10px;">' + restingHtml + '</div>' +
     '</div>' +
 
-    '<button class="btn btn-gold" style="margin-top:14px; font-size:15px; padding:14px 20px;" onclick="confirmarYSimularFecha()">⚖️ Confirmar Designaciones y Simular Fecha ' + ps.fecha + ' →</button>' +
+    '<button class="btn btn-gold" style="margin-top:16px; font-size:15px; padding:14px 20px;" onclick="confirmarYSimularFecha()">⚖️ Confirmar Designaciones y Simular Fecha ' + ps.fecha + ' →</button>' +
     '<button class="btn btn-outline" style="margin-top:8px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
     '<button class="btn btn-outline" style="margin-top:4px;" onclick="irAMenuModos()">← Volver al Menú Principal</button>';
 }
 
-window.cambiarDivisionDesignacion = function(divId){
-  presState.divisionSeleccionada = divId;
+window.cambiarDesignacionGlobal = function(targetKey, newRefId){
+  var ps = presState;
+  if(!ps.designaciones) ps.designaciones = {};
+  
+  if(!newRefId){
+    delete ps.designaciones[targetKey];
+    triggerHaptic("light");
+    guardarPresidente();
+    render();
+    return;
+  }
+
+  // If this ref was already assigned to another match in this date, remove from other match
+  for(var k in ps.designaciones){
+    if(ps.designaciones[k] === newRefId && k !== targetKey){
+      delete ps.designaciones[k];
+    }
+  }
+
+  ps.designaciones[targetKey] = newRefId;
+  triggerHaptic("decision");
+  guardarPresidente();
   render();
 };
 
-window.cambiarDesignacion = function(desKey, refId){
-  presState.designaciones[desKey] = refId;
+window.autoAsignarTernasFecha = function(){
+  var ps = presState;
+  if(!ps) return;
+  var todos = obtenerTodosPartidosFecha(ps.fecha);
+  
+  // Sort matches by difficulty descending
+  var sortedMatches = todos.slice().sort(function(a, b){
+    return b.match.dif - a.match.dif;
+  });
+
+  // Sort referees by energy, temple and fisico descending
+  var availableRefs = ps.arbitros.slice().sort(function(a, b){
+    var scoreA = (a.energia * 2) + a.temple + a.fisico;
+    var scoreB = (b.energia * 2) + b.temple + b.fisico;
+    return scoreB - scoreA;
+  });
+
+  var assignedMap = {};
+  var usedRefs = {};
+
+  sortedMatches.forEach(function(item){
+    var candidate = availableRefs.find(function(r){
+      return !usedRefs[r.id];
+    });
+    if(candidate){
+      assignedMap[item.desKey] = candidate.id;
+      usedRefs[candidate.id] = true;
+    }
+  });
+
+  ps.designaciones = assignedMap;
+  triggerHaptic("success");
+  guardarPresidente();
+  render();
+};
+
+window.limpiarDesignacionesFecha = function(){
+  var ps = presState;
+  if(!ps) return;
+  ps.designaciones = {};
+  triggerHaptic("light");
+  guardarPresidente();
   render();
 };
 
@@ -7557,6 +8444,21 @@ window.volverADashboardPresidente = function(){
 };
 
 window.confirmarYSimularFecha = function(){
+  var ps = presState;
+  var todos = obtenerTodosPartidosFecha(ps.fecha);
+  var unassigned = todos.filter(function(it){
+    return !ps.designaciones || !ps.designaciones[it.desKey];
+  });
+
+  if(unassigned.length > 0){
+    if(confirm("Hay " + unassigned.length + " partido(s) sin árbitro asignado. ¿Deseás auto-designar a los mejores árbitros disponibles y simular la fecha?")){
+      window.autoAsignarTernasFecha();
+      sfxWhistle();
+      simularFechaCompleta();
+    }
+    return;
+  }
+
   triggerHaptic("success");
   sfxWhistle();
   simularFechaCompleta();
@@ -7564,63 +8466,115 @@ window.confirmarYSimularFecha = function(){
 
 function simularFechaCompleta(){
   var ps = presState;
-  var divId = ps.divisionSeleccionada || "liga";
-  var fixIdx = (ps.fecha - 1) % 10;
-  var fixturesDivision = PRES_FIXTURES_POR_DIVISION[divId] || PRES_FIXTURES_POR_DIVISION.liga;
-  var partidos = fixturesDivision[fixIdx] || fixturesDivision[0];
+  var todos = obtenerTodosPartidosFecha(ps.fecha);
 
   var assignedSet = {};
   var resultadosPartidos = [];
   var totalNota = 0;
+  var promocionesPlantel = [];
 
-  for(var i=0; i<partidos.length; i++){
-    var p = partidos[i];
-    var desKey = divId + "_" + i;
-    var refId = ps.designaciones[desKey] || ps.arbitros[i % ps.arbitros.length].id;
-    var ref = ps.arbitros.find(function(a){ return a.id === refId; }) || ps.arbitros[0];
+  // Salarios por división y descanso
+  var salarioPorDivision = {
+    liga: 7500,
+    nacional: 5200,
+    bmetro: 3800,
+    regional: 2600
+  };
+  var salarioDescanso = 1200;
+  var totalSueldosArbitros = 0;
+
+  // Bonificaciones de la comisión directiva
+  var comTecnica = (PRES_COMISION_CATALOGO.tecnica || []).find(function(c){ return c.id === (ps.comision && ps.comision.tecnica); });
+  var comMedica = (PRES_COMISION_CATALOGO.medica || []).find(function(c){ return c.id === (ps.comision && ps.comision.medica); });
+
+  var bonusNotaTecnica = 0;
+  if(comTecnica && comTecnica.perk === "nota_boost") bonusNotaTecnica += 0.3;
+  if(ps.mejoras.simuladorVAR) bonusNotaTecnica += 0.4;
+  if(ps.mejoras.analisisVideo) bonusNotaTecnica += 0.2;
+
+  todos.forEach(function(item){
+    var p = item.match;
+    var desKey = item.desKey;
+    var refId = ps.designaciones ? ps.designaciones[desKey] : null;
+    var ref = ps.arbitros.find(function(a){ return a.id === refId; });
+    if(!ref){
+      ref = ps.arbitros.find(function(a){ return !assignedSet[a.id]; }) || ps.arbitros[0];
+    }
     assignedSet[ref.id] = true;
+
+    // Sueldo correspondiente al árbitro por este partido
+    var sPartido = salarioPorDivision[item.divId] || 3500;
+    totalSueldosArbitros += sPartido;
 
     // Goles
     var gL = Math.floor(Math.random() * 3);
     var gV = Math.floor(Math.random() * 3);
     if(Math.random() < 0.3) gL += 1;
 
-    // Calculo de desempeno arbitral
+    // Desempeño arbitral adaptado a la dificultad de la división
     var fatigaImpact = (100 - ref.energia) / 100;
+    var diffFactor = (p.dif - 65) * 0.04; // Divisiones menores (dif 35-55) tienen menor exigencia
     var templeBonus = (ref.temple - 80) * 0.08;
     var fisicoBonus = (ref.fisico - 80) * 0.06;
     
-    // Mejoras activas
-    if(ps.mejoras.simuladorVAR) templeBonus += 0.4;
-
-    var baseNota = 7.0 + templeBonus + fisicoBonus - (fatigaImpact * 2.2) + ((Math.random() * 2.0) - 1.0);
-    baseNota = clamp(baseNota, 3.0, 9.8);
+    var baseNota = 7.2 + templeBonus + fisicoBonus + bonusNotaTecnica - diffFactor - (fatigaImpact * 2.2) + ((Math.random() * 1.8) - 0.9);
+    baseNota = clamp(baseNota, 3.5, 9.9);
     baseNota = Math.round(baseNota * 10) / 10;
 
     var incidentes = [];
     var amarillas = Math.floor(Math.random() * 5) + 2;
-    var rojas = Math.random() < 0.28 ? 1 : 0;
-    var penales = Math.random() < 0.35 ? 1 : 0;
+    var rojas = Math.random() < 0.25 ? 1 : 0;
+    var penales = Math.random() < 0.30 ? 1 : 0;
 
     if(ref.energia < 45 && Math.random() < 0.65){
-      incidentes.push("⚠️ Min 78': Calambre del árbitro y tardanza en consultar el VAR.");
+      incidentes.push("⚠️ Min 78': Fatiga del juez central y demoras en revisar las jugadas.");
       baseNota = Math.max(3.5, baseNota - 1.4);
     } else if(baseNota >= 8.5){
-      incidentes.push("✨ Conducción impecable: acertó con el VAR en una jugada bisagra.");
-    } else if(baseNota <= 5.0){
-      incidentes.push("🚨 Polémica nacional: reclamos airados de los dos bancos de suplentes.");
+      incidentes.push("✨ Arbitraje de jerarquía: control absoluto y decisiones respaldadas.");
+    } else if(baseNota <= 5.2){
+      incidentes.push("🚨 Polémica y reclamos caldeados por fallos en jugadas divididas.");
     } else {
       incidentes.push("✔️ Arbitraje sobrio y sin sobresaltos reglamentarios.");
     }
 
-    // Actualizar cansancio del arbitro
-    var gastoEnergia = 35;
-    if(ps.mejoras.preparadorFisico) gastoEnergia = 22;
+    // Progreso y crecimiento de estadísticas del árbitro si tuvo buen desempeño en divisiones menores
+    if(baseNota >= 7.0){
+      var growthExp = (baseNota >= 8.2) ? 3 : 2;
+      var growthTemple = (baseNota >= 8.0) ? 2 : 1;
+      ref.exp = Math.min(99, (ref.exp || 60) + growthExp);
+      ref.temple = Math.min(99, (ref.temple || 60) + growthTemple);
+      ref.fisico = Math.min(99, (ref.fisico || 60) + 1);
+      ref.integridad = Math.min(99, (ref.integridad || 60) + 1);
+
+      // Promociones de categoría por mérito deportivo
+      if(ref.divisionPreferida === "regional" && ref.exp >= 74 && ref.temple >= 76){
+        ref.divisionPreferida = "bmetro";
+        promocionesPlantel.push({ nombre: ref.nombre, de: "Torneo Regional", a: "Primera B Metropolitana", icon: "🥈" });
+        ps.promocionesRealizadas = (ps.promocionesRealizadas || 0) + 1;
+      } else if(ref.divisionPreferida === "bmetro" && ref.exp >= 82 && ref.temple >= 83){
+        ref.divisionPreferida = "nacional";
+        promocionesPlantel.push({ nombre: ref.nombre, de: "Primera B Metropolitana", a: "Primera Nacional", icon: "🥇" });
+        ps.promocionesRealizadas = (ps.promocionesRealizadas || 0) + 1;
+      } else if(ref.divisionPreferida === "nacional" && ref.exp >= 88 && ref.temple >= 88){
+        ref.divisionPreferida = "liga";
+        ref.esInternacional = true;
+        promocionesPlantel.push({ nombre: ref.nombre, de: "Primera Nacional", a: "Liga Profesional (Categoría FIFA)", icon: "🏆" });
+        ps.promocionesRealizadas = (ps.promocionesRealizadas || 0) + 1;
+      }
+    }
+
+    // Actualizar cansancio del árbitro asignado
+    var gastoEnergia = 34;
+    if(ps.mejoras.preparadorFisico) gastoEnergia = 20;
+    if(comMedica && comMedica.perk === "energia_boost") gastoEnergia = Math.max(15, gastoEnergia - 4);
     ref.energia = Math.max(10, ref.energia - gastoEnergia);
     ref.partidosSeguidos = (ref.partidosSeguidos || 0) + 1;
     ref.partidosTotal = (ref.partidosTotal || 0) + 1;
 
     resultadosPartidos.push({
+      divId: item.divId,
+      divNombre: item.divNombre,
+      divIcon: item.divIcon,
       local: p.local,
       visitante: p.visitante,
       clasico: p.clasico,
@@ -7636,18 +8590,32 @@ function simularFechaCompleta(){
     });
 
     totalNota += baseNota;
-  }
+  });
 
-  // Arbitros en descanso recuperan energia
+  // Árbitros en descanso: recuperan energía y cobran sueldo de viático base
+  var recoveryPct = ps.mejoras.crioTerapia ? 65 : 45;
   ps.arbitros.forEach(function(a){
     if(!assignedSet[a.id]){
-      a.energia = Math.min(100, a.energia + 45);
+      a.energia = Math.min(100, a.energia + recoveryPct);
       a.partidosSeguidos = 0;
+      totalSueldosArbitros += salarioDescanso;
     }
   });
 
-  // Calculo financiero con sponsors
-  var ingresoDerechos = 60000;
+  // Sueldos de la Comisión Directiva (4 departamentos)
+  var totalSueldosComision = 0;
+  for(var deptKey in (ps.comision || {})){
+    var mId = ps.comision[deptKey];
+    var cat = PRES_COMISION_CATALOGO[deptKey] || [];
+    var mObj = cat.find(function(c){ return c.id === mId; });
+    if(mObj) totalSueldosComision += mObj.sueldoPorFecha;
+  }
+
+  // Gastos de logística, traslado y viáticos
+  var gastosLogistica = 12000;
+
+  // Cálculo de ingresos: Derechos de TV + Patrocinios comerciales
+  var ingresoDerechos = 95000;
   var ingresoPorSponsors = 0;
   for(var slotKey in ps.sponsors){
     var spId = ps.sponsors[slotKey];
@@ -7657,14 +8625,15 @@ function simularFechaCompleta(){
     }
   }
 
-  var viaticos = 25000;
-  var balanceNeto = ingresoDerechos + ingresoPorSponsors - viaticos;
+  var totalIngresos = ingresoDerechos + ingresoPorSponsors;
+  var totalGastos = totalSueldosArbitros + totalSueldosComision + gastosLogistica;
+  var balanceNeto = totalIngresos - totalGastos;
 
-  ps.fondos += balanceNeto;
+  ps.fondos = Math.max(0, ps.fondos + balanceNeto);
   
-  var promedioFecha = Math.round((totalNota / partidos.length) * 10) / 10;
+  var promedioFecha = Math.round((totalNota / Math.max(1, todos.length)) * 10) / 10;
 
-  // Confianza AFA y prensa se ajustan segun promedio de notas
+  // Ajuste de confianza AFA y prensa
   if(promedioFecha >= 7.5){
     ps.confianzaAFA = clamp(ps.confianzaAFA + 8, 0, 100);
     ps.reputacionPublica = clamp(ps.reputacionPublica + 6, 0, 100);
@@ -7678,8 +8647,15 @@ function simularFechaCompleta(){
   ps.simulacionActual = {
     fecha: ps.fecha,
     promedioNota: promedioFecha,
-    ingresoNeto: balanceNeto,
+    ingresoDerechos: ingresoDerechos,
     ingresoSponsors: ingresoPorSponsors,
+    totalIngresos: totalIngresos,
+    sueldosArbitros: totalSueldosArbitros,
+    sueldosComision: totalSueldosComision,
+    gastosLogistica: gastosLogistica,
+    totalGastos: totalGastos,
+    ingresoNeto: balanceNeto,
+    promociones: promocionesPlantel,
     partidos: resultadosPartidos
   };
 
@@ -7699,44 +8675,108 @@ function screenPresidentRoundSummary(){
 
   var veredicto = "";
   if(sim.promedioNota >= 7.8){
-    veredicto = "🏆 Jornada de excelencia: La prensa y la Comisión Directiva elogiaron la solvencia técnica.";
+    veredicto = "🏆 Jornada de excelencia: La prensa y el Comité de la AFA elogiaron la solvencia técnica en todas las categorías.";
   } else if(sim.promedioNota >= 6.5){
-    veredicto = "✔️ Jornada regular: Arbitrajes correctos sin incidencias de gravedad.";
+    veredicto = "✔️ Jornada regular: Arbitrajes correctos y desempeño parejo sin quejas mayores.";
   } else {
-    veredicto = "⚠️ Jornada caldeada: Polémicas en los minutos finales y quejas formales de los clubes.";
+    veredicto = "⚠️ Jornada caldeada: Polémicas en varios estadios y quejas formales de los dirigentes.";
   }
 
-  var partidosReportHtml = sim.partidos.map(function(m){
-    var notaColor = m.nota >= 7.5 ? "var(--green)" : (m.nota >= 6.0 ? "var(--gold)" : "var(--red)");
-    return '<div class="match-assign-card">' +
-      '<div class="match-assign-header">' +
-        '<div>' +
-          '<div class="match-tension-badge">' + m.clasico + '</div>' +
-          '<div class="match-teams-title">' + m.local + ' ' + m.golesLocal + ' - ' + m.golesVisitante + ' ' + m.visitante + '</div>' +
-        '</div>' +
-        '<div style="text-align:right;">' +
-          '<span class="score-badge" style="background:rgba(255,255,255,0.05); color:' + notaColor + '; font-size:18px;">' + m.nota.toFixed(1) + '<small style="font-size:11px;">/10</small></span>' +
-        '</div>' +
-      '</div>' +
-      '<div style="display:flex; align-items:center; gap:10px; margin-top:8px;">' +
-        '<div class="avatar-preview-box" style="width:36px; height:36px; flex:none;">' + renderAvatarSvg(m.avatarId||"h1", 36) + '</div>' +
+  // Notificaciones de promociones arbitrales
+  var promocionesHtml = "";
+  if(sim.promociones && sim.promociones.length){
+    var promoItems = sim.promociones.map(function(pr){
+      return '<div style="background:rgba(0,230,118,0.12); border:1.5px solid var(--green); border-radius:10px; padding:10px 14px; margin-top:8px; display:flex; align-items:center; gap:12px;">' +
+        '<div style="font-size:24px;">' + pr.icon + '</div>' +
         '<div style="flex:1;">' +
-          '<div style="font-size:13px; font-weight:700; color:#fff;">Árbitro: ' + m.arbitro + '</div>' +
-          '<div style="font-size:12px; color:#bbb;">' + m.incidente + '</div>' +
+          '<div style="font-weight:800; color:#fff; font-size:13.5px;">¡ASCENSO ARBITRAL POR MÉRITO!</div>' +
+          '<div style="font-size:12px; color:var(--green); margin-top:2px;"><b>' + pr.nombre + '</b> fue promovido de ' + pr.de + ' a <b>' + pr.a + '</b> gracias a sus excelentes calificaciones.</div>' +
         '</div>' +
+      '</div>';
+    }).join("");
+
+    promocionesHtml = '<div class="panel" style="border-color:rgba(0,230,118,0.4); margin-top:14px;">' +
+      '<div class="eyebrow" style="color:var(--green);">🎓 Crecimiento Profesional del Plantel</div>' +
+      promoItems +
+    '</div>';
+  }
+
+  // Financial ledger statement breakdown
+  var ledgerHtml = '<div class="panel" style="margin-top:14px; border-color:rgba(240,196,25,0.35); background:rgba(0,0,0,0.35);">' +
+    '<div class="eyebrow" style="color:var(--gold);">Memoria Financiera · Balance de Tesorería Fecha ' + sim.fecha + '</div>' +
+    '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-top:10px;">' +
+      '<div style="background:#0c1219; border:1px solid var(--border); border-radius:10px; padding:10px 12px;">' +
+        '<div style="font-size:11px; color:var(--text-faint); text-transform:uppercase; font-weight:700;">📺 Derechos de TV (AFA)</div>' +
+        '<div style="font-size:15px; font-weight:800; color:var(--green); margin-top:2px;">+' + fmtMoney(sim.ingresoDerechos) + '</div>' +
       '</div>' +
-      '<div style="display:flex; gap:12px; margin-top:8px; font-size:11.5px; color:var(--text-faint);">' +
-        '<span>🟨 ' + m.amarillas + ' Amarillas</span>' +
-        '<span>🟥 ' + m.rojas + ' Rojas</span>' +
-        '<span>⚡ ' + m.penales + ' Penales</span>' +
+      '<div style="background:#0c1219; border:1px solid var(--border); border-radius:10px; padding:10px 12px;">' +
+        '<div style="font-size:11px; color:var(--text-faint); text-transform:uppercase; font-weight:700;">💼 Sponsors de Uniforme</div>' +
+        '<div style="font-size:15px; font-weight:800; color:var(--green); margin-top:2px;">+' + fmtMoney(sim.ingresoSponsors) + '</div>' +
       '</div>' +
+      '<div style="background:#0c1219; border:1px solid var(--border); border-radius:10px; padding:10px 12px;">' +
+        '<div style="font-size:11px; color:var(--text-faint); text-transform:uppercase; font-weight:700;">🏃‍♂️ Sueldos Árbitros (Designados + Descanso)</div>' +
+        '<div style="font-size:15px; font-weight:800; color:var(--red); margin-top:2px;">-' + fmtMoney(sim.sueldosArbitros) + '</div>' +
+      '</div>' +
+      '<div style="background:#0c1219; border:1px solid var(--border); border-radius:10px; padding:10px 12px;">' +
+        '<div style="font-size:11px; color:var(--text-faint); text-transform:uppercase; font-weight:700;">⚖️ Gabinete Comisión Directiva</div>' +
+        '<div style="font-size:15px; font-weight:800; color:var(--red); margin-top:2px;">-' + fmtMoney(sim.sueldosComision) + '</div>' +
+      '</div>' +
+      '<div style="background:#0c1219; border:1px solid var(--border); border-radius:10px; padding:10px 12px;">' +
+        '<div style="font-size:11px; color:var(--text-faint); text-transform:uppercase; font-weight:700;">🚚 Logística & Traslados Federales</div>' +
+        '<div style="font-size:15px; font-weight:800; color:var(--red); margin-top:2px;">-' + fmtMoney(sim.gastosLogistica) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px dashed var(--border);">' +
+      '<div style="font-weight:700; font-size:13.5px; color:#fff;">Resultado Neto de Tesorería de la Jornada:</div>' +
+      '<div style="font-size:18px; font-weight:900; color:' + (sim.ingresoNeto >= 0 ? "var(--green)" : "var(--red)") + ';">' + (sim.ingresoNeto >= 0 ? "+" : "") + fmtMoney(sim.ingresoNeto) + '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Group matches by division
+  var groupedSectionsHtml = PRES_DIVISIONES.map(function(d){
+    var matchesInDiv = sim.partidos.filter(function(p){ return p.divId === d.id; });
+    if(!matchesInDiv.length) return "";
+
+    var cardsHtml = matchesInDiv.map(function(m){
+      var notaColor = m.nota >= 7.5 ? "var(--green)" : (m.nota >= 6.0 ? "var(--gold)" : "var(--red)");
+      return '<div class="match-assign-card">' +
+        '<div class="match-assign-header">' +
+          '<div>' +
+            '<div class="match-tension-badge">' + m.clasico + '</div>' +
+            '<div class="match-teams-title">' + m.local + ' ' + m.golesLocal + ' - ' + m.golesVisitante + ' ' + m.visitante + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;">' +
+            '<span class="score-badge" style="background:rgba(255,255,255,0.05); color:' + notaColor + '; font-size:18px;">' + m.nota.toFixed(1) + '<small style="font-size:11px;">/10</small></span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex; align-items:center; gap:10px; margin-top:8px;">' +
+          '<div class="avatar-preview-box" style="width:34px; height:34px; flex:none;">' + renderAvatarSvg(m.avatarId||"h1", 34) + '</div>' +
+          '<div style="flex:1;">' +
+            '<div style="font-size:13px; font-weight:700; color:#fff;">Árbitro: ' + m.arbitro + '</div>' +
+            '<div style="font-size:11.5px; color:#bbb;">' + m.incidente + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex; gap:12px; margin-top:8px; font-size:11.5px; color:var(--text-faint);">' +
+          '<span>🟨 ' + m.amarillas + ' Amarillas</span>' +
+          '<span>🟥 ' + m.rojas + ' Rojas</span>' +
+          '<span>⚡ ' + m.penales + ' Penales</span>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+
+    return '<div class="division-section-box ' + d.id + '" style="margin-top:12px;">' +
+      '<div class="division-section-header">' +
+        '<div class="division-section-title">' + d.icon + ' ' + d.nombre + '</div>' +
+        '<span class="division-badge-count">' + matchesInDiv.length + ' Partidos</span>' +
+      '</div>' +
+      '<div class="match-assign-grid" style="margin-top:0;">' + cardsHtml + '</div>' +
     '</div>';
   }).join("");
 
   var isLastRound = ps.fecha >= 10;
   var actionBtn = isLastRound ?
-    '<button class="btn btn-gold" style="margin-top:14px; font-size:15px;" onclick="irABalanceFinTemporadaPresidente()">🏆 Ver Balance de Temporada y Asamblea de AFA →</button>' :
-    '<button class="btn btn-primary" style="margin-top:14px; font-size:15px;" onclick="avanzarFechaPresidente()">Avanzar a la Fecha ' + (ps.fecha + 1) + ' de 10 →</button>';
+    '<button class="btn btn-gold" style="margin-top:16px; font-size:15px; padding:14px;" onclick="irABalanceFinTemporadaPresidente()">🏆 Ver Balance de Temporada y Asamblea de AFA →</button>' :
+    '<button class="btn btn-primary" style="margin-top:16px; font-size:15px; padding:14px;" onclick="avanzarFechaPresidente()">Avanzar a la Fecha ' + (ps.fecha + 1) + ' de 10 →</button>';
 
   return topbar() +
     '<div class="panel center">' +
@@ -7747,13 +8787,15 @@ function screenPresidentRoundSummary(){
     '</div>' +
 
     '<div class="stat-grid">' +
-      '<div class="stat-box gold"><div class="v">+' + fmtMoney(sim.ingresoNeto) + '</div><div class="l">Superávit (inc. Sponsors)</div></div>' +
+      '<div class="stat-box gold"><div class="v">' + (sim.ingresoNeto >= 0 ? "+" : "") + fmtMoney(sim.ingresoNeto) + '</div><div class="l">Balance Neto (inc. Sueldos)</div></div>' +
       '<div class="stat-box"><div class="v" style="color:' + (ps.confianzaAFA>=60?'var(--green)':'var(--yellow)') + ';">' + ps.confianzaAFA + '%</div><div class="l">Confianza AFA</div></div>' +
       '<div class="stat-box"><div class="v" style="color:var(--gold);">' + ps.reputacionPublica + '%</div><div class="l">Reputación Prensa</div></div>' +
       '<div class="stat-box"><div class="v" style="color:#40c4ff;">' + ps.moralPlantel + '%</div><div class="l">Moral Plantel</div></div>' +
     '</div>' +
 
-    '<div class="match-assign-grid" style="margin-top:14px;">' + partidosReportHtml + '</div>' +
+    promocionesHtml +
+    ledgerHtml +
+    '<div style="margin-top:14px;">' + groupedSectionsHtml + '</div>' +
     actionBtn +
     '<button class="btn btn-outline" style="margin-top:8px;" onclick="irAMenuModos()">← Volver al Menú Principal</button>';
 }
@@ -8003,35 +9045,75 @@ window.renovarScoutingAcademia = function(){
 /* ---------- PANTALLA DE COMISIÓN ASESORA ---------- */
 function screenPresidentCommission(){
   var ps = presState;
+  if(!ps.comision) ps.comision = { tecnica: "com_elizondo", medica: "com_villani", legal: "com_benitez", prensa: "com_rossi" };
 
-  var consejerosHtml = PRES_CONSEJEROS_COMISION.map(function(c){
-    var tip = c.consejo(ps);
-    return '<div class="commission-card">' +
+  var deptos = [
+    { key: "tecnica", titulo: "Dirección Técnica & Estrategia Arbitral", icon: "🎯", color: "var(--gold)" },
+    { key: "medica", titulo: "Departamento Médico & Fisiología Deportiva", icon: "🩺", color: "var(--green)" },
+    { key: "legal", titulo: "Asesoría Legal & Tribunal de Disciplina", icon: "⚖️", color: "#40c4ff" },
+    { key: "prensa", titulo: "Vocería Institucional & Prensa", icon: "🎙️", color: "#b388ff" }
+  ];
+
+  var totalSueldosComision = 0;
+
+  var deptosHtml = deptos.map(function(d){
+    var catalogo = PRES_COMISION_CATALOGO[d.key] || [];
+    var activeId = ps.comision[d.key] || (catalogo[0] && catalogo[0].id);
+    var activeObj = catalogo.find(function(c){ return c.id === activeId; }) || catalogo[0];
+    if(activeObj) totalSueldosComision += activeObj.sueldoPorFecha;
+
+    var optionsHtml = catalogo.map(function(c){
+      var isSelected = c.id === activeObj.id;
+      return '<option value="' + c.id + '"' + (isSelected ? ' selected' : '') + '>' +
+        c.avatar + ' ' + c.nombre + ' (' + fmtMoney(c.sueldoPorFecha) + '/fecha · ' + c.expNivel + ')' +
+      '</option>';
+    }).join("");
+
+    return '<div class="commission-card" style="border-left:4px solid ' + d.color + '; margin-top:12px;">' +
       '<div class="commission-head">' +
-        '<div class="commission-avatar">' + c.avatar + '</div>' +
+        '<div class="commission-avatar" style="font-size:32px; width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center;">' + (activeObj ? activeObj.avatar : d.icon) + '</div>' +
         '<div style="flex:1;">' +
-          '<div class="commission-name">' + c.nombre + '</div>' +
-          '<div class="commission-role">' + c.cargo + '</div>' +
-          '<span class="mode-feat-pill" style="margin-top:4px; display:inline-block; font-size:10.5px;">' + c.badge + '</span>' +
+          '<div class="eyebrow" style="color:' + d.color + '; font-size:11px;">' + d.titulo + '</div>' +
+          '<div class="commission-name" style="font-size:16px; font-weight:800; color:#fff;">' + (activeObj ? activeObj.nombre : "Sin Asignar") + '</div>' +
+          '<div class="commission-role" style="font-size:12px; color:var(--text-faint); margin-top:2px;">' + (activeObj ? activeObj.expNivel : "") + ' · <b style="color:var(--gold);">' + fmtMoney(activeObj ? activeObj.sueldoPorFecha : 0) + '/fecha</b></div>' +
         '</div>' +
       '</div>' +
-      '<div class="commission-quote">' + tip + '</div>' +
+      '<div style="background:rgba(0,0,0,0.25); border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-top:10px;">' +
+        '<div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase;">⚡ Efecto Activo del Gabinete:</div>' +
+        '<div style="font-size:12.5px; color:#eee; margin-top:2px;">' + (activeObj ? activeObj.bonoDesc : "") + '</div>' +
+      '</div>' +
+      '<div class="commission-quote" style="margin-top:10px; font-style:italic; font-size:12.5px; color:#ccc;">' + (activeObj ? activeObj.quote : "") + '</div>' +
+      '<div style="margin-top:12px; display:flex; align-items:center; gap:8px;">' +
+        '<label style="font-size:11.5px; font-weight:700; color:var(--text-faint); white-space:nowrap;">Relevar Asesor:</label>' +
+        '<select class="ref-select-box" style="padding:6px 10px; font-size:12px;" onchange="cambiarAsesorComision(\'' + d.key + '\', this.value)">' +
+          optionsHtml +
+        '</select>' +
+      '</div>' +
     '</div>';
   }).join("");
 
   return topbar() +
     navTabsPresidente("pres_commission") +
     '<div class="panel">' +
-      '<div class="eyebrow" style="color:var(--gold);">Comité Asesor & Tribunal de Honor</div>' +
-      '<h2 class="section-title" style="margin-top:4px;">Consejos de la Comisión Técnica</h2>' +
-      '<p class="muted" style="font-size:13px; margin-top:4px;">Consultá las recomendaciones de las máximas leyendas del arbitraje y los directores médicos y legales antes de confirmar las fechas.</p>' +
+      '<div class="eyebrow" style="color:var(--gold);">Gabinete Ejecutivo & Tribunal Asesor</div>' +
+      '<h2 class="section-title" style="margin-top:4px;">Comisión Directiva del Colegio de Árbitros</h2>' +
+      '<p class="muted" style="font-size:13px; margin-top:4px;">Tu gabinete de 4 directores te asesora en las designaciones y otorga bonificaciones técnicas, físicas, jurídicas y mediáticas. Costo operativo total: <b style="color:var(--gold);">' + fmtMoney(totalSueldosComision) + ' por fecha</b>.</p>' +
     '</div>' +
 
-    '<div style="display:flex; flex-direction:column; gap:12px; margin-top:12px;">' + consejerosHtml + '</div>' +
+    '<div style="display:flex; flex-direction:column; gap:6px;">' + deptosHtml + '</div>' +
 
-    '<button class="btn btn-outline" style="margin-top:14px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
+    '<button class="btn btn-outline" style="margin-top:16px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
     '<button class="btn btn-outline" style="margin-top:6px;" onclick="irAMenuModos()">← Volver al Menú Principal</button>';
 }
+
+window.cambiarAsesorComision = function(deptoKey, nuevoId){
+  var ps = presState;
+  if(!ps.comision) ps.comision = {};
+  ps.comision[deptoKey] = nuevoId;
+  triggerHaptic("decision");
+  guardarPresidente();
+  render();
+};
 
 /* ---------- PANTALLA DE EQUIPAMIENTO Y MEJORAS ---------- */
 function screenPresidentTraining(){
@@ -8041,15 +9123,23 @@ function screenPresidentTraining(){
     {
       id: "preparadorFisico",
       nombre: "Preparador Físico de Élite y GPS Polar",
-      desc: "Reduce un 35% el gasto de energía por partido en todo el plantel de árbitros.",
+      desc: "Reduce un 40% el gasto de energía por partido en todo el plantel arbitral.",
       costo: 60000,
       comprado: !!ps.mejoras.preparadorFisico,
       icono: "🏃‍♂️"
     },
     {
+      id: "crioTerapia",
+      nombre: "Cabinas de Crioterapia & Recuperación Rápida",
+      desc: "Los árbitros en descanso recuperan +65% de energía por fecha (en vez de +45%).",
+      costo: 75000,
+      comprado: !!ps.mejoras.crioTerapia,
+      icono: "❄️"
+    },
+    {
       id: "clinicaPsicologia",
       nombre: "Clínica de Psicología Deportiva & Temple",
-      desc: "Otorga +6 de Temple a todos los árbitros para resistir la presión en los Superclásicos.",
+      desc: "Otorga +6 de Temple a todos los árbitros para resistir la hostilidad de los estadios.",
       costo: 50000,
       comprado: !!ps.mejoras.clinicaPsicologia,
       icono: "🧠"
@@ -8065,10 +9155,18 @@ function screenPresidentTraining(){
     {
       id: "intercomunicadoresHD",
       nombre: "Intercomunicadores Vokkero HD Encriptados",
-      desc: "Comunicación sin interferencias entre el juez central, los líneas y la cabina VOR (+4 Rigor).",
+      desc: "Comunicación sin interferencias entre juez central, jueces de línea y la cabina VOR (+4 Rigor).",
       costo: 70000,
       comprado: !!ps.mejoras.intercomunicadoresHD,
       icono: "🎧"
+    },
+    {
+      id: "analisisVideo",
+      nombre: "Software de Videoanálisis & Scouting de Jugadores",
+      desc: "Otorga +0.2 de nota técnica general y reduce la probabilidad de incidentes graves.",
+      costo: 65000,
+      comprado: !!ps.mejoras.analisisVideo,
+      icono: "📹"
     },
     {
       id: "aumentoViaticos",
@@ -8077,6 +9175,14 @@ function screenPresidentTraining(){
       costo: 40000,
       comprado: !!ps.mejoras.aumentoViaticos,
       icono: "💵"
+    },
+    {
+      id: "pasantiaFIFA",
+      nombre: "Convenio de Pasantías Internacionales UEFA / FIFA",
+      desc: "Eleva +8 de Experiencia en todo el plantel y acelera las promociones de jóvenes promesas.",
+      costo: 90000,
+      comprado: !!ps.mejoras.pasantiaFIFA,
+      icono: "🌐"
     }
   ];
 
@@ -8090,7 +9196,7 @@ function screenPresidentTraining(){
 
     return '<div class="shop-card' + (m.comprado ? ' bought' : '') + '">' +
       '<div class="shop-card-head">' +
-        '<div style="font-size:24px;">' + m.icono + '</div>' +
+        '<div style="font-size:26px;">' + m.icono + '</div>' +
         '<div style="flex:1;">' +
           '<div class="shop-card-title">' + m.nombre + '</div>' +
           '<div class="shop-card-desc">' + m.desc + '</div>' +
@@ -8105,10 +9211,10 @@ function screenPresidentTraining(){
     '<div class="panel">' +
       '<div class="eyebrow" style="color:var(--gold);">Tecnología, Fisioterapia & Equipamiento</div>' +
       '<h2 class="section-title" style="margin-top:4px;">Inversiones Institucionales para Árbitros</h2>' +
-      '<p class="muted" style="font-size:13px; margin-top:4px;">Fondos disponibles en las arcas: <b style="color:var(--green);">' + fmtMoney(ps.fondos) + '</b></p>' +
+      '<p class="muted" style="font-size:13px; margin-top:4px;">Fondos disponibles en las arcas del Colegio: <b style="color:var(--green);">' + fmtMoney(ps.fondos) + '</b></p>' +
     '</div>' +
     '<div class="shop-grid">' + cardsHtml + '</div>' +
-    '<button class="btn btn-outline" style="margin-top:14px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
+    '<button class="btn btn-outline" style="margin-top:16px;" onclick="volverADashboardPresidente()">← Volver al Despacho Presidencial</button>' +
     '<button class="btn btn-outline" style="margin-top:6px;" onclick="irAMenuModos()">← Volver al Menú Principal</button>';
 }
 
@@ -8127,6 +9233,9 @@ window.comprarMejoraPresidente = function(id, costo){
     }
     if(id === "aumentoViaticos"){
       ps.moralPlantel = Math.min(100, ps.moralPlantel + 25);
+    }
+    if(id === "pasantiaFIFA"){
+      ps.arbitros.forEach(function(a){ a.exp = Math.min(99, (a.exp || 60) + 8); });
     }
     guardarPresidente();
     render();
@@ -8470,17 +9579,55 @@ function screenPresidentAchievements(){
 var modalConfirmReinicioActivo = false;
 
 window.confirmarReinicioPresidencia = function(){
-  if(confirm("¿Estás seguro de que deseás reiniciar tu carrera de Dirigente? Se borrarán todos los avances, árbitros promovidos, fondos y acuerdos de sponsors.")){
-    reiniciarPresidencia();
-  }
+  modalConfirmReinicioActivo = true;
+  triggerHaptic("light");
+  render();
+};
+
+window.cancelarReinicioPresidencia = function(){
+  modalConfirmReinicioActivo = false;
+  triggerHaptic("light");
+  render();
+};
+
+window.ejecutarReinicioPresidenciaConfirmado = function(){
+  modalConfirmReinicioActivo = false;
+  borrarGuardadoPresidente();
+  presState = null;
+  currentGameMode = "president";
+  triggerHaptic("warning");
+  render();
 };
 
 window.reiniciarPresidencia = function(){
+  modalConfirmReinicioActivo = false;
   borrarGuardadoPresidente();
   presState = null;
   currentGameMode = "president";
   render();
 };
+
+/* ---------- DESTITUCIÓN / GAME OVER DIRIGENTE ---------- */
+function screenPresidentGameOver(){
+  var ps = presState || { nombre:"Presidente", mandatoAno:1, temporada:1, fondos:0, reputacionPublica:0, confianzaAFA:0 };
+  return topbar() +
+    '<div class="panel center" style="border-color:rgba(255,77,94,0.4); background:radial-gradient(circle at 50% 20%, rgba(255,77,94,0.1), #0e151e 75%);">' +
+      '<div class="eyebrow" style="color:var(--red);">Asamblea Extraordinaria de la AFA</div>' +
+      '<h1 class="section-title" style="font-size:26px; color:var(--red); margin-top:8px;">MANDATO REVOCADO · DESTITUCIÓN</h1>' +
+      '<div class="result-big" style="color:var(--red); font-size:36px; margin-top:8px;">FIN DE GESTIÓN</div>' +
+      '<p style="font-size:13.5px; color:#e0e0e0; margin-top:8px; line-height:1.5;">' +
+        'El Comité Ejecutivo y los presidentes de los clubes votaron por mayoría la destitución del Colegio de Árbitros. La falta de confianza institucional y las reiteradas polémicas precipitaron el final de tu mandato.' +
+      '</p>' +
+    '</div>' +
+    '<div class="stat-grid">' +
+      '<div class="stat-box"><div class="v">' + (ps.totalFechasDirigidas || 0) + '</div><div class="l">Fechas Dirigidas</div></div>' +
+      '<div class="stat-box gold"><div class="v">' + fmtMoney(ps.fondos) + '</div><div class="l">Balance Final de Caja</div></div>' +
+      '<div class="stat-box"><div class="v" style="color:var(--gold);">' + ps.reputacionPublica + '%</div><div class="l">Reputación Prensa</div></div>' +
+      '<div class="stat-box red"><div class="v">' + ps.confianzaAFA + '%</div><div class="l">Confianza AFA Final</div></div>' +
+    '</div>' +
+    '<button class="btn btn-danger" style="margin-top:14px; font-size:15px;" onclick="confirmarReinicioPresidencia()">🔄 Asumir Nueva Presidencia</button>' +
+    '<button class="btn btn-outline" style="margin-top:8px;" onclick="irAMenuModos()">← Volver al Menú Principal</button>';
+}
 
 /* ---------- RETIRO / GAME OVER ---------- */
 function screenRetirement(){
